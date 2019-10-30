@@ -32,3 +32,7 @@
     background-color: green;
     float: none;
 }
+
+#table-svg {
+    fill: white;
+}

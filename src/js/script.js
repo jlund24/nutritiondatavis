@@ -38,8 +38,9 @@ let columns = [
         "name": "price",
         "unit": "$"
     }
-]
+];
 
 let table = new Table(dummy_data);
+table.createTable();
 let scatterplot = new ScatterPlot(dummy_data);
 let meal_planner = new MealPlanner(dummy_data);
