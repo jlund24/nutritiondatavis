@@ -1,0 +1,33 @@
+#controls {
+    width: 1500px;
+    height: 100px;
+    background-color: yellow;
+    border: solid 1px black;
+}
+
+#entire-vis {
+    width: 1500px;
+    height: 900px;
+    background-color: gray;
+    /* float: left; */
+}
+
+#food-table-container {
+    width: 800px;
+    height: 800px;
+    background-color: red;
+    float: left;
+}
+
+#food-scatterplot-container {
+    width: 700px;
+    height: 800px;
+    background-color: blue;
+    float: left;
+}
+
+#meal-container {
+    width: 1500px;
+    height: 500px;
+    background-color: green;
+}
