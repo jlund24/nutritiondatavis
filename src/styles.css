@@ -5,7 +5,7 @@
     border: solid 1px black;
 }
 
-#entire-vis {
+#main-container {
     width: 1500px;
     height: 900px;
     background-color: gray;
@@ -30,4 +30,5 @@
     width: 1500px;
     height: 500px;
     background-color: green;
+    float: none;
 }
