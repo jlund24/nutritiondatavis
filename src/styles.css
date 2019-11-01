@@ -8,7 +8,7 @@
 #main-container {
     width: 1500px;
     height: 900px;
-    background-color: gray;
+/*    background-color: gray;*/
     /* float: left; */
 }
 
@@ -19,12 +19,63 @@
     float: left;
 }
 
+
+
+/*Scatterplot*/
+
 #food-scatterplot-container {
     width: 700px;
     height: 800px;
-    background-color: blue;
+/*    background-color: blue;*/
     float: left;
 }
+
+circle {
+    fill: #d9d9d9;
+    stroke: gray;
+    opacity: .8;
+}
+
+.axis path,
+.axis line {
+    fill: none;
+    stroke: #000;
+    shape-rendering: crispEdges;
+}
+
+.axis-label {
+    font-size: 18px;
+	text-anchor: middle;
+}
+
+.y-label,
+.x-label,
+.c-label {
+    width: 1%7;
+    display: inline-block;
+    float: left;
+    padding-right: 5px;
+}
+
+div.tooltip {
+    position: absolute;
+    text-align: center;
+    min-width: 60px;
+    height: 28px;
+    padding: 2px;
+    background: white;
+    stroke: gray;
+    border-radius: 8px;
+    pointer-events: none;
+}
+
+.tooltip h2 {
+    margin: auto;
+    font: 14px sans-serif;
+}
+
+
+
 
 #meal-container {
     width: 1500px;
@@ -36,3 +87,35 @@
 #table-svg {
     fill: white;
 }
+
+
+
+/*Food Group Styling*/
+.vegetable {
+	fill: green;
+}
+
+.fruit {
+	fill: red;
+}
+
+.protein {
+	fill: purple;
+}
+
+.dairy {
+	fill: blue;
+}
+
+.grain {
+	fill: orange;
+}
+
+.dessert {
+	fill: pink;
+}
+
+.compound {
+	fill: brown;
+}
+
