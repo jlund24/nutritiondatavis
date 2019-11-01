@@ -125,6 +125,16 @@ class ScatterPlot {
 			'Carbohydrate, by difference' : "TOTAL CARBOHYDRATES (GRAMS)"
 		}
 		
+		this.tooltipLabels = 
+		{
+			'Energy' 					  : "Calories",
+			'price' 					  : "Price",
+			'Protein' 					  : "Protein",
+			'Total lipid (fat)'			  : "Total Fat",
+			'Fructose' 					  : "Total Sugar", //**UPDATE Fructose WHEN DATA IS CHANGED**
+			'Carbohydrate, by difference' : "Total Carbs"
+		}
+		
 		this.createScatterPlot();
 		this.drawDropDown(this.curXIndicator, this.curYIndicator, this.curCIndicator);
 
@@ -337,7 +347,7 @@ class ScatterPlot {
         for (let key in this.labels) {
             dropData.push({
                 indicator: key,
-                indicator_name: this.labels[key].toLowerCase()
+                indicator_name: this.tooltipLabels[key]
             });
         }
 
@@ -456,9 +466,9 @@ class ScatterPlot {
 	//call on hover of the circles to get a tooltip for it
 	tooltipRender(data) {
         let text = "<h2>" + data.title + "</h2><br>" 
-			+ this.curXIndicator + ": " + data[this.curXIndicator] + "<br>"
-			+ this.curYIndicator + ": " + data[this.curYIndicator] + "<br>"
-			+ this.curCIndicator + ": " + data[this.curCIndicator];
+			+ this.tooltipLabels[this.curXIndicator] + ": " + (data[this.curXIndicator] ? data[this.curXIndicator] : "no data") + "<br>"
+			+ this.tooltipLabels[this.curYIndicator] + ": " + (data[this.curYIndicator] ? data[this.curYIndicator] : "no data") + "<br>"
+			+ this.tooltipLabels[this.curCIndicator] + ": " + (data[this.curCIndicator] ? data[this.curCIndicator] : "no data");
         return text;
     }
 }
