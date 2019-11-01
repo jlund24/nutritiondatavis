@@ -466,9 +466,11 @@ class ScatterPlot {
 	//call on hover of the circles to get a tooltip for it
 	tooltipRender(data) {
         let text = "<span>" + data.title + "</span><br>" 
+			+ "<div>"
 			+ this.tooltipLabels[this.curXIndicator] + ": " + (data[this.curXIndicator] ? data[this.curXIndicator] : "no data") + "<br>"
 			+ this.tooltipLabels[this.curYIndicator] + ": " + (data[this.curYIndicator] ? data[this.curYIndicator] : "no data") + "<br>"
-			+ this.tooltipLabels[this.curCIndicator] + ": " + (data[this.curCIndicator] ? data[this.curCIndicator] : "no data");
+			+ this.tooltipLabels[this.curCIndicator] + ": " + (data[this.curCIndicator] ? data[this.curCIndicator] : "no data")
+			+ "</div>";
         return text;
     }
 }

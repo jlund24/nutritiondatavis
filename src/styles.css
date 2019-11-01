@@ -79,6 +79,10 @@ div.tooltip {
 	font-weight: bold;
 }
 
+.tooltip div {
+	text-align: left;
+}
+
 div.dropdown-wrapper {
     display: inline-block;
     margin-left: 75px;
