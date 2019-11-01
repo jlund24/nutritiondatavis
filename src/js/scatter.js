@@ -196,7 +196,7 @@ class ScatterPlot {
 		svgGroup.append("text")
 			.attr("id", "yAxisLabel")
 			.classed("axis-label", true)
-			.attr("transform", "translate(20" + "," + ((this.height / 2) + this.margin.top) + ") rotate (-90)")
+			.attr("transform", "translate(35" + "," + ((this.height / 2) + this.margin.top) + ") rotate (-90)")
 			.text(this.labels[this.curYIndicator]);
 		
 		
