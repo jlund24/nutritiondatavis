@@ -292,8 +292,8 @@ class ScatterPlot {
 			.join(
 				enter => enter.append("circle")
 //							.attr("id", (d) => d.id)
-							.attr("cx", (d) => this.xScales[xIndicator](d[xIndicator]))
-							.attr("cy", (d) => this.yScales[yIndicator](d[yIndicator]))
+							.attr("cx", (d) => d[xIndicator] ? this.xScales[xIndicator](d[xIndicator]) : this.xScales[xIndicator](0))
+							.attr("cy", (d) => d[yIndicator] ? this.yScales[yIndicator](d[yIndicator]) : this.yScales[yIndicator](0))
 							.attr("r", (d) => circleSizer(d))
 							.attr("transform", "translate(" + this.margin.left + "," + (this.margin.top) + ") scale (1, 1)")
 //							.attr("class", (d) => d.foodGroup) //** ADD THIS WHEN WE HAVE FOOD GROUP IN THE DATA **
