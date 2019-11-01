@@ -123,6 +123,7 @@ class ScatterPlot {
 		}
 		
 		this.createScatterPlot();
+		this.drawDropDown(this.curXIndicator, this.curYIndicator, this.curCIndicator);
 
     }
 
@@ -189,15 +190,144 @@ class ScatterPlot {
 			.attr("id", "circleTooltip")
 			.classed("tooltip", true)
 			.style("opacity", 0);
+		
+		//Create dropdowns for selecting axis data
+ 		let dropdownWrap = d3.select('#chart-view').append('div').classed('dropdown-wrapper', true);
 
+        let cWrap = dropdownWrap.append('div').classed('dropdown-panel', true);
+
+        cWrap.append('div').classed('c-label', true)
+            .append('text')
+            .text('Circle Size');
+
+        cWrap.append('div').attr('id', 'dropdown_c').classed('dropdown', true).append('div').classed('dropdown-content', true)
+            .append('select');
+
+        let xWrap = dropdownWrap.append('div').classed('dropdown-panel', true);
+
+        xWrap.append('div').classed('x-label', true)
+            .append('text')
+            .text('X Axis Data');
+
+        xWrap.append('div').attr('id', 'dropdown_x').classed('dropdown', true).append('div').classed('dropdown-content', true)
+            .append('select');
+
+        let yWrap = dropdownWrap.append('div').classed('dropdown-panel', true);
+
+        yWrap.append('div').classed('y-label', true)
+            .append('text')
+            .text('Y Axis Data');
+
+        yWrap.append('div').attr('id', 'dropdown_y').classed('dropdown', true).append('div').classed('dropdown-content', true)
+            .append('select');
+
+        d3.select('#chart-view')
+            .append('div')
+            .classed('circle-legend', true)
+            .append('svg')
+            .append('g')
+            .attr('transform', 'translate(10, 0)');
     }
 
-    updateScatterPlot()
+    updateScatterPlot(x, y, c)
     {
-        
+        console.log('update scatterplot: ', x, y, c);
     }
 	
 	drawDropDown(xIndicator, yIndicator, circleSizeIndicator) 
 	{
+		let that = this;
+        let dropDownWrapper = d3.select('.dropdown-wrapper');
+        let dropData = [];
+
+        for (let key in this.labels) {
+			console.log(key)
+            dropData.push({
+                indicator: key,
+                indicator_name: this.labels[key].toLowerCase()
+            });
+        }
+
+        /* CIRCLE DROPDOWN */
+        let dropC = dropDownWrapper.select('#dropdown_c').select('.dropdown-content').select('select');
+
+        let optionsC = dropC.selectAll('option')
+            .data(dropData);
+
+
+        optionsC.exit().remove();
+
+        let optionsCEnter = optionsC.enter()
+            .append('option')
+            .attr('value', (d, i) => d.indicator);
+
+        optionsCEnter.append('text')
+            .text((d, i) => d.indicator_name);
+
+        optionsC = optionsCEnter.merge(optionsC);
+
+        let selectedC = optionsC.filter(d => d.indicator === circleSizeIndicator)
+            .attr('selected', true);
+
+        dropC.on('change', function(d, i) {
+            let cValue = this.options[this.selectedIndex].value;
+            let xValue = dropX.node().value;
+            let yValue = dropY.node().value;
+            that.updateScatterPlot(xValue, yValue, cValue);
+        });
+
+        /* X DROPDOWN */
+        let dropX = dropDownWrapper.select('#dropdown_x').select('.dropdown-content').select('select');
+
+        let optionsX = dropX.selectAll('option')
+            .data(dropData);
+
+        optionsX.exit().remove();
+
+        let optionsXEnter = optionsX.enter()
+            .append('option')
+            .attr('value', (d, i) => d.indicator);
+
+        optionsXEnter.append('text')
+            .text((d, i) => d.indicator_name);
+
+        optionsX = optionsXEnter.merge(optionsX);
+
+        let selectedX = optionsX.filter(d => d.indicator === xIndicator)
+            .attr('selected', true);
+
+        dropX.on('change', function(d, i) {
+            let xValue = this.options[this.selectedIndex].value;
+            let yValue = dropY.node().value;
+            let cValue = dropC.node().value;
+            that.updateScatterPlot(xValue, yValue, cValue);
+        });
+
+        /* Y DROPDOWN */
+        let dropY = dropDownWrapper.select('#dropdown_y').select('.dropdown-content').select('select');
+
+        let optionsY = dropY.selectAll('option')
+            .data(dropData);
+
+        optionsY.exit().remove();
+
+        let optionsYEnter = optionsY.enter()
+            .append('option')
+            .attr('value', (d, i) => d.indicator);
+
+        optionsY = optionsYEnter.merge(optionsY);
+
+        optionsYEnter.append('text')
+            .text((d, i) => d.indicator_name);
+
+        let selectedY = optionsY.filter(d => d.indicator === yIndicator)
+            .attr('selected', true);
+
+        dropY.on('change', function(d, i) {
+            let yValue = this.options[this.selectedIndex].value;
+            let xValue = dropX.node().value;
+            let cValue = dropC.node().value;
+            that.updateScatterPlot(xValue, yValue, cValue);
+        });
 	}
 }

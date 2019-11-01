@@ -74,6 +74,18 @@ div.tooltip {
     font: 14px sans-serif;
 }
 
+div.dropdown-wrapper {
+    display: inline-block;
+    margin-left: 75px;
+    width: 320px;
+    height: 130px;
+    padding: 2px;
+}
+
+.dropdown {
+    float: right;
+}
+
 
 
 
