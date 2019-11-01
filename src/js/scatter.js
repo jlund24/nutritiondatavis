@@ -312,7 +312,9 @@ class ScatterPlot {
 			
 				update => update
 //							.attr("id", (d) => d.id)
-							.attr("class", (d) => d.region)
+//							.attr("class", (d) => d.region)
+							.transition()
+							.duration(1000)
 							.attr("cx", (d) => this.xScales[xIndicator](d[xIndicator]))
 							.attr("cy", (d) => this.yScales[yIndicator](d[yIndicator]))
 							.attr("r", (d) => circleSizer(d)),
