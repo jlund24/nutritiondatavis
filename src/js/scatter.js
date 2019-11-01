@@ -7,7 +7,7 @@ class ScatterPlot {
 		
 		this.margin = { top: 20, right: 20, bottom: 60, left: 80 };
         this.width = 700 - this.margin.left - this.margin.right; //700 is the container width
-        this.height = 500 - this.margin.top - this.margin.bottom; //container height is 800 but I probably don't need that much
+        this.height = 600 - this.margin.top - this.margin.bottom; //container height is 800 but I probably don't need that much
 		
 		this.circleMinR = 3;
 		this.circleMaxR = 20;
