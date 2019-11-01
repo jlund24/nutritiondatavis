@@ -1,0 +1,29 @@
+id,name,unit_name,nutrient_nbr,rank
+1003,Protein,G,203,600
+1004,Total lipid (fat),G,204,800
+1005,"Carbohydrate, by difference",G,205,1110
+1008,Energy,KCAL,208,300
+1009,Starch,G,209,2200
+1010,Sucrose,G,210,1600
+1011,Glucose (dextrose),G,211,1700
+1012,Fructose,G,212,1800
+1013,Lactose,G,213,1900
+1057,Caffeine,MG,262,18300
+1063,"Sugars, Total NLEA",G,269.3,1500
+1079,"Fiber, total dietary",G,291,1200
+1087,"Calcium, Ca",MG,301,5300
+1089,"Iron, Fe",MG,303,5400
+1090,"Magnesium, Mg",MG,304,5500
+1092,"Potassium, K",MG,306,5700
+1093,"Sodium, Na",MG,307,5800
+1095,"Zinc, Zn",MG,309,5900
+1099,"Fluoride, F",UG,313,6240
+1100,"Iodine, I",UG,314,6260
+1106,"Vitamin A, RAE",UG,320,7420
+1109,Vitamin E (alpha-tocopherol),MG,323,7905
+1114,Vitamin D (D2 + D3),UG,328,8700
+1162,"Vitamin C, total ascorbic acid",MG,401,6300
+1190,"Folate, DFE",UG,435,7200
+1253,Cholesterol,MG,601,15700
+1257,"Fatty acids, total trans",G,605,15400
+1258,"Fatty acids, total saturated",G,606,9700
