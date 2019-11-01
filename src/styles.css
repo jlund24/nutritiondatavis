@@ -1,3 +1,7 @@
+* {
+    font-family: 'Roboto', sans-serif;
+}
+
 #controls {
     width: 1500px;
     height: 100px;
@@ -63,15 +67,16 @@ div.tooltip {
     min-width: 60px;
 /*    height: 28px;*/
     padding: 2px;
-    background: white;
+    background: #94ffff;
     stroke: gray;
     border-radius: 8px;
     pointer-events: none;
 }
 
-.tooltip h2 {
+.tooltip span {
     margin: auto;
-    font: 14px sans-serif;
+    font: 20px sans-serif;
+	font-weight: bold;
 }
 
 div.dropdown-wrapper {

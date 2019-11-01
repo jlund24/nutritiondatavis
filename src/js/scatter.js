@@ -325,8 +325,8 @@ class ScatterPlot {
 //							.attr("class", (d) => d.region)
 							.transition()
 							.duration(1000)
-							.attr("cx", (d) => this.xScales[xIndicator](d[xIndicator]))
-							.attr("cy", (d) => this.yScales[yIndicator](d[yIndicator]))
+							.attr("cx", (d) => d[xIndicator] ? this.xScales[xIndicator](d[xIndicator]) : this.xScales[xIndicator](0))
+							.attr("cy", (d) => d[yIndicator] ? this.yScales[yIndicator](d[yIndicator]) : this.yScales[yIndicator](0))
 							.attr("r", (d) => circleSizer(d)),
 			
 				exit => exit.remove()
@@ -465,7 +465,7 @@ class ScatterPlot {
 	
 	//call on hover of the circles to get a tooltip for it
 	tooltipRender(data) {
-        let text = "<h2>" + data.title + "</h2><br>" 
+        let text = "<span>" + data.title + "</span><br>" 
 			+ this.tooltipLabels[this.curXIndicator] + ": " + (data[this.curXIndicator] ? data[this.curXIndicator] : "no data") + "<br>"
 			+ this.tooltipLabels[this.curYIndicator] + ": " + (data[this.curYIndicator] ? data[this.curYIndicator] : "no data") + "<br>"
 			+ this.tooltipLabels[this.curCIndicator] + ": " + (data[this.curCIndicator] ? data[this.curCIndicator] : "no data");
