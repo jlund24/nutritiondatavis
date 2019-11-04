@@ -1,3 +1,7 @@
+html {
+    font-family: sans-serif;
+}
+
 #controls {
     width: 1500px;
     height: 100px;
@@ -15,8 +19,10 @@
 #food-table-container {
     width: 800px;
     height: 800px;
-    background-color: red;
+    /* background-color: red; */
     float: left;
+    /* overflow-y: auto;
+    overflow-x: auto; */
 }
 
 
@@ -130,4 +136,92 @@ div.dropdown-wrapper {
 .compound {
 	fill: brown;
 }
+
+.header-line-1 {
+    text-transform: capitalize;
+    padding: 0px;
+    margin: 0px;
+}
+
+.header-line-2 {
+    font-weight: normal;
+    padding: 0px;
+    margin: 0px;
+}
+
+
+table {
+    position: relative;
+    width: 800px;
+    background-color: #aaa;
+    overflow: hidden;
+    border-collapse: collapse;
+  }
+  
+  
+  /*thead*/
+  thead {
+    position: relative;
+    display: block; /*seperates the header from the body allowing it to be positioned*/
+    width: 800px;
+    overflow: visible;
+  }
+  
+  thead th {
+    background-color: #99a;
+    min-width: 120px;
+    height: 32px;
+    border: 1px solid #222;
+  }
+
+  .header-row {
+    background-color: #99a;
+    min-width: 120px;
+    height: 32px;
+    border: 1px solid #222;
+  }
+  
+  thead th:nth-child(1) {/*first cell in the header*/
+    position: relative;
+    display: block; /*seperates the first cell in the header from the header*/
+    background-color: #88b;
+    
+  }
+  
+  /*tbody*/
+  tbody {
+    position: relative;
+    display: block; /*seperates the tbody from the header*/
+    width: 800px;
+    height: 750px;
+    overflow: scroll;
+  }
+  
+  tbody th {
+    background-color: #bbc;
+    min-width: 120px;
+    border: 1px solid #222;
+  }
+
+  tbody td {
+    background-color: #bbc;
+    min-width: 120px;
+    border: 1px solid #222;
+  }
+
+  #food-title-header {
+    position: relative;
+    display: block; /*seperates the first cell in the header from the header*/
+    background-color: #88b;
+    /* min-height: 32px; */
+    min-width: 120px;
+  }
+
+  .food-title-cell {
+    position: relative;
+    display: block; /*seperates the first column from the tbody*/
+    height: auto;
+    max-width: 122px;
+    background-color: #99a;
+  }
 
