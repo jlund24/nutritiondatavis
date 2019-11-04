@@ -1,5 +1,5 @@
-html {
-    font-family: sans-serif;
+* {
+    font-family: 'Roboto', sans-serif;
 }
 
 #controls {
@@ -67,23 +67,28 @@ div.tooltip {
     position: absolute;
     text-align: center;
     min-width: 60px;
-    height: 28px;
+/*    height: 28px;*/
     padding: 2px;
-    background: white;
+    background: #94ffff;
     stroke: gray;
     border-radius: 8px;
     pointer-events: none;
 }
 
-.tooltip h2 {
+.tooltip span {
     margin: auto;
-    font: 14px sans-serif;
+    font: 20px sans-serif;
+	font-weight: bold;
+}
+
+.tooltip div {
+	text-align: left;
 }
 
 div.dropdown-wrapper {
     display: inline-block;
     margin-left: 75px;
-    width: 320px;
+    width: 200px;
     height: 130px;
     padding: 2px;
 }
@@ -91,6 +96,36 @@ div.dropdown-wrapper {
 .dropdown {
     float: right;
 }
+
+.circle-legend {
+    width: 200px;
+    height: 120px;
+    padding-right: 20px;
+    margin: auto;
+    display: inline-block;
+    float: right;
+}
+
+.circle-legend svg {
+    width: 100%;
+    height: 90%;
+}
+
+.circle-legend text {
+    font-size: 11px;
+}
+
+.circle-legend .label {
+    font-size: 12px;
+    font-weight: bold;
+    text-anchor: middle;
+}
+
+.circle-legend .subLabel {
+    font-size: 11px;
+    font-weight: bold;
+}
+
 
 
 
