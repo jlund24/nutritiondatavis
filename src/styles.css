@@ -126,10 +126,6 @@ div.dropdown-wrapper {
     font-weight: bold;
 }
 
-
-
-
-
 #meal-container {
     width: 1500px;
     height: 500px;
@@ -140,8 +136,6 @@ div.dropdown-wrapper {
 #table-svg {
     fill: white;
 }
-
-
 
 /*Food Group Styling*/
 .vegetable {
@@ -184,11 +178,11 @@ div.dropdown-wrapper {
     margin: 0px;
 }
 
-
 table {
     position: relative;
     width: 800px;
-    background-color: #aaa;
+    /* background-color: #aaa; */
+    background-color: white;
     overflow: hidden;
     border-collapse: collapse;
   }
@@ -239,8 +233,10 @@ table {
   }
 
   tbody td {
-    background-color: #bbc;
+    /* background-color: #bbc; */
+    background-color: white;
     min-width: 120px;
+    max-width: 120px;
     border: 1px solid #222;
   }
 

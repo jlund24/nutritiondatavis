@@ -10,52 +10,83 @@ class Table {
         this.width = 775;
         this.height = 800;
 
-        this.columnData = [
-            {
+        this.columnData = {
+            food_title : {
                 "title": "food",
                 "id": "food-title"
             },
-            {
+            serving_size: {
                 "title": "serving size",
-                "id": "serving-size"
+                "id": "serving-size",
+                // "vis" : "text",
+                "visData" : {
+                    type: "text",
+                    value: d => `${d.portion_amount} ${d.serving}`,
+                }
             },
-            {
+            food_group : {
                 "title": "food group",
-                "id": "food-group"
+                "id": "food-group",
+                "visData" : {
+                    type: "text",
+                    //TODO: fix this
+                    value: d => d.food_category_id,
+                    //TODO: fix this
+                    color: d => d.food_category_id
+                }
             },
-            {
+            calories : {
                 "title": "calories",
                 "unit": "cal",
-                "id": "calories"
+                "id": "calories",
+                "visData" : {
+                    type: "donut",
+                    value: d => d["Energy"],
+                    totalValue: d => 2400, 
+                }
+                
             },
-            {
+            carbs : {
                 "title": "total carbs",
                 "unit": "grams",
-                "id": "total-carbs"
+                "id": "total-carbs",
+                "vis" : "donut",
+                "maxValue" : 130
             },
-            {
-                "title": "price",
-                "unit": "dollars",
-                "id": "price"
-            },
-            {
+            protein : {
                 "title": "protein",
                 "unit": "grams",
-                "id": "protein"
+                "id": "protein",
+                "vis": "donut",
+                "maxValue" : 56
             },
-            {
+            fat : {
                 "title": "total fat",
                 "unit": "grams",
-                "id": "total-fat"
+                "id": "total-fat",
+                "vis": "donut",
+                "maxValue": 35
+                //in % kcal
             },
-            {
+            sugar : {
                 "title": "total sugar",
                 "unit": "grams",
-                "id": "total-sugar"
+                "id": "total-sugar",
+                "maxValue": 10,
+                //in % kcal
             },
-        ];
+            price : {
+                "title": "price",
+                "unit": "dollars",
+                "id": "price",
+                "vis": "text"
+            },
+        };
 
-        this.selectedColumns = [[],[],[],[],[],[],[],[]];
+        this.selectedColumns = [this.columnData["serving_size"],
+                                this.columnData["food_group"],
+                                this.columnData["calories"]
+                            ];
     }
 
     createTable()
@@ -69,7 +100,7 @@ class Table {
             .append("thead")
             .append("tr")
             .selectAll("th")
-            .data(this.columnData)
+            .data([this.columnData.food_title, ...this.selectedColumns])
                 .join("th")
                 .classed("header-row", true)
                 .attr("id", d => `${d.id}-header`)
@@ -89,7 +120,6 @@ class Table {
 
         d3.select("#food-table")
             .append("tbody");
-
     }
 
     updateTable()
@@ -103,90 +133,69 @@ class Table {
         // console.log(this.tableElements);
         rows.join("tr")
             .classed("row", true)
-            .append("th")
-                .classed("first-col-cell", true)
-                .classed("food-title-cell", true)
-                .append("p")
-                .classed("food-title-text", true)
-                .text(d => d.title);
+            .selectAll(".food-title-cell")
+                .data(d => [d])
+                .join("th")
+                    .classed("first-col-cell", true)
+                    .classed("food-title-cell", true)
+                    .selectAll(".food-title-text")
+                        .data(d => [d])
+                        .join("p")
+                            .classed("food-title-text", true)
+                            .text(d => d.title);
 
         d3.selectAll(".food-title-cell")
-            .append('img')
-            .attr('src', d => "icon_name" in d && d.icon_name != null ? `assets/${d.icon_name}.svg` : "");
+            .selectAll(".food-title-image")
+            .data(d => [d])
+                .join('img')
+                .classed("food-title-image", true)
+            //.append('img')
+                .attr('src', d => "icon_name" in d && d.icon_name != null ? `assets/${d.icon_name}.svg` : "");
 
         let td = d3.selectAll(".row")
             .selectAll("td")  
             .data((d) => {
                 let rowData = [];
                 this.selectedColumns.forEach(column => {
-                    let cellData = {
-                        // "vis": column.vis,
-                        "vis": "donut",
-                        // "value": d[column.key],
-                        "value": 6,
-                        // "total_value": demographicData[something],
-                        "total_value": 10,
-                        // "units": d[column.unit],
-                        "units": "g"
+                    // d is the rowData
+                    // let cellData = {
+                    //     // "vis": column.vis,
+                    //     "vis": column.visData.type,
+                    //     // "value": d[column.key],
+                    //     "value": 6,
+                    //     // "total_value": demographicData[something],
+                    //     "total_value": column.maxValue,
+                    //     // "units": column.unit,
+                    //     "units": column.unit
 
-                    };
-                    rowData.push(cellData);
+                    // };
+                    // console.log("column");
+                    // console.log(column);
+                    let combinedCellData = {
+                        columnData: column.visData,
+                        units: column.unit,
+                        rowData: d
+                    }
+                    rowData.push(combinedCellData);
                 });
                 return rowData;
             });
 
         td.join("td")
-            .classed("cell", true)
-            // .text(d => d.vis);
-            ;
+            .classed("cell", true);
         
         let donutCells = d3.selectAll(".cell").filter((d) => {
-            return d.vis == "donut";
+            return d.columnData.type == "donut";
         });
         
-        let radius = 25;
-        let arc = d3.arc()
-            .innerRadius(radius * .75)
-            .outerRadius(radius);
+        this.updateDonutCells(donutCells);
 
-        let pie = d3.pie();
-        pie.value(d => d.share);
-         
-       
-        donutCells.append("svg")
-            .attr("width", 120)
-            .attr("height", 60)
-            .append("g")
-                .classed("donut-group", true)
-                .attr("transform", "translate(" + 120 / 2 + "," + 60 / 2 + ")");
+        let textCells = d3.selectAll(".cell").filter((d) => {
+            return d.columnData.type == "text";
+        });
 
-        d3.selectAll(".donut-group")
-            .selectAll(".slice-group")
-            .data(d => {
-                let pieData = [
-                    {
-                        share: d.value / d.total_value,
-                        color: "green"
-                    },
-                    {
-                        share: (d.total_value - d.value) / d.total_value,
-                        color: "gray"
-                    }
-                    
-                ];
-                return pie(pieData);
-            })
-            .join("g")
-            .classed("slice-group", true)
-            .append("path")
-                .attr("d", arc)
-                .style("fill", d => d.data.color)
-                ;
-
+        this.updateTextCells(textCells);
         
-            
-
-
         this.setScroll();
     }
 
@@ -202,5 +211,64 @@ class Table {
         });
     }
 
+    updateDonutCells(donutCells)
+    {
+        let radius = 25;
+        let arc = d3.arc()
+            .innerRadius(radius * .75)
+            .outerRadius(radius);
+
+        let pie = d3.pie();
+        pie.value(d => d.share)
+            .sort(null);
+         
+        donutCells
+            .selectAll(".donut-svg")
+            .data(d => [d])
+            .join("svg")
+                .classed("donut-svg", true)
+                .attr("width", 120)
+                .attr("height", 60)
+                .selectAll(".donut-group")
+                .data(d => [d])
+                .join("g")
+                    .classed("donut-group", true)
+                    .attr("transform", "translate(" + 120 / 2 + "," + 60 / 2 + ")");
+
+        d3.selectAll(".donut-group")
+            .selectAll(".slice-group")
+            .data(d => {
+                let value = d.columnData.value(d.rowData);
+                let totalValue = d.columnData.totalValue(d.rowData);
+
+                let pieData = [
+                    {
+                        share: value / totalValue,
+                        color: "green"
+                    },
+                    {
+                        share: (totalValue - value) / totalValue,
+                        color: "lightgray"
+                    },
+                ];
+                return pie(pieData);
+            })
+            .join("g")
+            .classed("slice-group", true)
+            .selectAll(".slice-path")
+                .data(d => [d])
+                .join("path")
+                    .classed("slice-path", true)
+                    .attr("d", arc)
+                    .style("fill", d => d.data.color)
+                ;
+    }
+
+    updateTextCells(textCells)
+    {
+        textCells
+            .text(d => d.columnData.value(d.rowData));
+
+    }
     
 }
