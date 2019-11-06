@@ -1,4 +1,3 @@
-
 SELECT f.*,
 food_portion.amount AS portion_amount,
 COALESCE(food_portion.portion_description, food_portion.modifier) AS serving,
@@ -22,14 +21,14 @@ FROM (SELECT FIRST(fdc_id) AS fdc_id, FIRST(data_type) AS data_type, description
     "Breakfast tart")
     AND data_type != "branded_food"
     GROUP BY description) f
-LEFT JOIN food_portion ON f.fdc_id = food_portion.fdc_id AND food_portion.seq_num = 1
+LEFT JOIN food_portion ON f.fdc_id = food_portion.fdc_id
 LEFT JOIN (SELECT food_nutrient.fdc_id, nutrient.name AS nutrient, food_nutrient.amount AS nutrients_per_100g, food_nutrient.data_points
     FROM food_nutrient
-    INNER JOIN nutrient
+    LEFT JOIN nutrient
     ON nutrient.id = food_nutrient.nutrient_id
     WHERE name IN ("Protein","Total lipid (fat)","Carbohydrate, by difference","Energy","Starch",
-    "Sucrose","Glucose (dextrose)","Fructose","Lactose","Caffeine","Sugars",
-    "Total NLEA","Fiber, total dietary","Calcium, Ca","Iron, Fe","Magnesium, Mg",
+    "Sucrose","Glucose (dextrose)","Fructose","Lactose","Caffeine","Sugars, Total NLEA", "Sugars, total including NLEA",
+    "Fiber, total dietary","Calcium, Ca","Iron, Fe","Magnesium, Mg",
     "Potassium, K","Sodium, Na","Zinc, Zn","Fluoride, F","Iodine, I",
     "Vitamin A, RAE","Vitamin E (alpha-tocopherol)","Vitamin D (D2 + D3)",
     "Vitamin C, total ascorbic acid","Folate, DFE","Cholesterol",

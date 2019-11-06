@@ -1,8 +1,12 @@
 library(tidyverse)
 library(readxl)
+library(jsonlite)
 
-# fda data
-nutrients <- read_csv('preprocess/nutrition_extract_201911011127.csv')
+timestamp <- '201911061442'
+
+# fda data, extracted with the query
+
+nutrients <- read_csv(str_c('preprocess/nutrition_extract_', timestamp, '.csv'))
 colnames(nutrients) <- c('fdc_id', 'data_type', 'description', 'food_category_id',
                      'portion_amount', 'serving', 'grams_per_serving',
                      'nutrients_per_100g', 'data_points', 'nutrient')
@@ -13,6 +17,16 @@ nutrients_spread <- nutrients %>%
   select(-nutrients_per_100g) %>%
   pivot_wider(names_from = nutrient,
               values_from = nutrients)
+
+# pick a serving that makes sense
+nutrients_spread$na <- rowSums(is.na(nutrients_spread))
+nutrients_spread <- nutrients_spread %>%
+  group_by(fdc_id, description) %>%
+  # has "cup" in it, or has the least NA's
+  filter(str_detect(serving, 'cup') | (!(any(str_detect(serving, 'cup'))) & min_rank(na) == 1)) %>%
+  # now pick the one with least na's
+  filter(row_number(na) == 1) %>%
+  select(-na)
 
 # price data
 snack_prices <- read_excel('raw/snackprices.xls', range = 'A4:B23', col_names = FALSE)
@@ -32,3 +46,6 @@ nutrients_and_price <- nutrients_spread %>%
 
 nutrients_and_price %>%
   write_csv('preprocess/nutrients_and_price.csv')
+
+nutrients_and_price %>%
+  write_json('src/data/nutrients_and_price.json')
