@@ -1,29 +1,29 @@
-price_name,fda_description,title
-Bananas,"Banana, raw",Banana
-Cantaloupe,"Melons, cantaloupe, raw",Cantaloupe
-Grapes,"Grapes, raw, NS as to type",Grapes
-"Oranges, navel","Oranges, raw, navels (Includes foods for USDA's Food Distribution Program)",Oranges
-"Peaches, canned*","Peach, cooked or canned, drained solids",Canned Peaches
-"Pineapple, canned*","Pineapple, cooked or canned, NS as to sweetened or unsweetened; sweetened, NS as to type of sweetener",Canned Pineapple
-Plums*,"Plums, raw",Plum
-"Raisins, dried*",Raisins,Raisins
-Strawberries*,"Strawberries, raw",Strawberries
-Watermelon  ,"Watermelon, raw",Watermelon
-Broccoli florets*,"Broccoli, raw",Broccoli
-"Carrots, baby*","Carrots, raw",Baby carrots
-Celery*,"Celery, raw",Celery
-Red peppers*,"Pepper, sweet, red, raw",Red peppers
-"Sweet potatoes, cooked*","Sweet potato, baked, peel not eaten, fat not added in cooking",Sweet potatoes
-"Tomatoes, grape/cherry* ","Tomatoes, grape, raw",Cherry tomatoes
-Cookies,"Cookie, chocolate chip",Cookies
-Cupcakes ,"Cake or cupcake, NS as to type",Cupcakes
-Donuts ,"Doughnut, raised or yeast",Donuts
-Graham crackers ,"Crackers, graham",Graham Crackers
-Ice cream4,"Ice cream, regular, chocolate",Chocolate Ice Cream
-Muffins,"Muffin, fruit",Blueberry Muffin
-"Pizza, from frozen","DIGIORNO Pizza, cheese topping, rising crust, frozen, baked",Pizza
-Popsicles and bars5,Ice pop,Popsicle
-Potato chips,"White potato chips, lightly salted",Potato Chips
-Pretzels,"Pretzels, hard",Pretzels
-"Pudding, ready-to-eat","Pudding, ready-to-eat, chocolate and non-chocolate flavors combined",Pudding
-Toaster pastries,Breakfast tart,Pop-Tart
+price_name,fda_description,title,category
+Bananas,"Banana, raw",Banana,fruit
+Cantaloupe,"Melons, cantaloupe, raw",Cantaloupe,fruit
+Grapes,"Grapes, raw, NS as to type",Grapes,fruit
+"Oranges, navel","Oranges, raw, navels (Includes foods for USDA's Food Distribution Program)",Oranges,fruit
+"Peaches, canned*","Peach, cooked or canned, drained solids",Canned Peaches,fruit
+"Pineapple, canned*","Pineapple, cooked or canned, NS as to sweetened or unsweetened; sweetened, NS as to type of sweetener",Canned Pineapple,fruit
+Plums*,"Plums, raw",Plum,fruit
+"Raisins, dried*",Raisins,Raisins,fruit
+Strawberries*,"Strawberries, raw",Strawberries,fruit
+Watermelon  ,"Watermelon, raw",Watermelon,fruit
+Broccoli florets*,"Broccoli, raw",Broccoli,vegetable
+"Carrots, baby*","Carrots, raw",Baby carrots,vegetable
+Celery*,"Celery, raw",Celery,vegetable
+Red peppers*,"Pepper, sweet, red, raw",Red peppers,vegetable
+"Sweet potatoes, cooked*","Sweet potato, baked, peel not eaten, fat not added in cooking",Sweet potatoes,grain
+"Tomatoes, grape/cherry* ","Tomatoes, grape, raw",Cherry tomatoes,vegetable
+Cookies,"Cookie, chocolate chip",Cookies,dessert
+Cupcakes ,"Cake or cupcake, NS as to type",Cupcakes,dessert
+Donuts ,"Doughnut, raised or yeast",Donuts,dessert
+Graham crackers ,"Crackers, graham",Graham Crackers,dessert
+Ice cream4,"Ice cream, regular, chocolate",Chocolate Ice Cream,dessert
+Muffins,"Muffin, fruit",Blueberry Muffin,dessert
+"Pizza, from frozen","DIGIORNO Pizza, cheese topping, rising crust, frozen, baked",Pizza,compound
+Popsicles and bars5,Ice pop,Popsicle,dessert
+Potato chips,"White potato chips, lightly salted",Potato Chips,compound
+Pretzels,"Pretzels, hard",Pretzels,compound
+"Pudding, ready-to-eat","Pudding, ready-to-eat, chocolate and non-chocolate flavors combined",Pudding,dessert
+Toaster pastries,Breakfast tart,Pop-Tart,dessert
