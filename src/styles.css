@@ -267,6 +267,8 @@ table {
 
   .cell {
       text-align: center;
+      text-overflow: ellipsis;
+      height: 60px;
   }
 
   .donut-label {

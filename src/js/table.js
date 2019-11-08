@@ -353,10 +353,23 @@ class Table {
                 .join("text")
                     .text(d => {
                         // console.log(d);
-                        return d.columnData.value(d.rowData)
+
+                        return ellipsizeText(d.columnData.value(d.rowData));
                     })
                     .attr("class", d => d.columnData.color(d.rowData));
 
     }
     
+}
+
+function ellipsizeText(text)
+{
+    let ending = "...";
+    let maxLength = 35;
+    if (text.length > maxLength)
+    {
+        text = text.substring(0, maxLength - ending.length) + ending;
+    }
+
+    return text;
 }
