@@ -278,7 +278,7 @@ table {
 
   .header-row {
     /* background-color: #99a; */
-    background-color: rgba(153, 153, 170, 0.329);
+    background-color: rgb(213, 213, 226);
     min-width: 120px;
     height: 32px;
     border: 1px solid #222;
@@ -330,7 +330,7 @@ table {
     display: block; /*seperates the first column from the tbody*/
     height: auto;
     max-width: 122px;
-    background-color: rgba(153, 153, 170, 0.329);
+    background-color: rgb(213, 213, 226);
   }
 
   .cell {
