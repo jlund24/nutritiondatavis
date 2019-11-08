@@ -242,6 +242,7 @@ div.dropdown-wrapper {
     text-transform: capitalize;
     padding: 0px;
     margin: 0px;
+    font-weight: bold;
 }
 
 .header-line-2 {
@@ -276,10 +277,12 @@ table {
   }
 
   .header-row {
-    background-color: #99a;
+    /* background-color: #99a; */
+    background-color: rgba(153, 153, 170, 0.329);
     min-width: 120px;
     height: 32px;
     border: 1px solid #222;
+    font-weight: bold;
   }
   
   thead th:nth-child(1) {/*first cell in the header*/
@@ -327,7 +330,7 @@ table {
     display: block; /*seperates the first column from the tbody*/
     height: auto;
     max-width: 122px;
-    background-color: #99a;
+    background-color: rgba(153, 153, 170, 0.329);
   }
 
   .cell {

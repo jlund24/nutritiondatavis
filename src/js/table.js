@@ -13,7 +13,8 @@ class Table {
         this.columnData = {
             food_title : {
                 "title": "food",
-                "id": "food-title"
+                "id": "food-title",
+                // "color": d => d.category
             },
             serving_size: {
                 "title": "serving size",
@@ -26,15 +27,15 @@ class Table {
                     color: _ => ""
                 }
             },
-            food_group : {
-                "title": "food group",
-                "id": "food-group",
-                "visData" : {
-                    type: "text",
-                    value: d => d.category,
-                    color: d => d.category,
-                }
-            },
+            // food_group : {
+            //     "title": "food group",
+            //     "id": "food-group",
+            //     "visData" : {
+            //         type: "text",
+            //         value: d => d.category,
+            //         color: d => d.category,
+            //     }
+            // },
             calories : {
                 "title": "calories",
                 "unit": "cal",
@@ -111,7 +112,7 @@ class Table {
 
         this.selectedColumns = [
             this.columnData["serving_size"],
-            this.columnData["food_group"],
+            // this.columnData["food_group"],
             this.columnData["calories"],
             this.columnData["carbs"],
             this.columnData["protein"],
@@ -203,6 +204,7 @@ class Table {
                     .selectAll(".food-title-text")
                         .data(d => [d])
                         .join("p")
+                            .attr("class", d => d.category)
                             .classed("food-title-text", true)
                             .text(d => d.title);
 
@@ -212,7 +214,7 @@ class Table {
                 .join('img')
                 .classed("food-title-image", true)
             //.append('img')
-                .attr('src', d => "icon_name" in d && d.icon_name != null ? `assets/${d.icon_name}.svg` : "");
+                .attr('src', d => ("icon_name" in d && d.icon_name != null) ? `assets/${d.icon_name}.svg` : "");
 
         let td = d3.selectAll(".row")
             .selectAll("td")  
