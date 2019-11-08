@@ -137,33 +137,40 @@ div.dropdown-wrapper {
     fill: white;
 }
 
-/*Food Group Styling*/
+/*Food Group Colors*/
 .vegetable {
-	fill: green;
+    fill: green;
+    color: green;
 }
 
 .fruit {
-	fill: red;
+    fill: red;
+    color: red;
 }
 
 .protein {
-	fill: purple;
+    fill: purple;
+    color: purple;
 }
 
 .dairy {
-	fill: blue;
+    fill: blue;
+    color: blue;
 }
 
 .grain {
-	fill: orange;
+    fill: orange;
+    color: orange;
 }
 
 .dessert {
-	fill: pink;
+    fill: pink;
+    color: pink
 }
 
 .compound {
-	fill: brown;
+    fill: brown;
+    color: brown;
 }
 
 .header-line-1 {
@@ -222,7 +229,7 @@ table {
     position: relative;
     display: block; /*seperates the tbody from the header*/
     width: 800px;
-    height: 750px;
+    height: 850px;
     overflow: scroll;
   }
   
@@ -244,8 +251,10 @@ table {
     position: relative;
     display: block; /*seperates the first cell in the header from the header*/
     background-color: #88b;
-    /* min-height: 32px; */
+    min-height: 43px;
     min-width: 120px;
+    margin: 0px;
+    /* padding: 0px; */
   }
 
   .food-title-cell {
@@ -254,5 +263,13 @@ table {
     height: auto;
     max-width: 122px;
     background-color: #99a;
+  }
+
+  .cell {
+      text-align: center;
+  }
+
+  .donut-label {
+      font-size: 10pt;
   }
 

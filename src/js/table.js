@@ -21,7 +21,9 @@ class Table {
                 // "vis" : "text",
                 "visData" : {
                     type: "text",
-                    value: d => `${d.portion_amount} ${d.serving}`,
+                    //value: d => `${d.portion_amount} ${d.serving}`,
+                    value: d => `1 ${d.serving}`,
+                    color: _ => ""
                 }
             },
             food_group : {
@@ -29,10 +31,8 @@ class Table {
                 "id": "food-group",
                 "visData" : {
                     type: "text",
-                    //TODO: fix this
-                    value: d => d.food_category_id,
-                    //TODO: fix this
-                    color: d => d.food_category_id
+                    value: d => d.category,
+                    color: d => d.category,
                 }
             },
             calories : {
@@ -42,7 +42,8 @@ class Table {
                 "visData" : {
                     type: "donut",
                     value: d => d["Energy"],
-                    totalValue: d => 2400, 
+                    totalValue: _ => 2400, 
+                    // text: d => `${d["Energy"]} / 2400`
                 }
                 
             },
@@ -50,43 +51,74 @@ class Table {
                 "title": "total carbs",
                 "unit": "grams",
                 "id": "total-carbs",
-                "vis" : "donut",
-                "maxValue" : 130
+                "visData" : {
+                    type: "donut",
+                    value: d => d["Carbohydrate, by difference"],
+                    totalValue: _ => 130,
+                    // text: d => `${d["Carbohydrate, by difference"]} / 130`
+                }
             },
             protein : {
                 "title": "protein",
                 "unit": "grams",
                 "id": "protein",
-                "vis": "donut",
-                "maxValue" : 56
+                "visData" : {
+                    type: "donut",
+                    value: d => d["Protein"],
+                    totalValue: _ => 56
+                }
             },
             fat : {
                 "title": "total fat",
                 "unit": "grams",
                 "id": "total-fat",
-                "vis": "donut",
-                "maxValue": 35
-                //in % kcal
+                "visData" : {
+                    type: "donut",
+                    value: d => d["Total lipid (fat)"],
+                    totalValue: _ => 93
+                }
+                
+                //max val is 35% kcal. I got 93 by taking 
+                // number of calories * %kcal / num calories per g of fat
+                // maxVal = 2400 * .35 / 9 = 93
             },
             sugar : {
                 "title": "total sugar",
                 "unit": "grams",
                 "id": "total-sugar",
                 "maxValue": 10,
-                //in % kcal
+                "visData" : {
+                    type: "donut",
+                    value: d => d["Fructose"] ? d["Fructose"] : 0, //should be something with NLEA
+                    totalValue: _ => 60
+                }
+                //max val is 10% kcal
+                //num_calories * %kcal / num calories per g of sugar
+                //maxVal = 2400 * .1 / 4 = 60
             },
             price : {
                 "title": "price",
                 "unit": "dollars",
                 "id": "price",
-                "vis": "text"
+                "visData" : {
+                    type: "text",
+                    value: d => `$${d.price.toFixed(2)}`,
+                    color: _ => ""
+                }
+                // "vis": "text"
             },
         };
 
-        this.selectedColumns = [this.columnData["serving_size"],
-                                this.columnData["food_group"],
-                                this.columnData["calories"]
-                            ];
+        this.selectedColumns = [
+            this.columnData["serving_size"],
+            this.columnData["food_group"],
+            this.columnData["calories"],
+            this.columnData["carbs"],
+            this.columnData["protein"],
+            this.columnData["fat"],
+            this.columnData["sugar"],
+            this.columnData["price"]
+            ];
     }
 
     createTable()
@@ -96,27 +128,36 @@ class Table {
             .attr("id", "food-table");
 
         // add header row
-        d3.select("#food-table")
+        let headerRow = d3.select("#food-table")
             .append("thead")
             .append("tr")
-            .selectAll("th")
-            .data([this.columnData.food_title, ...this.selectedColumns])
-                .join("th")
-                .classed("header-row", true)
-                .attr("id", d => `${d.id}-header`)
-                    .append("p")
-                        .classed("header-line-1", true)
-                        .text(d => d.title); 
-        
-        
-        d3.select("#food-title-header")
-            .classed("header-row", false);
+                .attr("id", "header-row-container");
 
-        // add header units
-        d3.selectAll("#food-table th")
-            .append("p")
-                .classed("header-line-2", true)
-                .text(d => ("unit" in d) ? d.unit : "");
+        headerRow.selectAll("th")
+            .data([this.columnData.food_title])
+                .join("th")
+                    .attr("id", d => `${d.id}-header`)
+                    .selectAll(".header-line-1")
+                    .data(d => [d])
+                        .join("p")
+                            .classed("header-line-1", true)
+                            .text(d => d.title); 
+
+        // headerRow.selectAll("th")
+        //     .data([this.columnData.food_title, ...this.selectedColumns])
+        //         .join("th")
+        //         .classed("header-row", true)
+        //         .attr("id", d => `${d.id}-header`)
+        //             .append("p")
+        //                 .classed("header-line-1", true)
+        //                 .text(d => d.title); 
+        
+        
+        // d3.select("#food-title-header")
+        //     .classed("header-row", false);
+
+        
+        
 
         d3.select("#food-table")
             .append("tbody");
@@ -124,6 +165,27 @@ class Table {
 
     updateTable()
     {
+        //bind data to columns
+        d3.select("#header-row-container")
+            .selectAll(".header-row")
+            .data(this.selectedColumns)
+            .join("th")
+                .classed("header-row", true)
+                .attr("id", d => `${d.id}-header`)
+                    .selectAll(".header-line-1")
+                    .data(d => [d])
+                    .join("p")
+                        .classed("header-line-1", true)
+                        .text(d => d.title);
+
+        //add header units
+        d3.selectAll(".header-row")
+            .selectAll(".header-line-2")
+            .data(d => [d])
+            .join("p")
+                .classed("header-line-2", true)
+                .text(d => ("unit" in d) ? d.unit : "");
+        
         // bind data to rows
         let rows = d3.select("#food-table tbody")
             .selectAll(".row")
@@ -228,12 +290,12 @@ class Table {
             .join("svg")
                 .classed("donut-svg", true)
                 .attr("width", 120)
-                .attr("height", 60)
+                .attr("height", 52)
                 .selectAll(".donut-group")
                 .data(d => [d])
                 .join("g")
                     .classed("donut-group", true)
-                    .attr("transform", "translate(" + 120 / 2 + "," + 60 / 2 + ")");
+                    .attr("transform", "translate(" + 120 / 2 + "," + 52 / 2 + ")");
 
         d3.selectAll(".donut-group")
             .selectAll(".slice-group")
@@ -262,12 +324,38 @@ class Table {
                     .attr("d", arc)
                     .style("fill", d => d.data.color)
                 ;
+
+        donutCells
+            .selectAll(".donut-label")
+            .data(d => [d])
+            .join("div")
+                .classed("donut-label", true)
+                .selectAll(".donut-label-value", true)
+                .data(d => [d])
+                .join("span")
+                    .classed("donut-label-value", true)
+                    .text(d => +d.columnData.value(d.rowData).toFixed(2))
+                ;
+
+        donutCells.selectAll(".donut-label")
+            .selectAll(".donut-label-totalValue")
+            .data(d => [d])
+            .join("span")
+                .classed("donut-label-totalValue", true)
+                .text(d => ` / ${+d.columnData.totalValue(d.rowData).toFixed(2)}`);
     }
 
     updateTextCells(textCells)
     {
         textCells
-            .text(d => d.columnData.value(d.rowData));
+            .selectAll("text")
+                .data(d => [d])
+                .join("text")
+                    .text(d => {
+                        // console.log(d);
+                        return d.columnData.value(d.rowData)
+                    })
+                    .attr("class", d => d.columnData.color(d.rowData));
 
     }
     
