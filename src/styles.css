@@ -274,6 +274,7 @@ table {
     min-width: 120px;
     height: 32px;
     border: 1px solid #222;
+    cursor: pointer;
   }
 
   .header-row {
@@ -283,6 +284,7 @@ table {
     height: 32px;
     border: 1px solid #222;
     font-weight: bold;
+    cursor: pointer;
   }
   
   thead th:nth-child(1) {/*first cell in the header*/
@@ -341,5 +343,15 @@ table {
 
   .donut-label {
       font-size: 10pt;
+  }
+
+  .header-cell-container {
+      display: flex;
+      flex-flow: row nowrap;
+      justify-content: center;
+  }
+
+  .hidden {
+      display: none;
   }
 

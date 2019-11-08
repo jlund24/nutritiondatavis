@@ -14,7 +14,7 @@ class Table {
             food_title : {
                 "title": "food",
                 "id": "food-title",
-                // "color": d => d.category
+                "sort": (first, second) => first.title <= second.title ? -1 : 1
             },
             serving_size: {
                 "title": "serving size",
@@ -25,7 +25,8 @@ class Table {
                     //value: d => `${d.portion_amount} ${d.serving}`,
                     value: d => `1 ${d.serving}`,
                     color: _ => ""
-                }
+                },
+                "sort": (first, second) => first.serving <= second.serving ? -1 : 1
             },
             // food_group : {
             //     "title": "food group",
@@ -45,8 +46,8 @@ class Table {
                     value: d => d["Energy"],
                     totalValue: _ => 2400, 
                     // text: d => `${d["Energy"]} / 2400`
-                }
-                
+                },
+                "sort": (first, second) => first["Energy"] <= second["Energy"] ? -1 : 1 
             },
             carbs : {
                 "title": "total carbs",
@@ -57,7 +58,9 @@ class Table {
                     value: d => d["Carbohydrate, by difference"],
                     totalValue: _ => 130,
                     // text: d => `${d["Carbohydrate, by difference"]} / 130`
-                }
+                },
+                "sort": (first, second) => first["Carbohydrate, by difference"] 
+                    <= second["Carbohydrate, by difference"] ? -1 : 1 
             },
             protein : {
                 "title": "protein",
@@ -67,7 +70,8 @@ class Table {
                     type: "donut",
                     value: d => d["Protein"],
                     totalValue: _ => 56
-                }
+                },
+                "sort": (first, second) => first["Protein"] <= second["Protein"] ? -1 : 1 
             },
             fat : {
                 "title": "total fat",
@@ -77,7 +81,8 @@ class Table {
                     type: "donut",
                     value: d => d["Total lipid (fat)"],
                     totalValue: _ => 93
-                }
+                },
+                "sort" : (first, second) => first["Total lipid (fat)"] <= second["Total lipid (fat)"] ? -1 : 1
                 
                 //max val is 35% kcal. I got 93 by taking 
                 // number of calories * %kcal / num calories per g of fat
@@ -92,7 +97,8 @@ class Table {
                     type: "donut",
                     value: d => d["Fructose"] ? d["Fructose"] : 0, //should be something with NLEA
                     totalValue: _ => 60
-                }
+                },
+                "sort" : (first, second) => (first["Fructose"] ? first["Fructose"] : 0) <= (second["Fructose"] ? second["Fructose"] : 0) ? -1 : 1
                 //max val is 10% kcal
                 //num_calories * %kcal / num calories per g of sugar
                 //maxVal = 2400 * .1 / 4 = 60
@@ -105,7 +111,8 @@ class Table {
                     type: "text",
                     value: d => `$${d.price.toFixed(2)}`,
                     color: _ => ""
-                }
+                },
+                "sort" : (first, second) => first["price"] <= second["price"] ? -1 : 1
                 // "vis": "text"
             },
         };
@@ -120,6 +127,42 @@ class Table {
             this.columnData["sugar"],
             this.columnData["price"]
             ];
+
+        this.sortedBy = null;
+    }
+
+    sortByColumn(d, instance, selection)
+    {
+        let direction = null;
+        if (instance.sortedBy === d.id)
+        {
+            instance.tableElements = instance.tableElements.reverse();
+            instance.sortedBy = null;
+            direction = "down";
+        }
+        else
+        {
+            // console.log("d");
+            // console.log(d);
+            instance.tableElements = instance.tableElements.sort( d.sort );
+            instance.sortedBy = d.id;
+            direction = "up";
+        }
+
+        instance.updateTable();
+        instance.showSortIcon(selection, direction);
+    }
+
+    showSortIcon(selection, direction)
+    {
+        // hide any currently showing icons
+        d3.selectAll('.sort-icon')
+            .classed("hidden", true);
+
+        // show the correct one
+        d3.select(selection)
+            .select(`.sorted-${direction}-icon`)
+            .classed("hidden", false);
     }
 
     createTable()
@@ -134,15 +177,45 @@ class Table {
             .append("tr")
                 .attr("id", "header-row-container");
 
+        let instance = this;
+
         headerRow.selectAll("th")
             .data([this.columnData.food_title])
                 .join("th")
                     .attr("id", d => `${d.id}-header`)
-                    .selectAll(".header-line-1")
+                    .on("click", function(d) {
+                        instance.sortByColumn(d, instance, this);
+                    })
+                    .selectAll(".header-cell-container")
                     .data(d => [d])
-                        .join("p")
-                            .classed("header-line-1", true)
-                            .text(d => d.title); 
+                    .join("div")
+                        .classed("header-cell-container", true)
+                        .selectAll(".header-title-container")
+                        .data(d => [d])
+                        .join("div")
+                            .classed("header-title-container", true)
+                                .selectAll(".header-line-1")
+                                .data(d => [d])
+                                    .join("p")
+                                        .classed("header-line-1", true)
+                                        .text(d => d.title); 
+        
+        // add sort icons and then hide them for use later
+        d3.selectAll(".header-cell-container")
+            .selectAll(".sorted-down-icon")
+            .data(d => [d])
+            .join("img")
+                .classed("sort-icon sorted-down-icon hidden", true)
+                    .attr('src', `assets/arrow_down.svg`);
+
+        d3.selectAll(".header-cell-container")
+            .selectAll(".sorted-up-icon")
+            .data(d => [d])
+            .join("img")
+                .classed("sort-icon sorted-up-icon hidden", true)
+                    .attr('src', `assets/arrow_up.svg`);
+
+        
 
         // headerRow.selectAll("th")
         //     .data([this.columnData.food_title, ...this.selectedColumns])
@@ -166,6 +239,7 @@ class Table {
 
     updateTable()
     {
+        let instance = this;
         //bind data to columns
         d3.select("#header-row-container")
             .selectAll(".header-row")
@@ -173,19 +247,45 @@ class Table {
             .join("th")
                 .classed("header-row", true)
                 .attr("id", d => `${d.id}-header`)
-                    .selectAll(".header-line-1")
+                .on("click", function(d) {
+                    instance.sortByColumn(d, instance, this);
+                })
+                .selectAll(".header-cell-container")
+                .data(d => [d])
+                .join("div")
+                    .classed("header-cell-container", true)
+                    .selectAll(".header-title-container")
                     .data(d => [d])
-                    .join("p")
-                        .classed("header-line-1", true)
-                        .text(d => d.title);
+                    .join("div")
+                        .classed("header-title-container", true)
+                        .selectAll(".header-line-1")
+                        .data(d => [d])
+                        .join("p")
+                            .classed("header-line-1", true)
+                            .text(d => d.title);
 
         //add header units
-        d3.selectAll(".header-row")
+        d3.selectAll(".header-title-container")
             .selectAll(".header-line-2")
             .data(d => [d])
             .join("p")
                 .classed("header-line-2", true)
                 .text(d => ("unit" in d) ? d.unit : "");
+
+        //add sort icons
+        d3.selectAll(".header-cell-container")
+            .selectAll(".sorted-down-icon")
+            .data(d => [d])
+            .join("img")
+                .classed("sort-icon sorted-down-icon hidden", true)
+                    .attr('src', `assets/arrow_down.svg`);
+
+        d3.selectAll(".header-cell-container")
+            .selectAll(".sorted-up-icon")
+            .data(d => [d])
+            .join("img")
+                .classed("sort-icon sorted-up-icon hidden", true)
+                    .attr('src', `assets/arrow_up.svg`);
         
         // bind data to rows
         let rows = d3.select("#food-table tbody")
@@ -213,7 +313,6 @@ class Table {
             .data(d => [d])
                 .join('img')
                 .classed("food-title-image", true)
-            //.append('img')
                 .attr('src', d => ("icon_name" in d && d.icon_name != null) ? `assets/${d.icon_name}.svg` : "");
 
         let td = d3.selectAll(".row")
