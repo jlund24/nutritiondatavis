@@ -89,8 +89,9 @@ div.dropdown-wrapper {
     display: inline-block;
     margin-left: 75px;
     width: 200px;
-    height: 130px;
-    padding: 2px;
+/*    height: 130px;*/
+	height:80px;
+	padding: 2px;
 }
 
 .dropdown {
@@ -99,7 +100,8 @@ div.dropdown-wrapper {
 
 .circle-legend {
     width: 200px;
-    height: 120px;
+/*    height: 120px;*/
+	height: 80px;
     padding-right: 20px;
     margin: auto;
     display: inline-block;
@@ -125,6 +127,69 @@ div.dropdown-wrapper {
     font-size: 11px;
     font-weight: bold;
 }
+
+#switchDiv {
+    display: flex;
+/*	margin: auto;*/
+	align-items: center;
+    margin-left: 250px;
+/*    width: 250px;*/
+    height: 50;
+    padding: 2px;
+/*	width: 250px;*/
+}
+
+/*Switch adapted from https://danklammer.com/articles/simple-css-toggle-switch/*/
+.toggle {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  width: 62px;
+  height: 32px;
+  display: inline-block;
+  position: relative;
+  border-radius: 50px;
+  overflow: hidden;
+  outline: none;
+  border: none;
+  cursor: pointer;
+  background-color: #2196F3;
+  transition: background-color ease 0.3s;
+}
+
+.toggle:before {
+  content: "";
+  display: block;
+  position: absolute;
+/*  z-index: 2;*/
+  width: 28px;
+  height: 28px;
+  background: #fff;
+  left: 2px;
+  top: 2px;
+  border-radius: 50%;
+  font: 10px/28px Helvetica;
+  text-transform: uppercase;
+  font-weight: bold;
+  text-indent: -22px;
+  word-spacing: 37px;
+  color: #fff;
+  text-shadow: -1px -1px rgba(0,0,0,0.15);
+  white-space: nowrap;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.2);
+  transition: all cubic-bezier(0.3, 1.5, 0.7, 1) 0.3s;
+}
+
+.toggle:checked {
+  background-color: #2196F3;
+}
+
+.toggle:checked:before {
+  left: 32px;
+}
+
+
+
 
 #meal-container {
     width: 1500px;

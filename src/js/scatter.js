@@ -23,6 +23,14 @@ class ScatterPlot {
 		this.sugarMax = d3.max(data, d => d.Fructose); //***UPDATE to 'Sugars, Total NLEA' when data is updated ***
 		this.carbMax = d3.max(data, d => d['Carbohydrate, by difference']);
 		
+		this.energyPerGramMax = d3.max(data, d => d.Energy / d.grams_per_serving);
+		this.pricePerGramMax = d3.max(data, d => d.price / d.grams_per_serving);
+		this.proteinPerGramMax = d3.max(data, d => d.Protein / d.grams_per_serving);
+		this.fatPerGramMax = d3.max(data, d => d['Total lipid (fat)'] / d.grams_per_serving);
+		this.sugarPerGramMax = d3.max(data, d => d.Fructose / d.grams_per_serving); //***UPDATE to 'Sugars, Total NLEA' when data is updated ***
+		this.carbPerGramMax = d3.max(data, d => d['Carbohydrate, by difference'] / d.grams_per_serving);
+		
+		//energy scales
 		let energyScaleX = d3
 			.scaleLinear()
 			.domain([0, this.energyMax])
@@ -35,6 +43,19 @@ class ScatterPlot {
 			.range([this.height, 0])
 			.nice();
 		
+		let energyPerGramScaleX = d3
+			.scaleLinear()
+			.domain([0, this.energyPerGramMax])
+			.range([0, this.width])
+			.nice();
+		
+		let energyPerGramScaleY= d3
+			.scaleLinear()
+			.domain([0, this.energyPerGramMax])
+			.range([this.height, 0])
+			.nice();
+		
+		//price scales
 		let priceScaleX = d3
 			.scaleLinear()
 			.domain([0, this.priceMax])
@@ -47,6 +68,19 @@ class ScatterPlot {
 			.range([this.height, 0])
 			.nice();
 		
+		let pricePerGramScaleX = d3
+			.scaleLinear()
+			.domain([0, this.pricePerGramMax])
+			.range([0, this.width])
+			.nice();
+		
+		let pricePerGramScaleY= d3
+			.scaleLinear()
+			.domain([0, this.pricePerGramMax])
+			.range([this.height, 0])
+			.nice();
+		
+		//protein scales
 		let proteinScaleX = d3
 			.scaleLinear()
 			.domain([0, this.proteinMax])
@@ -59,6 +93,19 @@ class ScatterPlot {
 			.range([this.height, 0])
 			.nice();
 		
+		let proteinPerGramScaleX = d3
+			.scaleLinear()
+			.domain([0, this.proteinPerGramMax])
+			.range([0, this.width])
+			.nice();
+		
+		let proteinPerGramScaleY= d3
+			.scaleLinear()
+			.domain([0, this.proteinPerGramMax])
+			.range([this.height, 0])
+			.nice();
+		
+		//fat scales
 		let fatScaleX = d3
 			.scaleLinear()
 			.domain([0, this.fatMax])
@@ -71,6 +118,19 @@ class ScatterPlot {
 			.range([this.height, 0])
 			.nice();
 		
+		let fatPerGramScaleX = d3
+			.scaleLinear()
+			.domain([0, this.fatPerGramMax])
+			.range([0, this.width])
+			.nice();
+		
+		let fatPerGramScaleY= d3
+			.scaleLinear()
+			.domain([0, this.fatPerGramMax])
+			.range([this.height, 0])
+			.nice();
+		
+		//sugar scales
 		let sugarScaleX = d3
 			.scaleLinear()
 			.domain([0, this.sugarMax])
@@ -83,6 +143,19 @@ class ScatterPlot {
 			.range([this.height, 0])
 			.nice();
 		
+		let sugarPerGramScaleX = d3
+			.scaleLinear()
+			.domain([0, this.sugarPerGramMax])
+			.range([0, this.width])
+			.nice();
+		
+		let sugarPerGramScaleY= d3
+			.scaleLinear()
+			.domain([0, this.sugarPerGramMax])
+			.range([this.height, 0])
+			.nice();
+		
+		//carb scales
 		let carbScaleX = d3
 			.scaleLinear()
 			.domain([0, this.carbMax])
@@ -92,6 +165,18 @@ class ScatterPlot {
 		let carbScaleY= d3
 			.scaleLinear()
 			.domain([0, this.carbMax])
+			.range([this.height, 0])
+			.nice();
+		
+		let carbPerGramScaleX = d3
+			.scaleLinear()
+			.domain([0, this.carbPerGramMax])
+			.range([0, this.width])
+			.nice();
+		
+		let carbPerGramScaleY= d3
+			.scaleLinear()
+			.domain([0, this.carbPerGramMax])
 			.range([this.height, 0])
 			.nice();
 		
@@ -115,6 +200,26 @@ class ScatterPlot {
 			'Carbohydrate, by difference' : carbScaleY
 		}
 		
+		this.xScales_perGram = 
+		{
+			'Energy' 					  : energyPerGramScaleX,
+			'price' 					  : pricePerGramScaleX,
+			'Protein' 					  : proteinPerGramScaleX,
+			'Total lipid (fat)'			  : fatPerGramScaleX,
+			'Fructose' 					  : sugarPerGramScaleX, //**UPDATE Fructose WHEN DATA IS CHANGED**
+			'Carbohydrate, by difference' : carbPerGramScaleX
+		}
+		
+		this.yScales_perGram = 
+		{
+			'Energy' 					  : energyPerGramScaleY,
+			'price' 					  : pricePerGramScaleY,
+			'Protein' 					  : proteinPerGramScaleY,
+			'Total lipid (fat)'			  : fatPerGramScaleY,
+			'Fructose' 					  : sugarPerGramScaleY, //**UPDATE Fructose WHEN DATA IS CHANGED**
+			'Carbohydrate, by difference' : carbPerGramScaleY
+		}
+		
 		this.labels = 
 		{
 			'Energy' 					  : "CALORIES (DIETARY)",
@@ -135,6 +240,8 @@ class ScatterPlot {
 			'Carbohydrate, by difference' : "Total Carbs"
 		}
 		
+		this.perServing = true;
+		
 		this.createScatterPlot();
 		this.drawDropDown(this.curXIndicator, this.curYIndicator, this.curCIndicator);
 
@@ -143,6 +250,7 @@ class ScatterPlot {
     createScatterPlot()
     {
         console.log('create scatterplot');
+		let that = this;
 		
 		//create chart-view div
 		let v = d3.select("#food-scatterplot-container")
@@ -199,7 +307,7 @@ class ScatterPlot {
 			.attr("transform", "translate(35" + "," + ((this.height / 2) + this.margin.top) + ") rotate (-90)")
 			.text(this.labels[this.curYIndicator]);
 		
-		
+
 		//Create dropdowns for selecting axis data
  		let dropdownWrap = d3.select('#chart-view').append('div').classed('dropdown-wrapper', true);
 
@@ -230,12 +338,37 @@ class ScatterPlot {
         yWrap.append('div').attr('id', 'dropdown_y').classed('dropdown', true).append('div').classed('dropdown-content', true)
             .append('select');
 
+		
+		//draw the circle legend
         d3.select('#chart-view')
             .append('div')
             .classed('circle-legend', true)
             .append('svg')
             .append('g')
             .attr('transform', 'translate(10, 0)');
+		
+		//draw the per serving/per gram switch
+		let switchDiv = d3.select('#chart-view')
+			.append('div')
+			.attr('id', 'switchDiv');
+		
+		switchDiv.append('span')
+			.style("margin-right",  "15px")
+			.html('Per Serving');
+		
+		switchDiv.append('input')
+			.classed('toggle', true)
+			.attr('id', 'serving_gram_switch')
+			.attr('type', 'checkbox')
+			.on('click', function() { 
+				console.log('toggle', this.checked);
+				that.perServing = !this.checked;
+				that.updateScatterPlot(that.curXIndicator, that.curYIndicator, that.curCIndicator);
+			});
+		
+		switchDiv.append('span')
+			.style("margin-left",  "15px")
+			.html('Per Gram');
 		
 		//draw the initial data
 		this.updateScatterPlot(this.curXIndicator, this.curYIndicator, this.curCIndicator);
@@ -255,7 +388,7 @@ class ScatterPlot {
 		let maxSize = 0;
 		let minSize = Number.MAX_SAFE_INTEGER;
 		for (let food of this.tableElements) {
-			let val = food[circleSizeIndicator];
+			let val = this.perServing ? food[circleSizeIndicator] : food[circleSizeIndicator] / food.grams_per_serving;
 			if (val > maxSize) {
 				maxSize = val;
 			}
@@ -266,17 +399,21 @@ class ScatterPlot {
 		
         let circleSizer = function(d) {
             let cScale = d3.scaleSqrt().range([that.circleMinR, that.circleMaxR]).domain([minSize, maxSize]);
-            return d[that.curCIndicator] ? cScale(d[that.curCIndicator]) : that.circleMinR;
+			if (d[that.curCIndicator]) {
+				return that.perServing ? cScale(d[that.curCIndicator]) : cScale(d[that.curCIndicator] / d.grams_per_serving);
+			} else {
+				return that.circleMinR;
+			}
         };
 		
 		this.drawLegend(minSize, maxSize);
 		
 		//set scales
 		let xAxis = d3.axisBottom();
-		xAxis.scale(this.xScales[xIndicator]);
+		xAxis.scale(this.perServing ? this.xScales[xIndicator] : this.xScales_perGram[xIndicator]);
 		
 		let yAxis = d3.axisLeft();
-		yAxis.scale(this.yScales[yIndicator]);
+		yAxis.scale(this.perServing ? this.yScales[yIndicator] : this.yScales_perGram[yIndicator]);
 		
 		d3.select('#xAxis')
 			.call(xAxis);
@@ -302,11 +439,17 @@ class ScatterPlot {
 			.join(
 				enter => enter.append("circle")
 //							.attr("id", (d) => d.id)
-							.attr("cx", (d) => d[xIndicator] ? this.xScales[xIndicator](d[xIndicator]) : this.xScales[xIndicator](0))
-							.attr("cy", (d) => d[yIndicator] ? this.yScales[yIndicator](d[yIndicator]) : this.yScales[yIndicator](0))
+							.attr("cx", function (d) { 
+								if (d[xIndicator]) {
+									return that.perServing ? that.xScales[xIndicator](d[xIndicator]) : that.xScales_perGram[xIndicator](d[xIndicator] / d.grams_per_serving);
+								} else return that.xScales[xIndicator](0)}) //should be the same whether per gram or per serving
+							.attr("cy", function (d) { 
+								if (d[yIndicator]) {
+									return that.perServing ? that.yScales[yIndicator](d[yIndicator]) : that.yScales_perGram[yIndicator](d[yIndicator] / d.grams_per_serving);
+								} else return that.yScales[yIndicator](0)}) //should be the same whether per gram or per serving
 							.attr("r", (d) => circleSizer(d))
 							.attr("transform", "translate(" + this.margin.left + "," + (this.margin.top) + ") scale (1, 1)")
-//							.attr("class", (d) => d.foodGroup) //** ADD THIS WHEN WE HAVE FOOD GROUP IN THE DATA **
+							.attr("class", (d) => d.category)
 							.on("mouseover", function (d) {
 								tooltip.style("opacity", 0.9)
 								   	   .html(that.tooltipRender(d))
@@ -325,8 +468,14 @@ class ScatterPlot {
 //							.attr("class", (d) => d.region)
 							.transition()
 							.duration(1000)
-							.attr("cx", (d) => d[xIndicator] ? this.xScales[xIndicator](d[xIndicator]) : this.xScales[xIndicator](0))
-							.attr("cy", (d) => d[yIndicator] ? this.yScales[yIndicator](d[yIndicator]) : this.yScales[yIndicator](0))
+							.attr("cx", function (d) { 
+								if (d[xIndicator]) {
+									return that.perServing ? that.xScales[xIndicator](d[xIndicator]) : that.xScales_perGram[xIndicator](d[xIndicator] / d.grams_per_serving);
+								} else return that.xScales[xIndicator](0)}) //should be the same whether per gram or per serving
+							.attr("cy", function (d) { 
+								if (d[yIndicator]) {
+									return that.perServing ? that.yScales[yIndicator](d[yIndicator]) : that.yScales_perGram[yIndicator](d[yIndicator] / d.grams_per_serving);
+								} else return that.yScales[yIndicator](0)}) //should be the same whether per gram or per serving
 							.attr("r", (d) => circleSizer(d)),
 			
 				exit => exit.remove()
@@ -465,12 +614,28 @@ class ScatterPlot {
 	
 	//call on hover of the circles to get a tooltip for it
 	tooltipRender(data) {
+		let x = "";
+		let y = "";
+		let c = "";
+		
+		if (this.perServing) {
+			x = this.tooltipLabels[this.curXIndicator] + ": " + (data[this.curXIndicator] ? data[this.curXIndicator] : "no data");
+			y = this.tooltipLabels[this.curYIndicator] + ": " + (data[this.curYIndicator] ? data[this.curYIndicator] : "no data");
+			c = this.tooltipLabels[this.curCIndicator] + ": " + (data[this.curCIndicator] ? data[this.curCIndicator] : "no data");
+		} else {
+			x = this.tooltipLabels[this.curXIndicator] + ": " + (data[this.curXIndicator] ? (data[this.curXIndicator] / data.grams_per_serving).toPrecision(4) : "no data");
+			y = this.tooltipLabels[this.curYIndicator] + ": " + (data[this.curYIndicator] ? (data[this.curYIndicator] / data.grams_per_serving).toPrecision(4) : "no data");
+			c = this.tooltipLabels[this.curCIndicator] + ": " + (data[this.curCIndicator] ? (data[this.curCIndicator] / data.grams_per_serving).toPrecision(4) : "no data");
+		}
+		
         let text = "<span>" + data.title + "</span><br>" 
 			+ "<div>"
-			+ this.tooltipLabels[this.curXIndicator] + ": " + (data[this.curXIndicator] ? data[this.curXIndicator] : "no data") + "<br>"
-			+ this.tooltipLabels[this.curYIndicator] + ": " + (data[this.curYIndicator] ? data[this.curYIndicator] : "no data") + "<br>"
-			+ this.tooltipLabels[this.curCIndicator] + ": " + (data[this.curCIndicator] ? data[this.curCIndicator] : "no data")
+			+ x + "<br>"
+			+ y + "<br>"
+			+ c
 			+ "</div>";
         return text;
     }
+	
+
 }
