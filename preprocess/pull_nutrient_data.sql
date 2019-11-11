@@ -27,7 +27,7 @@ LEFT JOIN (SELECT food_nutrient.fdc_id, nutrient.name AS nutrient, food_nutrient
     LEFT JOIN nutrient
     ON nutrient.id = food_nutrient.nutrient_id
     WHERE name IN ("Protein","Total lipid (fat)","Carbohydrate, by difference","Energy","Starch",
-    "Sucrose","Glucose (dextrose)","Fructose","Lactose","Caffeine","Sugars, Total NLEA", "Sugars, total including NLEA",
+    "Sucrose","Glucose (dextrose)","Fructose","Lactose","Caffeine","Sugars, total including NLEA",
     "Fiber, total dietary","Calcium, Ca","Iron, Fe","Magnesium, Mg",
     "Potassium, K","Sodium, Na","Zinc, Zn","Fluoride, F","Iodine, I",
     "Vitamin A, RAE","Vitamin E (alpha-tocopherol)","Vitamin D (D2 + D3)",

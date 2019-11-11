@@ -2,7 +2,7 @@ library(tidyverse)
 library(readxl)
 library(jsonlite)
 
-timestamp <- '201911061442'
+timestamp <- '201911070947'
 
 # fda data, extracted with the query
 
@@ -11,11 +11,16 @@ colnames(nutrients) <- c('fdc_id', 'data_type', 'description', 'food_category_id
                      'portion_amount', 'serving', 'grams_per_serving',
                      'nutrients_per_100g', 'data_points', 'nutrient')
 
+nutrient_names <- read_csv('preprocess/nutrients.csv') %>%
+  select(nutrient = name, label)
+
 nutrients_spread <- nutrients %>%
   select(-data_points) %>%
   mutate(nutrients = nutrients_per_100g * grams_per_serving / 100) %>%
   select(-nutrients_per_100g) %>%
-  pivot_wider(names_from = nutrient,
+  left_join(nutrient_names, by = c('nutrient')) %>%
+  select(-nutrient) %>%
+  pivot_wider(names_from = label,
               values_from = nutrients)
 
 # pick a serving that makes sense
