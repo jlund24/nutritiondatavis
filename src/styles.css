@@ -272,6 +272,7 @@ div.dropdown-wrapper {
     text-transform: capitalize;
     padding: 0px;
     margin: 0px;
+    font-weight: bold;
 }
 
 .header-line-2 {
@@ -303,13 +304,17 @@ table {
     min-width: 120px;
     height: 32px;
     border: 1px solid #222;
+    cursor: pointer;
   }
 
   .header-row {
-    background-color: #99a;
+    /* background-color: #99a; */
+    background-color: rgb(213, 213, 226);
     min-width: 120px;
     height: 32px;
     border: 1px solid #222;
+    font-weight: bold;
+    cursor: pointer;
   }
   
   thead th:nth-child(1) {/*first cell in the header*/
@@ -357,7 +362,7 @@ table {
     display: block; /*seperates the first column from the tbody*/
     height: auto;
     max-width: 122px;
-    background-color: #99a;
+    background-color: rgb(213, 213, 226);
   }
 
   .cell {
@@ -368,5 +373,15 @@ table {
 
   .donut-label {
       font-size: 10pt;
+  }
+
+  .header-cell-container {
+      display: flex;
+      flex-flow: row nowrap;
+      justify-content: center;
+  }
+
+  .hidden {
+      display: none;
   }
 
