@@ -189,14 +189,44 @@ div.dropdown-wrapper {
 }
 
 
-
+/*Meal Planner*/
 
 #meal-container {
     width: 1500px;
     height: 500px;
-    background-color: green;
+/*    background-color: green;*/
     float: none;
 }
+
+#menu-div {
+	width: 500px;
+	height: 100%;
+	    background-color: green;
+	display: inline-block;
+
+}
+
+#price-div {
+	width: 300px;
+	height: 100%;
+	    background-color: red;
+	display: inline-block;
+
+}
+
+#bar-div {
+	width: 700px;
+	height: 100%;
+	    background-color: royalblue;
+	display: inline-block;
+
+}
+
+
+
+
+
+/*Table*/
 
 #table-svg {
     fill: white;
