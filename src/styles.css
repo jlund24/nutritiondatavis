@@ -195,22 +195,46 @@ div.dropdown-wrapper {
     width: 1500px;
     height: 500px;
 /*    background-color: green;*/
-    float: none;
+    float: left;
+
 }
 
 #menu-div {
 	width: 500px;
 	height: 100%;
-	    background-color: green;
+/*	    background-color: green;*/
 	display: inline-block;
-
+	float: left;
 }
+
+/*Designed with https://dabuttonfactory.com/*/
+/*current design: https://dabuttonfactory.com/button.png?t=ADD+TO+MENU&f=Roboto-Bold&ts=17&tc=fff&tshs=1&tshc=000&hp=14&vp=9&c=round&bgt=gradient&bgc=f00&ebgc=900a0a*/
+#addFoodButton {
+	background:    #ff0000;
+	background:    linear-gradient(#ff0000, #900a0a);
+	border-radius: 1000px;
+	padding:       9px 14px;
+	color:         #ffffff;
+	display:       inline-block;
+	font:          normal bold 17px/1 "Roboto", sans-serif;
+	text-align:    center;
+	text-shadow:   1px 1px #000000;
+	
+	margin-left: 15px;
+}
+
+.menuItem {
+	font-size: 18px;
+}
+
 
 #price-div {
 	width: 300px;
 	height: 100%;
 	    background-color: red;
 	display: inline-block;
+	float: left;
+
 
 }
 
@@ -219,6 +243,8 @@ div.dropdown-wrapper {
 	height: 100%;
 	    background-color: royalblue;
 	display: inline-block;
+	float: left;
+
 
 }
 
