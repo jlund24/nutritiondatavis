@@ -13,7 +13,8 @@ class Table {
         this.columnData = {
             food_title : {
                 "title": "food",
-                "id": "food-title"
+                "id": "food-title",
+                "sort": (first, second) => first.title <= second.title ? -1 : 1
             },
             serving_size: {
                 "title": "serving size",
@@ -21,20 +22,21 @@ class Table {
                 // "vis" : "text",
                 "visData" : {
                     type: "text",
-                    value: d => `${d.portion_amount} ${d.serving}`,
-                }
+                    //value: d => `${d.portion_amount} ${d.serving}`,
+                    value: d => `1 ${d.serving}`,
+                    color: _ => ""
+                },
+                "sort": (first, second) => first.serving <= second.serving ? -1 : 1
             },
-            food_group : {
-                "title": "food group",
-                "id": "food-group",
-                "visData" : {
-                    type: "text",
-                    //TODO: fix this
-                    value: d => d.food_category_id,
-                    //TODO: fix this
-                    color: d => d.food_category_id
-                }
-            },
+            // food_group : {
+            //     "title": "food group",
+            //     "id": "food-group",
+            //     "visData" : {
+            //         type: "text",
+            //         value: d => d.category,
+            //         color: d => d.category,
+            //     }
+            // },
             calories : {
                 "title": "calories",
                 "unit": "cal",
@@ -42,51 +44,125 @@ class Table {
                 "visData" : {
                     type: "donut",
                     value: d => d["Energy"],
-                    totalValue: d => 2400, 
-                }
-                
+                    totalValue: _ => 2400, 
+                    // text: d => `${d["Energy"]} / 2400`
+                },
+                "sort": (first, second) => first["Energy"] <= second["Energy"] ? -1 : 1 
             },
             carbs : {
                 "title": "total carbs",
                 "unit": "grams",
                 "id": "total-carbs",
-                "vis" : "donut",
-                "maxValue" : 130
+                "visData" : {
+                    type: "donut",
+                    value: d => d["Carbohydrate, by difference"],
+                    totalValue: _ => 130,
+                    // text: d => `${d["Carbohydrate, by difference"]} / 130`
+                },
+                "sort": (first, second) => first["Carbohydrate, by difference"] 
+                    <= second["Carbohydrate, by difference"] ? -1 : 1 
             },
             protein : {
                 "title": "protein",
                 "unit": "grams",
                 "id": "protein",
-                "vis": "donut",
-                "maxValue" : 56
+                "visData" : {
+                    type: "donut",
+                    value: d => d["Protein"],
+                    totalValue: _ => 56
+                },
+                "sort": (first, second) => first["Protein"] <= second["Protein"] ? -1 : 1 
             },
             fat : {
                 "title": "total fat",
                 "unit": "grams",
                 "id": "total-fat",
-                "vis": "donut",
-                "maxValue": 35
-                //in % kcal
+                "visData" : {
+                    type: "donut",
+                    value: d => d["Total lipid (fat)"],
+                    totalValue: _ => 93
+                },
+                "sort" : (first, second) => first["Total lipid (fat)"] <= second["Total lipid (fat)"] ? -1 : 1
+                
+                //max val is 35% kcal. I got 93 by taking 
+                // number of calories * %kcal / num calories per g of fat
+                // maxVal = 2400 * .35 / 9 = 93
             },
             sugar : {
                 "title": "total sugar",
                 "unit": "grams",
                 "id": "total-sugar",
                 "maxValue": 10,
-                //in % kcal
+                "visData" : {
+                    type: "donut",
+                    value: d => d["Fructose"] ? d["Fructose"] : 0, //should be something with NLEA
+                    totalValue: _ => 60
+                },
+                "sort" : (first, second) => (first["Fructose"] ? first["Fructose"] : 0) <= (second["Fructose"] ? second["Fructose"] : 0) ? -1 : 1
+                //max val is 10% kcal
+                //num_calories * %kcal / num calories per g of sugar
+                //maxVal = 2400 * .1 / 4 = 60
             },
             price : {
                 "title": "price",
                 "unit": "dollars",
                 "id": "price",
-                "vis": "text"
+                "visData" : {
+                    type: "text",
+                    value: d => `$${d.price.toFixed(2)}`,
+                    color: _ => ""
+                },
+                "sort" : (first, second) => first["price"] <= second["price"] ? -1 : 1
+                // "vis": "text"
             },
         };
 
-        this.selectedColumns = [this.columnData["serving_size"],
-                                this.columnData["food_group"],
-                                this.columnData["calories"]
-                            ];
+        this.selectedColumns = [
+            this.columnData["serving_size"],
+            // this.columnData["food_group"],
+            this.columnData["calories"],
+            this.columnData["carbs"],
+            this.columnData["protein"],
+            this.columnData["fat"],
+            this.columnData["sugar"],
+            this.columnData["price"]
+            ];
+
+        this.sortedBy = null;
+    }
+
+    sortByColumn(d, instance, selection)
+    {
+        let direction = null;
+        if (instance.sortedBy === d.id)
+        {
+            instance.tableElements = instance.tableElements.reverse();
+            instance.sortedBy = null;
+            direction = "down";
+        }
+        else
+        {
+            // console.log("d");
+            // console.log(d);
+            instance.tableElements = instance.tableElements.sort( d.sort );
+            instance.sortedBy = d.id;
+            direction = "up";
+        }
+
+        instance.updateTable();
+        instance.showSortIcon(selection, direction);
+    }
+
+    showSortIcon(selection, direction)
+    {
+        // hide any currently showing icons
+        d3.selectAll('.sort-icon')
+            .classed("hidden", true);
+
+        // show the correct one
+        d3.select(selection)
+            .select(`.sorted-${direction}-icon`)
+            .classed("hidden", false);
     }
 
     createTable()
@@ -96,27 +172,66 @@ class Table {
             .attr("id", "food-table");
 
         // add header row
-        d3.select("#food-table")
+        let headerRow = d3.select("#food-table")
             .append("thead")
             .append("tr")
-            .selectAll("th")
-            .data([this.columnData.food_title, ...this.selectedColumns])
-                .join("th")
-                .classed("header-row", true)
-                .attr("id", d => `${d.id}-header`)
-                    .append("p")
-                        .classed("header-line-1", true)
-                        .text(d => d.title); 
-        
-        
-        d3.select("#food-title-header")
-            .classed("header-row", false);
+                .attr("id", "header-row-container");
 
-        // add header units
-        d3.selectAll("#food-table th")
-            .append("p")
-                .classed("header-line-2", true)
-                .text(d => ("unit" in d) ? d.unit : "");
+        let instance = this;
+
+        headerRow.selectAll("th")
+            .data([this.columnData.food_title])
+                .join("th")
+                    .attr("id", d => `${d.id}-header`)
+                    .on("click", function(d) {
+                        instance.sortByColumn(d, instance, this);
+                    })
+                    .selectAll(".header-cell-container")
+                    .data(d => [d])
+                    .join("div")
+                        .classed("header-cell-container", true)
+                        .selectAll(".header-title-container")
+                        .data(d => [d])
+                        .join("div")
+                            .classed("header-title-container", true)
+                                .selectAll(".header-line-1")
+                                .data(d => [d])
+                                    .join("p")
+                                        .classed("header-line-1", true)
+                                        .text(d => d.title); 
+        
+        // add sort icons and then hide them for use later
+        d3.selectAll(".header-cell-container")
+            .selectAll(".sorted-down-icon")
+            .data(d => [d])
+            .join("img")
+                .classed("sort-icon sorted-down-icon hidden", true)
+                    .attr('src', `assets/arrow_down.svg`);
+
+        d3.selectAll(".header-cell-container")
+            .selectAll(".sorted-up-icon")
+            .data(d => [d])
+            .join("img")
+                .classed("sort-icon sorted-up-icon hidden", true)
+                    .attr('src', `assets/arrow_up.svg`);
+
+        
+
+        // headerRow.selectAll("th")
+        //     .data([this.columnData.food_title, ...this.selectedColumns])
+        //         .join("th")
+        //         .classed("header-row", true)
+        //         .attr("id", d => `${d.id}-header`)
+        //             .append("p")
+        //                 .classed("header-line-1", true)
+        //                 .text(d => d.title); 
+        
+        
+        // d3.select("#food-title-header")
+        //     .classed("header-row", false);
+
+        
+        
 
         d3.select("#food-table")
             .append("tbody");
@@ -124,6 +239,54 @@ class Table {
 
     updateTable()
     {
+        let instance = this;
+        //bind data to columns
+        d3.select("#header-row-container")
+            .selectAll(".header-row")
+            .data(this.selectedColumns)
+            .join("th")
+                .classed("header-row", true)
+                .attr("id", d => `${d.id}-header`)
+                .on("click", function(d) {
+                    instance.sortByColumn(d, instance, this);
+                })
+                .selectAll(".header-cell-container")
+                .data(d => [d])
+                .join("div")
+                    .classed("header-cell-container", true)
+                    .selectAll(".header-title-container")
+                    .data(d => [d])
+                    .join("div")
+                        .classed("header-title-container", true)
+                        .selectAll(".header-line-1")
+                        .data(d => [d])
+                        .join("p")
+                            .classed("header-line-1", true)
+                            .text(d => d.title);
+
+        //add header units
+        d3.selectAll(".header-title-container")
+            .selectAll(".header-line-2")
+            .data(d => [d])
+            .join("p")
+                .classed("header-line-2", true)
+                .text(d => ("unit" in d) ? d.unit : "");
+
+        //add sort icons
+        d3.selectAll(".header-cell-container")
+            .selectAll(".sorted-down-icon")
+            .data(d => [d])
+            .join("img")
+                .classed("sort-icon sorted-down-icon hidden", true)
+                    .attr('src', `assets/arrow_down.svg`);
+
+        d3.selectAll(".header-cell-container")
+            .selectAll(".sorted-up-icon")
+            .data(d => [d])
+            .join("img")
+                .classed("sort-icon sorted-up-icon hidden", true)
+                    .attr('src', `assets/arrow_up.svg`);
+        
         // bind data to rows
         let rows = d3.select("#food-table tbody")
             .selectAll(".row")
@@ -141,6 +304,7 @@ class Table {
                     .selectAll(".food-title-text")
                         .data(d => [d])
                         .join("p")
+                            .attr("class", d => d.category)
                             .classed("food-title-text", true)
                             .text(d => d.title);
 
@@ -149,8 +313,7 @@ class Table {
             .data(d => [d])
                 .join('img')
                 .classed("food-title-image", true)
-            //.append('img')
-                .attr('src', d => "icon_name" in d && d.icon_name != null ? `assets/${d.icon_name}.svg` : "");
+                .attr('src', d => ("icon_name" in d && d.icon_name != null) ? `assets/${d.icon_name}.svg` : "");
 
         let td = d3.selectAll(".row")
             .selectAll("td")  
@@ -228,12 +391,12 @@ class Table {
             .join("svg")
                 .classed("donut-svg", true)
                 .attr("width", 120)
-                .attr("height", 60)
+                .attr("height", 52)
                 .selectAll(".donut-group")
                 .data(d => [d])
                 .join("g")
                     .classed("donut-group", true)
-                    .attr("transform", "translate(" + 120 / 2 + "," + 60 / 2 + ")");
+                    .attr("transform", "translate(" + 120 / 2 + "," + 52 / 2 + ")");
 
         d3.selectAll(".donut-group")
             .selectAll(".slice-group")
@@ -262,13 +425,52 @@ class Table {
                     .attr("d", arc)
                     .style("fill", d => d.data.color)
                 ;
+
+        donutCells
+            .selectAll(".donut-label")
+            .data(d => [d])
+            .join("div")
+                .classed("donut-label", true)
+                .selectAll(".donut-label-value", true)
+                .data(d => [d])
+                .join("span")
+                    .classed("donut-label-value", true)
+                    .text(d => +d.columnData.value(d.rowData).toFixed(2))
+                ;
+
+        donutCells.selectAll(".donut-label")
+            .selectAll(".donut-label-totalValue")
+            .data(d => [d])
+            .join("span")
+                .classed("donut-label-totalValue", true)
+                .text(d => ` / ${+d.columnData.totalValue(d.rowData).toFixed(2)}`);
     }
 
     updateTextCells(textCells)
     {
         textCells
-            .text(d => d.columnData.value(d.rowData));
+            .selectAll("text")
+                .data(d => [d])
+                .join("text")
+                    .text(d => {
+                        // console.log(d);
+
+                        return ellipsizeText(d.columnData.value(d.rowData));
+                    })
+                    .attr("class", d => d.columnData.color(d.rowData));
 
     }
     
+}
+
+function ellipsizeText(text)
+{
+    let ending = "...";
+    let maxLength = 35;
+    if (text.length > maxLength)
+    {
+        text = text.substring(0, maxLength - ending.length) + ending;
+    }
+
+    return text;
 }

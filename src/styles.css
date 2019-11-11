@@ -89,8 +89,9 @@ div.dropdown-wrapper {
     display: inline-block;
     margin-left: 75px;
     width: 200px;
-    height: 130px;
-    padding: 2px;
+/*    height: 130px;*/
+	height:80px;
+	padding: 2px;
 }
 
 .dropdown {
@@ -99,7 +100,8 @@ div.dropdown-wrapper {
 
 .circle-legend {
     width: 200px;
-    height: 120px;
+/*    height: 120px;*/
+	height: 80px;
     padding-right: 20px;
     margin: auto;
     display: inline-block;
@@ -126,50 +128,177 @@ div.dropdown-wrapper {
     font-weight: bold;
 }
 
+#switchDiv {
+    display: flex;
+/*	margin: auto;*/
+	align-items: center;
+    margin-left: 250px;
+/*    width: 250px;*/
+    height: 50;
+    padding: 2px;
+/*	width: 250px;*/
+}
+
+/*Switch adapted from https://danklammer.com/articles/simple-css-toggle-switch/*/
+.toggle {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  width: 62px;
+  height: 32px;
+  display: inline-block;
+  position: relative;
+  border-radius: 50px;
+  overflow: hidden;
+  outline: none;
+  border: none;
+  cursor: pointer;
+  background-color: #2196F3;
+  transition: background-color ease 0.3s;
+}
+
+.toggle:before {
+  content: "";
+  display: block;
+  position: absolute;
+/*  z-index: 2;*/
+  width: 28px;
+  height: 28px;
+  background: #fff;
+  left: 2px;
+  top: 2px;
+  border-radius: 50%;
+  font: 10px/28px Helvetica;
+  text-transform: uppercase;
+  font-weight: bold;
+  text-indent: -22px;
+  word-spacing: 37px;
+  color: #fff;
+  text-shadow: -1px -1px rgba(0,0,0,0.15);
+  white-space: nowrap;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.2);
+  transition: all cubic-bezier(0.3, 1.5, 0.7, 1) 0.3s;
+}
+
+.toggle:checked {
+  background-color: #2196F3;
+}
+
+.toggle:checked:before {
+  left: 32px;
+}
+
+
+/*Meal Planner*/
+
 #meal-container {
     width: 1500px;
     height: 500px;
-    background-color: green;
-    float: none;
+/*    background-color: green;*/
+    float: left;
+
 }
+
+#menu-div {
+	width: 500px;
+	height: 100%;
+/*	    background-color: green;*/
+	display: inline-block;
+	float: left;
+}
+
+/*Designed with https://dabuttonfactory.com/*/
+/*current design: https://dabuttonfactory.com/button.png?t=ADD+TO+MENU&f=Roboto-Bold&ts=17&tc=fff&tshs=1&tshc=000&hp=14&vp=9&c=round&bgt=gradient&bgc=f00&ebgc=900a0a*/
+#addFoodButton {
+	background:    #ff0000;
+	background:    linear-gradient(#ff0000, #900a0a);
+	border-radius: 1000px;
+	padding:       9px 14px;
+	color:         #ffffff;
+	display:       inline-block;
+	font:          normal bold 17px/1 "Roboto", sans-serif;
+	text-align:    center;
+	text-shadow:   1px 1px #000000;
+	
+	margin-left: 15px;
+}
+
+.menuItem {
+	font-size: 18px;
+}
+
+
+#price-div {
+	width: 300px;
+	height: 100%;
+	    background-color: red;
+	display: inline-block;
+	float: left;
+
+
+}
+
+#bar-div {
+	width: 700px;
+	height: 100%;
+	    background-color: royalblue;
+	display: inline-block;
+	float: left;
+
+
+}
+
+
+
+
+
+/*Table*/
 
 #table-svg {
     fill: white;
 }
 
-/*Food Group Styling*/
+/*Food Group Colors*/
 .vegetable {
-	fill: green;
+    fill: green;
+    color: green;
 }
 
 .fruit {
-	fill: red;
+    fill: red;
+    color: red;
 }
 
 .protein {
-	fill: purple;
+    fill: purple;
+    color: purple;
 }
 
 .dairy {
-	fill: blue;
+    fill: blue;
+    color: blue;
 }
 
 .grain {
-	fill: orange;
+    fill: orange;
+    color: orange;
 }
 
 .dessert {
-	fill: pink;
+    fill: pink;
+    color: pink
 }
 
 .compound {
-	fill: brown;
+    fill: brown;
+    color: brown;
 }
 
 .header-line-1 {
     text-transform: capitalize;
     padding: 0px;
     margin: 0px;
+    font-weight: bold;
 }
 
 .header-line-2 {
@@ -201,13 +330,17 @@ table {
     min-width: 120px;
     height: 32px;
     border: 1px solid #222;
+    cursor: pointer;
   }
 
   .header-row {
-    background-color: #99a;
+    /* background-color: #99a; */
+    background-color: rgb(213, 213, 226);
     min-width: 120px;
     height: 32px;
     border: 1px solid #222;
+    font-weight: bold;
+    cursor: pointer;
   }
   
   thead th:nth-child(1) {/*first cell in the header*/
@@ -222,7 +355,7 @@ table {
     position: relative;
     display: block; /*seperates the tbody from the header*/
     width: 800px;
-    height: 750px;
+    height: 850px;
     overflow: scroll;
   }
   
@@ -244,8 +377,10 @@ table {
     position: relative;
     display: block; /*seperates the first cell in the header from the header*/
     background-color: #88b;
-    /* min-height: 32px; */
+    min-height: 43px;
     min-width: 120px;
+    margin: 0px;
+    /* padding: 0px; */
   }
 
   .food-title-cell {
@@ -253,6 +388,26 @@ table {
     display: block; /*seperates the first column from the tbody*/
     height: auto;
     max-width: 122px;
-    background-color: #99a;
+    background-color: rgb(213, 213, 226);
+  }
+
+  .cell {
+      text-align: center;
+      text-overflow: ellipsis;
+      height: 60px;
+  }
+
+  .donut-label {
+      font-size: 10pt;
+  }
+
+  .header-cell-container {
+      display: flex;
+      flex-flow: row nowrap;
+      justify-content: center;
+  }
+
+  .hidden {
+      display: none;
   }
 
