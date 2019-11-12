@@ -249,7 +249,6 @@ class ScatterPlot {
 
     createScatterPlot()
     {
-        console.log('create scatterplot');
 		let that = this;
 		
 		//create chart-view div
@@ -361,7 +360,6 @@ class ScatterPlot {
 			.attr('id', 'serving_gram_switch')
 			.attr('type', 'checkbox')
 			.on('click', function() { 
-				console.log('toggle', this.checked);
 				that.perServing = !this.checked;
 				that.updateScatterPlot(that.curXIndicator, that.curYIndicator, that.curCIndicator);
 			});
@@ -377,7 +375,6 @@ class ScatterPlot {
 	//updates all the circles based on the provided xIndicator, yIndicator, and circle size Indicator
     updateScatterPlot(xIndicator, yIndicator, circleSizeIndicator)
     {
-        console.log('update scatterplot: ', xIndicator, yIndicator, circleSizeIndicator);
 		let that = this;
 		//update global information
 		this.curXIndicator = xIndicator;
@@ -450,7 +447,7 @@ class ScatterPlot {
 							.attr("r", (d) => circleSizer(d))
 							.attr("transform", "translate(" + this.margin.left + "," + (this.margin.top) + ") scale (1, 1)")
 							.attr("class", (d) => d.category)
-							.on("mouseover", function (d) {
+							.on("mouseover", function (d) { //ALSO HIGHLIGHT THE CIRCLE BY INCREASING STROKE WIDTH, AND HIGHLIGHT ROW IN TABLE
 								tooltip.style("opacity", 0.9)
 								   	   .html(that.tooltipRender(d))
 								       .style("left", (d3.event.pageX) + "px")
@@ -586,7 +583,6 @@ class ScatterPlot {
 	//draws the circle size legend. Call every time the circle size indicator changes
 	//min is the smallest circle radius; max is the largest circle radius
 	drawLegend(min, max) {
-        console.log('draw legend')
         let scale = d3.scaleSqrt().range([this.circleMinR, this.circleMaxR]).domain([min, max]);
 
         let circleData = [min, max];

@@ -16,6 +16,10 @@ class MealPlanner {
 		
 		let mealContainer = d3.select("#meal-container");
 		
+		let mealTitleDiv = mealContainer.append('div')
+			.attr('id', "mealTitle-div")
+			.html("MEAL PLANNER");
+		
 		let menuDiv = mealContainer.append("div")
 			.attr("id", "menu-div");
 		
@@ -35,7 +39,7 @@ class MealPlanner {
 				
 		let foodNames = [];
 		for (let food of this.data) {
-			foodNames.push(food.title)
+			foodNames.push(food.title) //TODO: PREVENT DUPLICATES
 		}
 	
 		
@@ -67,8 +71,16 @@ class MealPlanner {
 		let addFood = function(e) {
 			let newFood = $("#searchBar").select2("val");
 			console.log('add', newFood);
-			that.menuItems.push([newFood, 1]);
-			that.updateMenu();
+			let foodData = that.data.filter(d => d.title == newFood)
+			
+			//don't allow duplicates
+			if(that.menuItems.filter(d => d[0].title == newFood).length == 0) {
+				that.menuItems.push([foodData[0], 1]);
+				that.updateMenu();
+				that.updatePriceChart();
+				that.updateBarGraph();
+			}
+			
 		}
 		
 		menuDiv.append('button')
@@ -77,10 +89,20 @@ class MealPlanner {
 			.html('ADD TO MENU')
 			.on('click', addFood);
 		
-		menuDiv.append('svg')
-			.attr('width', '100%')
-			.attr('height', '400px')
-			.attr('id', 'menuSvg');
+		menuDiv.append('span')
+			.html("Food")
+		
+		menuDiv.append('span')
+			.html("Servings")
+		
+		menuDiv.append('ul')
+			.attr('id', 'menu-list');
+//		menuDiv.append('svg')
+//			.attr('width', '100%')
+//			.attr('height', '400px')
+//			.attr('id', 'menuSvg');
+		
+		
 //		let menuTable = menuDiv.append('table')
 //			.attr('id', 'menuTable');
 //		
@@ -95,20 +117,30 @@ class MealPlanner {
 //		
 //		menuTable.append('tbody')
 //			.attr('id', 'menuTableBody');
+		
+		//initialize price donut chart
+		
+		
+		
+		//initialize bar chart
+		let barSvg = barDiv.append('svg')
+			.attr('width', '100%')
+			.attr('height', '100%');
 			
     }
 
     updateMenu()
     {
+		let that = this;
         console.log('menu:', this.menuItems);
 		
-		let menuSvg = d3.select('#menuSvg');
-		menuSvg.selectAll('text')
-			.data(this.menuItems)
-			.join('text')
-			.classed('menuItem', true)
-			.text(d => d[0])
-			.attr("transform", (d,i) => "translate(40," + (30 + i*40) + ")")
+//		let menuSvg = d3.select('#menuSvg');
+//		menuSvg.selectAll('text')
+//			.data(this.menuItems)
+//			.join('text')
+//			.classed('menuItem', true)
+//			.text(d => d[0])
+//			.attr("transform", (d,i) => "translate(40," + (30 + i*40) + ")")
 		
 		//TODO: Get numbers working
 		
@@ -121,6 +153,59 @@ class MealPlanner {
 //			.attr('id', (d,i) => 'servings' + i)
 //			.attr('min', '0')
 //			.attr('max', '99')
+		
+		let updateQuantity = function(d, i) {
+			let node = d3.select("#servingInput" + i).node();
+			let newVal = node.value;
+			if (newVal < 0) {
+				node.value = 0;
+				newVal = node.value;
+			}
+			else if (newVal > 99) {
+				node.value = 99;
+				newVal = node.value;
+			}
+			that.menuItems[i][1] = +newVal;
+
+			that.updatePriceChart();
+			that.updateBarGraph();
+		}
+		
+		let menuList = d3.select('#menu-list');
+		menuList.selectAll('li')
+			.data(this.menuItems)
+			.join(
+				enter => {	
+					let li = enter.append('li')
+						.style('list-style', 'none');
+					li.append('div')
+						.classed('remove-div', true)
+						.attr('width', '20px')
+						.append('svg')
+						.classed('remove-svg', true)
+						.attr('width', '20px')
+						.attr('height', '20px');
+					li.append('div')
+						.classed('foodName-div', true)
+						.html(d => d[0].title);
+					li.append('input')
+						.classed('servingInput', true)
+						.attr('id', (d,i) => "servingInput" + i)
+						.attr('type', 'number')
+						.attr('min', 0)
+						.attr('max', 99)
+						.attr('value', d => d[1])
+						.on('change', updateQuantity);
+				},
+				update => { //I DON'T THINK THIS IS EVER USED, SO A JOIN IS UNNECESSARY
+					update.select('.foodName-div')
+						.html(d => d[0].title);
+					update.select('.servingInput')
+						.attr('value', d => d[1])
+						.attr('id', (d,i) => "servingInput" + i);
+				},
+				exit => exit.remove()
+			);
 			
 		
 		
