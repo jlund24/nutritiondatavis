@@ -194,8 +194,10 @@ div.dropdown-wrapper {
 #meal-container {
     width: 1500px;
     height: 500px;
+    display: flex;
+    flex-flow: column nowrap;
 /*    background-color: green;*/
-    float: left;
+    /* float: left; */
 
 }
 
@@ -208,12 +210,17 @@ div.dropdown-wrapper {
 	display: table-cell;
 }
 
+#mealContent-div {
+    display: flex;
+    flex-flow: row nowrap;
+}
+
 #menu-div {
 	width: 500px;
 	height: 100%;
 /*	    background-color: green;*/
-	display: inline-block;
-	float: left;
+	/* display: inline-block; */
+	/* float: left; */
 }
 
 /*Designed with https://dabuttonfactory.com/*/
@@ -225,24 +232,29 @@ div.dropdown-wrapper {
 	display:       inline-block;
 	font:          normal bold 16px/1 "Roboto", sans-serif;
 	text-align:    center;
-	
+	outline: none;
 	margin-left: 15px;
 }
 
+li {
+    height: 25px;
+}
 
 .remove-div {
-	display: inline-block;
-	float: left;
+	/* display: inline-block; */
+    /* float: left; */
+    padding-right: 10px;
+    cursor: pointer;
 }
 
 .foodName-div {
-	display: inline-block;
-	float: left;
+	/* display: inline-block; */
+	/* float: left; */
 }
 
 .servingInput {
-	display: inline-block;
-	float: left;
+	/* display: inline-block; */
+	/* float: left; */
 }
 
 
@@ -250,8 +262,8 @@ div.dropdown-wrapper {
 	width: 300px;
 	height: 100%;
 	    background-color: red;
-	display: inline-block;
-	float: left;
+	/* display: inline-block;
+	float: left; */
 
 
 }
@@ -260,8 +272,8 @@ div.dropdown-wrapper {
 	width: 700px;
 	height: 100%;
 /*	    background-color: royalblue;*/
-	display: inline-block;
-	float: left;
+	/* display: inline-block;
+	float: left; */
 
 
 }
@@ -429,3 +441,37 @@ table {
       display: none;
   }
 
+ul {
+    list-style-type: none;
+    /* width: 100%; */
+    margin: 0px;
+    padding: 10px;
+}
+
+#menu-headers-container {
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: space-between;
+    font-weight: bold;
+    margin-right: 10px;
+    margin-left: 10px;
+    margin-top: 10px;
+}
+
+.food-list-item {
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: space-between;
+    /* width: 100% */
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+.food-list-item-left-container {
+    display: flex;
+    flex-flow: row nowrap;
+}
+
+#mealContent-div {
+    height: 500px;
+}

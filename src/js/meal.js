@@ -19,14 +19,17 @@ class MealPlanner {
 		let mealTitleDiv = mealContainer.append('div')
 			.attr('id', "mealTitle-div")
 			.html("MEAL PLANNER");
+
+		let mealContentContainer = mealContainer.append('div')
+			.attr("id", "mealContent-div");
 		
-		let menuDiv = mealContainer.append("div")
+		let menuDiv = mealContentContainer.append("div")
 			.attr("id", "menu-div");
 		
-		let priceDiv = mealContainer.append("div")
+		let priceDiv = mealContentContainer.append("div")
 			.attr("id", "price-div");
 		
-		let barDiv = mealContainer.append("div")
+		let barDiv = mealContentContainer.append("div")
 			.attr("id", "bar-div");
 		
 
@@ -89,10 +92,13 @@ class MealPlanner {
 			.html('ADD TO MENU')
 			.on('click', addFood);
 		
-		menuDiv.append('span')
+		let menuHeadersContainer = menuDiv.append('div')
+			.attr("id", "menu-headers-container");
+
+		menuHeadersContainer.append('span')
 			.html("Food")
 		
-		menuDiv.append('span')
+		menuHeadersContainer.append('span')
 			.html("Servings")
 		
 		menuDiv.append('ul')
@@ -177,15 +183,29 @@ class MealPlanner {
 			.join(
 				enter => {	
 					let li = enter.append('li')
-						.style('list-style', 'none');
-					li.append('div')
+						.classed("food-list-item", true)
+						// .style('list-style', 'none')
+						;
+					let foodItemLeft = li.append("div")
+						.classed("food-list-item-left-container", true);
+
+					foodItemLeft.append('div')
 						.classed('remove-div', true)
+						.classed("hidden", true)
 						.attr('width', '20px')
-						.append('svg')
+						.append('img')
 						.classed('remove-svg', true)
+						.attr('src', `assets/delete.svg`)
 						.attr('width', '20px')
 						.attr('height', '20px');
-					li.append('div')
+
+					d3.selectAll('.remove-div')
+						.on("click", function (d, i) {
+							console.log(i);
+							that.menuItems.splice(i, 1);
+							that.updateMenu();
+					});
+					foodItemLeft.append('div')
 						.classed('foodName-div', true)
 						.html(d => d[0].title);
 					li.append('input')
@@ -196,6 +216,16 @@ class MealPlanner {
 						.attr('max', 99)
 						.attr('value', d => d[1])
 						.on('change', updateQuantity);
+					li.on('mouseover', function (d) {
+						d3.select(this).select(".food-list-item-left-container")
+							.select(".remove-div")
+							.classed("hidden", false);
+						
+					});
+					li.on("mouseout", function (d) {
+						d3.select(this).select(".remove-div")
+							.classed("hidden", true);
+					});
 				},
 				update => { //I DON'T THINK THIS IS EVER USED, SO A JOIN IS UNNECESSARY
 					update.select('.foodName-div')
