@@ -11,24 +11,32 @@ class ScatterPlot {
 		
 		this.circleMinR = 3;
 		this.circleMaxR = 20;
+
+		// variable column names, just in case
+		let energyCol = 'Calories';
+		let fatCol = 'Fat';
+		let proteinCol = 'Protein';
+		let sugarCol = 'Sugars';
+		let carbCol = 'Carbohydrates'
+		let priceCol = 'price';
 		
-		this.curXIndicator = "Energy"; //calories
-		this.curYIndicator = "price";
-		this.curCIndicator = "Total lipid (fat)";
+		this.curXIndicator = energyCol;
+		this.curYIndicator = priceCol;
+		this.curCIndicator = fatCol;
 		
-		this.energyMax = d3.max(data, d => d.Energy);
-		this.priceMax = d3.max(data, d => d.price);
-		this.proteinMax = d3.max(data, d => d.Protein);
-		this.fatMax = d3.max(data, d => d['Total lipid (fat)']);
-		this.sugarMax = d3.max(data, d => d.Fructose); //***UPDATE to 'Sugars, Total NLEA' when data is updated ***
-		this.carbMax = d3.max(data, d => d['Carbohydrate, by difference']);
+		this.energyMax = d3.max(data, d => d[energyCol]);
+		this.priceMax = d3.max(data, d => d[priceCol]);
+		this.proteinMax = d3.max(data, d => d[proteinCol]);
+		this.fatMax = d3.max(data, d => d[fatCol]);
+		this.sugarMax = d3.max(data, d => d[sugarCol]);
+		this.carbMax = d3.max(data, d => d[carbCol]);
 		
-		this.energyPerGramMax = d3.max(data, d => d.Energy / d.grams_per_serving);
-		this.pricePerGramMax = d3.max(data, d => d.price / d.grams_per_serving);
-		this.proteinPerGramMax = d3.max(data, d => d.Protein / d.grams_per_serving);
-		this.fatPerGramMax = d3.max(data, d => d['Total lipid (fat)'] / d.grams_per_serving);
-		this.sugarPerGramMax = d3.max(data, d => d.Fructose / d.grams_per_serving); //***UPDATE to 'Sugars, Total NLEA' when data is updated ***
-		this.carbPerGramMax = d3.max(data, d => d['Carbohydrate, by difference'] / d.grams_per_serving);
+		this.energyPerGramMax = d3.max(data, d => d[energyCol] / d.grams_per_serving);
+		this.pricePerGramMax = d3.max(data, d => d[priceCol] / d.grams_per_serving);
+		this.proteinPerGramMax = d3.max(data, d => d[proteinCol] / d.grams_per_serving);
+		this.fatPerGramMax = d3.max(data, d => d[fatCol] / d.grams_per_serving);
+		this.sugarPerGramMax = d3.max(data, d => [sugarCol] / d.grams_per_serving);
+		this.carbPerGramMax = d3.max(data, d => d[carbCol] / d.grams_per_serving);
 		
 		//energy scales
 		let energyScaleX = d3
@@ -180,65 +188,58 @@ class ScatterPlot {
 			.range([this.height, 0])
 			.nice();
 		
-		this.xScales = 
-		{
-			'Energy' 					  : energyScaleX,
-			'price' 					  : priceScaleX,
-			'Protein' 					  : proteinScaleX,
-			'Total lipid (fat)'			  : fatScaleX,
-			'Fructose' 					  : sugarScaleX, //**UPDATE Fructose WHEN DATA IS CHANGED**
-			'Carbohydrate, by difference' : carbScaleX
-		}
+		this.xScales = {};
+		this.xScales[energyCol] = energyScaleX;
+		this.xScales[priceCol] = priceScaleX;
+		this.xScales[proteinCol] = proteinScaleX;
+		this.xScales[fatCol] = fatScaleX;
+		this.xScales[sugarCol] = sugarScaleX;
+		this.xScales[carbCol] = carbScaleX;
+
+
+		this.yScales = {};
+		this.yScales[energyCol] = energyScaleY;
+		this.yScales[priceCol] = priceScaleY;
+		this.yScales[proteinCol] = proteinScaleY;
+		this.yScales[fatCol] = fatScaleY;
+		this.yScales[sugarCol] = sugarScaleY;
+		this.yScales[carbCol] = carbScaleY;
 		
-		this.yScales = 
-		{
-			'Energy' 					  : energyScaleY,
-			'price' 					  : priceScaleY,
-			'Protein' 					  : proteinScaleY,
-			'Total lipid (fat)'			  : fatScaleY,
-			'Fructose' 					  : sugarScaleY, //**UPDATE Fructose WHEN DATA IS CHANGED**
-			'Carbohydrate, by difference' : carbScaleY
-		}
+
+		this.xScales_perGram = {};
+		this.xScales_perGram[energyCol] = energyPerGramScaleX;
+		this.xScales_perGram[priceCol] = pricePerGramScaleX;
+		this.xScales_perGram[proteinCol] = proteinPerGramScaleX;
+		this.xScales_perGram[fatCol] = fatPerGramScaleX;
+		this.xScales_perGram[sugarCol] = sugarPerGramScaleX;
+		this.xScales_perGram[carbCol] = carbPerGramScaleX;
+
+
+		this.yScales_perGram = {};
+		this.yScales_perGram[energyCol] = energyPerGramScaleY;
+		this.yScales_perGram[priceCol] = pricePerGramScaleY;
+		this.yScales_perGram[proteinCol] = proteinPerGramScaleY;
+		this.yScales_perGram[fatCol] = fatPerGramScaleY;
+		this.yScales_perGram[sugarCol] = sugarPerGramScaleY;
+		this.yScales_perGram[carbCol] = carbPerGramScaleY;
 		
-		this.xScales_perGram = 
-		{
-			'Energy' 					  : energyPerGramScaleX,
-			'price' 					  : pricePerGramScaleX,
-			'Protein' 					  : proteinPerGramScaleX,
-			'Total lipid (fat)'			  : fatPerGramScaleX,
-			'Fructose' 					  : sugarPerGramScaleX, //**UPDATE Fructose WHEN DATA IS CHANGED**
-			'Carbohydrate, by difference' : carbPerGramScaleX
-		}
+
 		
-		this.yScales_perGram = 
-		{
-			'Energy' 					  : energyPerGramScaleY,
-			'price' 					  : pricePerGramScaleY,
-			'Protein' 					  : proteinPerGramScaleY,
-			'Total lipid (fat)'			  : fatPerGramScaleY,
-			'Fructose' 					  : sugarPerGramScaleY, //**UPDATE Fructose WHEN DATA IS CHANGED**
-			'Carbohydrate, by difference' : carbPerGramScaleY
-		}
+		this.labels = {};
+		this.labels[energyCol] = "CALORIES (DIETARY)";
+		this.labels[priceCol] = "PRICE (DOLLARS)";
+		this.labels[proteinCol] = "PROTEIN (GRAMS)";
+		this.labels[fatCol] = "TOTAL FAT (GRAMS)";
+		this.labels[sugarCol] = "TOTAL SUGAR (GRAMS)";
+		this.labels[carbCol] ="TOTAL CARBOHYDRATES (GRAMS)";
 		
-		this.labels = 
-		{
-			'Energy' 					  : "CALORIES (DIETARY)",
-			'price' 					  : "PRICE (DOLLARS)",
-			'Protein' 					  : "PROTEIN (GRAMS)",
-			'Total lipid (fat)'			  : "TOTAL FAT (GRAMS)",
-			'Fructose' 					  : "TOTAL SUGAR (GRAMS)", //**UPDATE Fructose WHEN DATA IS CHANGED**
-			'Carbohydrate, by difference' : "TOTAL CARBOHYDRATES (GRAMS)"
-		}
-		
-		this.tooltipLabels = 
-		{
-			'Energy' 					  : "Calories",
-			'price' 					  : "Price",
-			'Protein' 					  : "Protein",
-			'Total lipid (fat)'			  : "Total Fat",
-			'Fructose' 					  : "Total Sugar", //**UPDATE Fructose WHEN DATA IS CHANGED**
-			'Carbohydrate, by difference' : "Total Carbs"
-		}
+		this.tooltipLabels = {};
+		this.tooltipLabels[energyCol] = "Calories";
+		this.tooltipLabels[priceCol] = "Price";
+		this.tooltipLabels[proteinCol] = "Protein";
+		this.tooltipLabels[fatCol] = "Total Fat";
+		this.tooltipLabels[sugarCol] = "Total Sugar";
+		this.tooltipLabels[carbCol] = "Total Carbs";
 		
 		this.perServing = true;
 		

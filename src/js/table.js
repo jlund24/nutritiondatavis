@@ -10,6 +10,14 @@ class Table {
         this.width = 775;
         this.height = 800;
 
+        // variable column names, just in case
+        let energyCol = 'Calories';
+        let fatCol = 'Fat';
+        let proteinCol = 'Protein';
+        let sugarCol = 'Sugars';
+        let carbCol = 'Carbohydrates'
+        let priceCol = 'price';
+
         this.columnData = {
             food_title : {
                 "title": "food",
@@ -23,7 +31,7 @@ class Table {
                 "visData" : {
                     type: "text",
                     //value: d => `${d.portion_amount} ${d.serving}`,
-                    value: d => `1 ${d.serving}`,
+                    value: d => `${d.serving}`,
                     color: _ => ""
                 },
                 "sort": (first, second) => first.serving <= second.serving ? -1 : 1
@@ -43,7 +51,7 @@ class Table {
                 "id": "calories",
                 "visData" : {
                     type: "donut",
-                    value: d => d["Energy"],
+                    value: d => d[energyCol],
                     totalValue: _ => 2400, 
                     // text: d => `${d["Energy"]} / 2400`
                 },
@@ -55,12 +63,12 @@ class Table {
                 "id": "total-carbs",
                 "visData" : {
                     type: "donut",
-                    value: d => d["Carbohydrate, by difference"],
+                    value: d => d[carbCol],
                     totalValue: _ => 130,
                     // text: d => `${d["Carbohydrate, by difference"]} / 130`
                 },
-                "sort": (first, second) => first["Carbohydrate, by difference"] 
-                    <= second["Carbohydrate, by difference"] ? -1 : 1 
+                "sort": (first, second) => first[carbCol] 
+                    <= second[carbCol] ? -1 : 1 
             },
             protein : {
                 "title": "protein",
@@ -68,10 +76,10 @@ class Table {
                 "id": "protein",
                 "visData" : {
                     type: "donut",
-                    value: d => d["Protein"],
+                    value: d => d[proteinCol],
                     totalValue: _ => 56
                 },
-                "sort": (first, second) => first["Protein"] <= second["Protein"] ? -1 : 1 
+                "sort": (first, second) => first[proteinCol] <= second[proteinCol] ? -1 : 1 
             },
             fat : {
                 "title": "total fat",
@@ -79,10 +87,10 @@ class Table {
                 "id": "total-fat",
                 "visData" : {
                     type: "donut",
-                    value: d => d["Total lipid (fat)"],
+                    value: d => d[fatCol],
                     totalValue: _ => 93
                 },
-                "sort" : (first, second) => first["Total lipid (fat)"] <= second["Total lipid (fat)"] ? -1 : 1
+                "sort" : (first, second) => first[fatCol] <= second[fatCol] ? -1 : 1
                 
                 //max val is 35% kcal. I got 93 by taking 
                 // number of calories * %kcal / num calories per g of fat
@@ -95,10 +103,10 @@ class Table {
                 "maxValue": 10,
                 "visData" : {
                     type: "donut",
-                    value: d => d["Fructose"] ? d["Fructose"] : 0, //should be something with NLEA
+                    value: d => d[sugarCol] ? d[sugarCol] : 0,
                     totalValue: _ => 60
                 },
-                "sort" : (first, second) => (first["Fructose"] ? first["Fructose"] : 0) <= (second["Fructose"] ? second["Fructose"] : 0) ? -1 : 1
+                "sort" : (first, second) => (first[sugarCol] ? first[sugarCol] : 0) <= (second[sugarCol] ? second[sugarCol] : 0) ? -1 : 1
                 //max val is 10% kcal
                 //num_calories * %kcal / num calories per g of sugar
                 //maxVal = 2400 * .1 / 4 = 60

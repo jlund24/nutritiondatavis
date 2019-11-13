@@ -278,38 +278,38 @@ div.dropdown-wrapper {
 
 /*Food Group Colors*/
 .vegetable {
-    fill: green;
-    color: green;
+    fill: #5DA043;
+    color: #5DA043;
 }
 
 .fruit {
-    fill: red;
-    color: red;
+    fill: #CC434E;
+    color: #CC434E;
 }
 
 .protein {
-    fill: purple;
-    color: purple;
+    fill: #462255;
+    color: #462255;
 }
 
 .dairy {
-    fill: blue;
-    color: blue;
+    fill: #08B2E3;
+    color: #08B2E3;
 }
 
 .grain {
-    fill: orange;
-    color: orange;
+    fill: #E26C2D;
+    color: #E26C2D;
 }
 
 .dessert {
-    fill: pink;
-    color: pink
+    fill: #F6839C;
+    color: #F6839C
 }
 
 .compound {
-    fill: brown;
-    color: brown;
+    fill: #764248;
+    color: #764248;
 }
 
 .header-line-1 {

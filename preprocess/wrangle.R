@@ -48,6 +48,7 @@ nutrients_and_price <- nutrients_spread %>%
   left_join(key_table, by = c('description' = 'fda_description')) %>%
   left_join(prices, by = 'price_name') %>%
   mutate(price = price_per_gram * grams_per_serving) %>%
+  mutate(serving = str_c(coalesce(str_c(portion_amount, ' '), ''), serving)) %>%
   select(-c(data_type, portion_amount, food_category_id))
 
 nutrients_and_price %>%
