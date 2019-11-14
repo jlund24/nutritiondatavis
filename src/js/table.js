@@ -55,7 +55,7 @@ class Table {
                     totalValue: _ => 2400, 
                     // text: d => `${d["Energy"]} / 2400`
                 },
-                "sort": (first, second) => first["Energy"] <= second["Energy"] ? -1 : 1 
+                "sort": (first, second) => first[energyCol] <= second[energyCol] ? -1 : 1 
             },
             carbs : {
                 "title": "total carbs",
@@ -120,7 +120,7 @@ class Table {
                     value: d => `$${d.price.toFixed(2)}`,
                     color: _ => ""
                 },
-                "sort" : (first, second) => first["price"] <= second["price"] ? -1 : 1
+                "sort" : (first, second) => first[priceCol] <= second[priceCol] ? -1 : 1
                 // "vis": "text"
             },
         };
