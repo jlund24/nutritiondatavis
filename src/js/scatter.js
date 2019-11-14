@@ -35,7 +35,7 @@ class ScatterPlot {
 		this.pricePerGramMax = d3.max(data, d => d[priceCol] / d.grams_per_serving);
 		this.proteinPerGramMax = d3.max(data, d => d[proteinCol] / d.grams_per_serving);
 		this.fatPerGramMax = d3.max(data, d => d[fatCol] / d.grams_per_serving);
-		this.sugarPerGramMax = d3.max(data, d => [sugarCol] / d.grams_per_serving);
+		this.sugarPerGramMax = d3.max(data, d => d[sugarCol] / d.grams_per_serving);
 		this.carbPerGramMax = d3.max(data, d => d[carbCol] / d.grams_per_serving);
 		
 		//energy scales
