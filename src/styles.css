@@ -193,7 +193,7 @@ div.dropdown-wrapper {
 
 #meal-container {
     width: 1500px;
-    height: 500px;
+    height: 800px;
     display: flex;
     flex-flow: column nowrap;
 /*    background-color: green;*/
@@ -203,7 +203,7 @@ div.dropdown-wrapper {
 
 #mealTitle-div {
 	width: 1500px;
-	height: 50px;
+	height: 100px;
 	font: bold 30px "Roboto";
 	text-align: center;
 	vertical-align: bottom;
@@ -213,6 +213,7 @@ div.dropdown-wrapper {
 #mealContent-div {
     display: flex;
     flex-flow: row nowrap;
+	height: 700px;
 }
 
 #menu-div {
@@ -470,8 +471,4 @@ ul {
 .food-list-item-left-container {
     display: flex;
     flex-flow: row nowrap;
-}
-
-#mealContent-div {
-    height: 500px;
 }

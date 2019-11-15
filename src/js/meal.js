@@ -6,7 +6,17 @@ class MealPlanner {
         this.tableElements = data;
 		
 		this.menuItems = []; //each index will contain the food and quantity
+		this.nutrients = [['Calories', 2400], ['Carbohydrates', 130], ['Protein', 56], ['Fat', 93], ['Sugars', 60]]; //data keys and default max values (needs) -- will need to programatically set
+		this.barLabels = ['Calories', 'Total Carbs', 'Protein', 'Total Fat', 'Total Sugar'];
 		
+		//sizing for bar chart
+		this.barChartmargin = { top: 20, right: 20, bottom: 60, left: 80 };
+        this.barChartWidth = 700 - this.barChartmargin.left - this.barChartmargin.right; 
+        this.barChartHeight = 700 - this.barChartmargin.top - this.barChartmargin.bottom; 
+		
+		this.barWidth = 100;
+		this.barSpacing = 20;
+
 		this.createMealPlanner();
     }
 
@@ -34,18 +44,17 @@ class MealPlanner {
 		
 
 		
-		//initialize menu
+		/* INITIALIZE MENU */
 		let optionSelect = function(data) {
 			console.log('search', data)
 		}
 				
-				
+		//create search bar
 		let foodNames = [];
 		for (let food of this.data) {
-			foodNames.push(food.title) //TODO: PREVENT DUPLICATES
+			foodNames.push(food.title)
 		}
 	
-		
 		let label = menuDiv.append('label')
 			.attr('for', 'searchBar')
 			.html('Select a food')
@@ -65,6 +74,7 @@ class MealPlanner {
 		options.text(d => d)
 			.attr("value", d => d)
 		
+		//stylize with select2
 		$(document).ready(function() {
 			$('.search-select2').select2();
 		});
@@ -86,6 +96,7 @@ class MealPlanner {
 			
 		}
 		
+		//"add to menu" button
 		menuDiv.append('button')
 			.attr('type', 'button')
 			.attr('id', 'addFoodButton')
@@ -124,14 +135,59 @@ class MealPlanner {
 //		menuTable.append('tbody')
 //			.attr('id', 'menuTableBody');
 		
-		//initialize price donut chart
+		/* INITIALIZE PRICE CHART */
+		
+		//TODO
 		
 		
-		
-		//initialize bar chart
+		/* INITIALIZE BAR CHART */
 		let barSvg = barDiv.append('svg')
 			.attr('width', '100%')
-			.attr('height', '100%');
+			.attr('height', '100%')
+			.attr('id', 'barSvg');
+		
+		//draw x-axis
+		barSvg.append('line')
+			.attr('x1', 0)
+			.attr('y1', 0)
+			.attr('x2', this.barChartWidth)
+			.attr('y2', 0)
+			.attr('transform', 'translate(' + this.barChartmargin.left + ',' + (this.barChartmargin.top + this.barChartHeight) + ')')
+			.attr('stroke-width', 1)
+			.attr('stroke', 'black');
+		
+		//draw x-axis labels
+		barSvg.selectAll('text')
+			.data(this.barLabels)
+			.join('text')
+			.attr('transform', (d, i) => 'translate(' + (this.barChartmargin.left + this.barSpacing + this.barWidth/2 + i*(this.barWidth + this.barSpacing)) + ',' + (this.barChartmargin.top + this.barChartHeight + 20) + ')')
+			.text(d => d)
+			.classed('axis-label', true);
+		
+		//draw y-axis label
+		barSvg.append('text')
+			.attr('transform', 'translate(' + (this.barChartmargin.left / 2) + ',' + (this.barChartmargin.top + (this.barChartHeight / 2)) + ') rotate(-90)')
+			.text('% DAILY VALUE')
+			.classed("axis-label", true);
+		
+		//create y-axis
+		barSvg.append('g')
+			.attr("id", "barYAxis")
+			.classed("axis", true)
+			.attr("transform", "translate(" + this.barChartmargin.left + "," + this.barChartmargin.top + ") scale (1, 1)");
+		
+		//create dashed line
+		barSvg.append('line')
+			.attr('id', 'line100')
+			.attr('x1', 0)
+			.attr('y1', 0)
+			.attr('x2', this.barChartWidth)
+			.attr('y2', 0)
+			.attr('stroke-width', 1)
+			.attr('stroke', 'black')
+			.attr('stroke-dasharray', '5,5');
+		
+		this.updateBarGraph();
 			
     }
 
@@ -204,6 +260,8 @@ class MealPlanner {
 							console.log(i);
 							that.menuItems.splice(i, 1);
 							that.updateMenu();
+							that.updatePriceChart();
+							that.updateBarGraph();
 					});
 					foodItemLeft.append('div')
 						.classed('foodName-div', true)
@@ -249,6 +307,80 @@ class MealPlanner {
 	
 	updateBarGraph() 
 	{
+		console.log('update bar graph');
+		let barSvg = d3.select('#barSvg');
+		
+		//index is bar/column number from left to right. Each index contains an array where each slot matches up with the food item in this.menuItems and
+		//   values are the top of the bar segment for that food(unscaled)
+		let barData = []; 
+		
+		//calculate bar segment sizes
+		for (let nutrientIndex in this.nutrients) {
+			let nutrient = this.nutrients[nutrientIndex];
+			let nutrientName = nutrient[0];
+			let fullValue = nutrient[1];
+			barData.push([]);
+			
+			for (let menuIndex in this.menuItems) {
+				let menuItem = this.menuItems[menuIndex];
+				let prevVal = menuIndex == 0 ? 0 : barData[nutrientIndex][menuIndex - 1].val;
+				let rectHeight = menuItem[0][nutrientName] * menuItem[1] / fullValue * 100; //this is not set to the y-axis scale yet
+				barData[nutrientIndex].push({val: prevVal + rectHeight, previous: prevVal});
+				
+			}
+		}
+		
+		console.log('bar data', barData);
+		
+		//find highest bar value to set y-axis
+		let barMax = 100; //go up to at least 100
+		if (this.menuItems.length > 0) {
+			for (let nutrientIndex in this.nutrients) {
+				let topValue = barData[nutrientIndex][this.menuItems.length - 1].val;
+				if (topValue > barMax) {
+					barMax = topValue;
+				}
+			}
+		}
+		
+		let barScale = d3.scaleLinear()
+			.domain([0, barMax])
+			.range([this.barChartHeight, 0])
+			.nice();
+		
+		let barAxis = d3.axisLeft();
+		barAxis.scale(barScale);
+		
+		barSvg.select('#barYAxis')
+			.call(barAxis);
+		
+		//draw dashed line at 100%
+		barSvg.select('#line100')
+			.attr('transform', 'translate(' + this.barChartmargin.left + ',' + (this.barChartmargin.top + barScale(100)) + ')');
+		
+		
+		//draw the bars
+		let barGroups = barSvg.selectAll('g.bar')
+			.data(barData)
+			.join('g')
+			.classed('bar', true)
+			.attr('transform', (d,i) => 'translate(' + (this.barChartmargin.left + this.barSpacing + i*(this.barWidth + this.barSpacing)) + ',' + (this.barChartmargin.top + this.barChartHeight) + ') scale (1,-1)');
+		
+		let bars = barGroups.selectAll('rect')
+			.data(d => d)
+			.join('rect');
+		
+		console.log(bars, bars.data())
+		
+		bars.attr('width', this.barWidth)
+			.attr('height', (d, i) => barScale(0) - barScale(d.val - d.previous))
+			.attr('transform', (d,i) => 'translate(0,' + (barScale(0) - (i == 0 ? barScale(0) : barScale(d.previous))) + ')')
+			.attr('fill', 'green')
+			.attr('stroke', 'none');
+		
+		
+		
+		
 		
 	}
 }
