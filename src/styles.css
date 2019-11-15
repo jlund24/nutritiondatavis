@@ -55,8 +55,7 @@ circle {
 }
 
 .y-label,
-.x-label,
-.c-label {
+.x-label {
     width: 1%7;
     display: inline-block;
     float: left;
@@ -87,6 +86,7 @@ div.tooltip {
 
 div.dropdown-wrapper {
     display: inline-block;
+	float: left;
     margin-left: 75px;
     width: 200px;
 /*    height: 130px;*/
@@ -98,46 +98,15 @@ div.dropdown-wrapper {
     float: right;
 }
 
-.circle-legend {
-    width: 200px;
-/*    height: 120px;*/
-	height: 80px;
-    padding-right: 20px;
-    margin: auto;
-    display: inline-block;
-    float: right;
-}
-
-.circle-legend svg {
-    width: 100%;
-    height: 90%;
-}
-
-.circle-legend text {
-    font-size: 11px;
-}
-
-.circle-legend .label {
-    font-size: 12px;
-    font-weight: bold;
-    text-anchor: middle;
-}
-
-.circle-legend .subLabel {
-    font-size: 11px;
-    font-weight: bold;
-}
 
 #switchDiv {
     display: flex;
-/*	margin: auto;*/
+	float:right;
 	align-items: center;
-    margin-left: 250px;
-/*    width: 250px;*/
-    height: 50;
     padding: 2px;
-/*	width: 250px;*/
+	margin-right: 75px;
 }
+
 
 /*Switch adapted from https://danklammer.com/articles/simple-css-toggle-switch/*/
 .toggle {

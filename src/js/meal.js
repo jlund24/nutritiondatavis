@@ -83,7 +83,6 @@ class MealPlanner {
 		
 		let addFood = function(e) {
 			let newFood = $("#searchBar").select2("val");
-			console.log('add', newFood);
 			let foodData = that.data.filter(d => d.title == newFood)
 			
 			//don't allow duplicates
@@ -200,7 +199,6 @@ class MealPlanner {
     updateMenu()
     {
 		let that = this;
-        console.log('menu:', this.menuItems);
 		
 //		let menuSvg = d3.select('#menuSvg');
 //		menuSvg.selectAll('text')
@@ -263,7 +261,6 @@ class MealPlanner {
 
 					d3.selectAll('.remove-div')
 						.on("click", function (d, i) {
-							console.log(i);
 							that.menuItems.splice(i, 1);
 							that.updateMenu();
 							that.updatePriceChart();
@@ -336,7 +333,6 @@ class MealPlanner {
 			}
 		}
 		
-		console.log('bar data', barData);
 		
 		//find highest bar value to set y-axis
 		let barMax = 100; //go up to at least 100
@@ -424,8 +420,6 @@ class MealPlanner {
 //			.on('mouseover', d => this.highlightBars(d.food, false))
 //			.on('mouseout', d => this.highlightBars(null, true));
 		
-		//add synchronized highlighting on hover
-		//add tooltip
 		
 	}
 	
