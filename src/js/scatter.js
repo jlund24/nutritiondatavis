@@ -1,9 +1,10 @@
 // JavaScript Document
 class ScatterPlot {
-    constructor(data)
+    constructor(data, table)
     {
         this.data = data;
         this.tableElements = data;
+		this.tableRef = table;
 		
 		this.margin = { top: 20, right: 20, bottom: 60, left: 80 };
         this.width = 700 - this.margin.left - this.margin.right; //700 is the container width
@@ -395,7 +396,6 @@ class ScatterPlot {
 			.data(this.tableElements)
 			.join(
 				enter => enter.append("circle")
-//							.attr("id", (d) => d.id)
 							.attr("cx", function (d) { 
 								if (d[xIndicator]) {
 									return that.perServing ? that.xScales[xIndicator](d[xIndicator]) : that.xScales_perGram[xIndicator](d[xIndicator] / d.grams_per_serving * 100);
@@ -412,17 +412,19 @@ class ScatterPlot {
 								   	   .html(that.tooltipRender(d))
 								       .style("left", (d3.event.pageX + 20) + "px")
 								       .style("top", (d3.event.pageY - 20) + "px");
+								that.highlightCircle(d, false);
+								that.tableRef.highlightRow(d, false);
 							})
 							.on("mouseout", function(d) {
 								tooltip.style("opacity", 0);
+								that.highlightCircle(null, true);
+								that.tableRef.highlightRow(null, true);
 							})
 							/*.on("click", function(d) {
 								//can call a function for interactivity
 							})*/,
 			
 				update => update
-//							.attr("id", (d) => d.id)
-//							.attr("class", (d) => d.region)
 							.transition()
 							.duration(1000)
 							.attr("cx", function (d) { 
@@ -531,6 +533,16 @@ class ScatterPlot {
 			+ "</div>";
         return text;
     }
+	
+	highlightCircle(data, clear) {
+		if (clear) {
+			d3.select('#scatterGroup').selectAll('circle')
+				.classed('highlighted', false);
+		} else {
+			d3.select('#scatterGroup').selectAll('circle')
+				.classed('highlighted', d => d.title == data.title);
+		}
+	}
 	
 
 }
