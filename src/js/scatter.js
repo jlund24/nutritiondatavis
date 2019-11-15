@@ -260,6 +260,7 @@ class ScatterPlot {
 		d3.select('#chart-view')
             .append('div')
             .attr("class", "tooltip")
+			.attr('id', 'scatterTooltip')
             .style("opacity", 0);
 		
 		//create svg for the scatterplot
@@ -414,9 +415,13 @@ class ScatterPlot {
 		yAxis.scale(this.perServing ? this.yScales[yIndicator] : this.yScales_perGram[yIndicator]);
 		
 		d3.select('#xAxis')
+			.transition()
+			.duration(1000)
 			.call(xAxis);
 		
 		d3.select('#yAxis')
+			.transition()
+			.duration(1000)
 			.call(yAxis);
 		
 		d3.select("#xAxisLabel")
@@ -429,7 +434,7 @@ class ScatterPlot {
 		let scatterGroup = d3.select('#scatterGroup');
 		
 		//tooltip
-		let tooltip = d3.select(".tooltip");
+		let tooltip = d3.select("#scatterTooltip");
 		
 		//update circles
 		scatterGroup.selectAll("circle")
@@ -451,7 +456,7 @@ class ScatterPlot {
 							.on("mouseover", function (d) { //ALSO HIGHLIGHT THE CIRCLE BY INCREASING STROKE WIDTH, AND HIGHLIGHT ROW IN TABLE
 								tooltip.style("opacity", 0.9)
 								   	   .html(that.tooltipRender(d))
-								       .style("left", (d3.event.pageX) + "px")
+								       .style("left", (d3.event.pageX + 20) + "px")
 								       .style("top", (d3.event.pageY - 20) + "px");
 							})
 							.on("mouseout", function(d) {

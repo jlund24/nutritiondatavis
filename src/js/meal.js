@@ -15,7 +15,7 @@ class MealPlanner {
         this.barChartHeight = 700 - this.barChartmargin.top - this.barChartmargin.bottom; 
 		
 		this.barWidth = 100;
-		this.barSpacing = 20;
+		this.barSpacing = 18;
 
 		this.createMealPlanner();
     }
@@ -187,6 +187,12 @@ class MealPlanner {
 			.attr('stroke', 'black')
 			.attr('stroke-dasharray', '5,5');
 		
+		//create tooltip
+		barDiv.append('div')
+            .attr("class", "tooltip")
+			.attr('id', 'barTooltip')
+            .style("opacity", 0);
+		
 		this.updateBarGraph();
 			
     }
@@ -307,7 +313,7 @@ class MealPlanner {
 	
 	updateBarGraph() 
 	{
-		console.log('update bar graph');
+		let that = this;
 		let barSvg = d3.select('#barSvg');
 		
 		//index is bar/column number from left to right. Each index contains an array where each slot matches up with the food item in this.menuItems and
@@ -325,7 +331,7 @@ class MealPlanner {
 				let menuItem = this.menuItems[menuIndex];
 				let prevVal = menuIndex == 0 ? 0 : barData[nutrientIndex][menuIndex - 1].val;
 				let rectHeight = menuItem[0][nutrientName] * menuItem[1] / fullValue * 100; //this is not set to the y-axis scale yet
-				barData[nutrientIndex].push({val: prevVal + rectHeight, previous: prevVal});
+				barData[nutrientIndex].push({val: prevVal + rectHeight, previous: prevVal, food: menuItem[0], nutrient: nutrientName});
 				
 			}
 		}
@@ -352,12 +358,18 @@ class MealPlanner {
 		barAxis.scale(barScale);
 		
 		barSvg.select('#barYAxis')
+			.transition()
+			.duration(500)
 			.call(barAxis);
 		
 		//draw dashed line at 100%
 		barSvg.select('#line100')
+			.transition()
+			.duration(500)
 			.attr('transform', 'translate(' + this.barChartmargin.left + ',' + (this.barChartmargin.top + barScale(100)) + ')');
 		
+		//tooltip
+		let tooltip = d3.select("#barTooltip");
 		
 		//draw the bars
 		let barGroups = barSvg.selectAll('g.bar')
@@ -368,19 +380,88 @@ class MealPlanner {
 		
 		let bars = barGroups.selectAll('rect')
 			.data(d => d)
-			.join('rect');
+			.join(
+				enter => enter.append('rect')
+					.attr('width', this.barWidth)
+					.attr('transform', (d,i) => 'translate(0,' + (barScale(0) - (i == 0 ? barScale(0) : barScale(d.previous))) + ')')
+					.attr('fill', 'green')
+					.attr('stroke', 'black')
+					.on('mouseover', d => {
+						this.highlightFood(d.food, false);
+						tooltip.style("opacity", 0.9)
+						   .html(that.barTooltipRender(d))
+						   .style("left", (d3.event.pageX + 20) + "px")
+						   .style("top", (d3.event.pageY - 20) + "px");
+					})
+					.on('mouseout', d => {
+						this.highlightFood(null, true);
+						tooltip.style("opacity", 0);
+					})
+					.attr('height', 0)
+					.attr('opacity', 0)
+					.transition()
+					.duration(500)
+					.attr('height', (d, i) => barScale(0) - barScale(d.val - d.previous))
+					.attr('opacity', 1),
+				
+				update => update
+					.transition()
+					.duration(500)
+					.attr('height', (d, i) => barScale(0) - barScale(d.val - d.previous))
+					.attr('transform', (d,i) => 'translate(0,' + (barScale(0) - (i == 0 ? barScale(0) : barScale(d.previous))) + ')'),
+				
+				exit => exit.transition().duration(500)
+					.attr('height', 0)
+					.attr('opacity', 0)
+					.remove()
+			);
+				
+//		bars.attr('width', this.barWidth)
+//			.attr('height', (d, i) => barScale(0) - barScale(d.val - d.previous))
+//			.attr('transform', (d,i) => 'translate(0,' + (barScale(0) - (i == 0 ? barScale(0) : barScale(d.previous))) + ')')
+//			.attr('fill', 'green')
+//			.attr('stroke', 'black')
+//			.on('mouseover', d => this.highlightBars(d.food, false))
+//			.on('mouseout', d => this.highlightBars(null, true));
 		
-		console.log(bars, bars.data())
-		
-		bars.attr('width', this.barWidth)
-			.attr('height', (d, i) => barScale(0) - barScale(d.val - d.previous))
-			.attr('transform', (d,i) => 'translate(0,' + (barScale(0) - (i == 0 ? barScale(0) : barScale(d.previous))) + ')')
-			.attr('fill', 'green')
-			.attr('stroke', 'none');
-		
-		
-		
-		
+		//add synchronized highlighting on hover
+		//add tooltip
 		
 	}
+	
+	//food is the data for the food to highlight. Clear is true if clearing all highlighting, false is highlighting something
+	highlightFood(food, clear) {
+		this.highlightMenu(food, clear);
+		this.highlightPrice(food, clear);
+		this.highlightBars(food, clear);
+	}
+	
+	highlightMenu(food, clear) {
+		
+	}
+	
+	highlightPrice(food, clear) {
+		
+	}
+	
+	
+	highlightBars(food, clear) {
+		if (clear) {
+			d3.select('#barSvg').selectAll('g.bar').selectAll('rect')
+				.classed('barHighlighted', false);			
+		} else {
+			d3.select('#barSvg').selectAll('g.bar').selectAll('rect')
+				.classed('barHighlighted', d => d.food.title == food.title);
+		}
+	}
+	
+	barTooltipRender(data) {
+		let text = "<span>" + data.food.title + "</span><br>" 
+			+ "<div>"
+			+ data.food[data.nutrient] + (data.nutrient == "Calories" ? " KCal" : " g") +"<br>"
+			+ (data.val - data.previous).toFixed(2) + "%"
+			+ "</div>";
+        return text;
+	}
+	
 }
