@@ -1,5 +1,5 @@
 // JavaScript Document
-d3.json('data/nutrients_and_price.json').then( data => {
+d3.json('data/nutrients_and_price1.json').then( data => {
 	console.log('data', data);
 	this.data = data;
 	

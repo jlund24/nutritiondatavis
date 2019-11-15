@@ -475,3 +475,7 @@ ul {
 #mealContent-div {
     height: 500px;
 }
+
+.food-title-text {
+    margin: 0px;
+}
