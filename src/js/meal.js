@@ -395,16 +395,20 @@ class MealPlanner {
 					})
 					.attr('height', 0)
 					.attr('opacity', 0)
-					.transition()
-					.duration(500)
-					.attr('height', (d, i) => barScale(0) - barScale(d.val - d.previous))
-					.attr('opacity', 1),
+					.call(enter => enter
+						.transition()
+						.duration(500)
+						.attr('height', (d, i) => barScale(0) - barScale(d.val - d.previous))
+						.attr('opacity', 1)
+					),
 				
 				update => update
-					.transition()
-					.duration(500)
-					.attr('height', (d, i) => barScale(0) - barScale(d.val - d.previous))
-					.attr('transform', (d,i) => 'translate(0,' + (barScale(0) - (i == 0 ? barScale(0) : barScale(d.previous))) + ')'),
+					.call(update => update
+						.transition()
+						.duration(500)
+						.attr('height', (d, i) => barScale(0) - barScale(d.val - d.previous))
+						.attr('transform', (d,i) => 'translate(0,' + (barScale(0) - (i == 0 ? barScale(0) : barScale(d.previous))) + ')')
+					),
 				
 				exit => exit.transition().duration(500)
 					.attr('height', 0)
