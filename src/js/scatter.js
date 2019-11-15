@@ -27,12 +27,13 @@ class ScatterPlot {
 		this.sugarMax = d3.max(data, d => d[sugarCol]);
 		this.carbMax = d3.max(data, d => d[carbCol]);
 		
-		this.energyPerGramMax = d3.max(data, d => d[energyCol] / d.grams_per_serving);
-		this.pricePerGramMax = d3.max(data, d => d[priceCol] / d.grams_per_serving);
-		this.proteinPerGramMax = d3.max(data, d => d[proteinCol] / d.grams_per_serving);
-		this.fatPerGramMax = d3.max(data, d => d[fatCol] / d.grams_per_serving);
-		this.sugarPerGramMax = d3.max(data, d => d[sugarCol] / d.grams_per_serving);
-		this.carbPerGramMax = d3.max(data, d => d[carbCol] / d.grams_per_serving);
+		//changed to 100 grams but I'm not going to rename everything
+		this.energyPerGramMax = d3.max(data, d => d[energyCol] / d.grams_per_serving * 100);
+		this.pricePerGramMax = d3.max(data, d => d[priceCol] / d.grams_per_serving * 100);
+		this.proteinPerGramMax = d3.max(data, d => d[proteinCol] / d.grams_per_serving * 100);
+		this.fatPerGramMax = d3.max(data, d => d[fatCol] / d.grams_per_serving * 100);
+		this.sugarPerGramMax = d3.max(data, d => d[sugarCol] / d.grams_per_serving * 100);
+		this.carbPerGramMax = d3.max(data, d => d[carbCol] / d.grams_per_serving * 100);
 		
 		//energy scales
 		let energyScaleX = d3
@@ -346,7 +347,7 @@ class ScatterPlot {
 		
 		switchDiv.append('span')
 			.style("margin-left",  "15px")
-			.html('Per Gram');
+			.html('Per 100 Grams');
 		
 		//draw the initial data
 		this.updateScatterPlot(this.curXIndicator, this.curYIndicator);
@@ -397,11 +398,11 @@ class ScatterPlot {
 //							.attr("id", (d) => d.id)
 							.attr("cx", function (d) { 
 								if (d[xIndicator]) {
-									return that.perServing ? that.xScales[xIndicator](d[xIndicator]) : that.xScales_perGram[xIndicator](d[xIndicator] / d.grams_per_serving);
+									return that.perServing ? that.xScales[xIndicator](d[xIndicator]) : that.xScales_perGram[xIndicator](d[xIndicator] / d.grams_per_serving * 100);
 								} else return that.xScales[xIndicator](0)}) //should be the same whether per gram or per serving
 							.attr("cy", function (d) { 
 								if (d[yIndicator]) {
-									return that.perServing ? that.yScales[yIndicator](d[yIndicator]) : that.yScales_perGram[yIndicator](d[yIndicator] / d.grams_per_serving);
+									return that.perServing ? that.yScales[yIndicator](d[yIndicator]) : that.yScales_perGram[yIndicator](d[yIndicator] / d.grams_per_serving * 100);
 								} else return that.yScales[yIndicator](0)}) //should be the same whether per gram or per serving
 							.attr("r", 10)
 							.attr("transform", "translate(" + this.margin.left + "," + (this.margin.top) + ") scale (1, 1)")
@@ -426,11 +427,11 @@ class ScatterPlot {
 							.duration(1000)
 							.attr("cx", function (d) { 
 								if (d[xIndicator]) {
-									return that.perServing ? that.xScales[xIndicator](d[xIndicator]) : that.xScales_perGram[xIndicator](d[xIndicator] / d.grams_per_serving);
+									return that.perServing ? that.xScales[xIndicator](d[xIndicator]) : that.xScales_perGram[xIndicator](d[xIndicator] / d.grams_per_serving * 100);
 								} else return that.xScales[xIndicator](0)}) //should be the same whether per gram or per serving
 							.attr("cy", function (d) { 
 								if (d[yIndicator]) {
-									return that.perServing ? that.yScales[yIndicator](d[yIndicator]) : that.yScales_perGram[yIndicator](d[yIndicator] / d.grams_per_serving);
+									return that.perServing ? that.yScales[yIndicator](d[yIndicator]) : that.yScales_perGram[yIndicator](d[yIndicator] / d.grams_per_serving * 100);
 								} else return that.yScales[yIndicator](0)}) //should be the same whether per gram or per serving
 							.attr("r", 10),
 			
@@ -519,8 +520,8 @@ class ScatterPlot {
 			x = this.tooltipLabels[this.curXIndicator] + ": " + (data[this.curXIndicator] ? data[this.curXIndicator] : "no data");
 			y = this.tooltipLabels[this.curYIndicator] + ": " + (data[this.curYIndicator] ? data[this.curYIndicator] : "no data");
 		} else {
-			x = this.tooltipLabels[this.curXIndicator] + ": " + (data[this.curXIndicator] ? (data[this.curXIndicator] / data.grams_per_serving).toPrecision(4) : "no data");
-			y = this.tooltipLabels[this.curYIndicator] + ": " + (data[this.curYIndicator] ? (data[this.curYIndicator] / data.grams_per_serving).toPrecision(4) : "no data");
+			x = this.tooltipLabels[this.curXIndicator] + ": " + (data[this.curXIndicator] ? (data[this.curXIndicator] / data.grams_per_serving * 100).toPrecision(4) : "no data");
+			y = this.tooltipLabels[this.curYIndicator] + ": " + (data[this.curYIndicator] ? (data[this.curYIndicator] / data.grams_per_serving * 100).toPrecision(4) : "no data");
 		}
 		
         let text = "<span>" + data.title + "</span><br>" 
