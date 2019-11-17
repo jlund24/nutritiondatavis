@@ -1,16 +1,14 @@
 // JavaScript Document
 class ScatterPlot {
-    constructor(data)
+    constructor(data, table)
     {
         this.data = data;
         this.tableElements = data;
+		this.tableRef = table;
 		
 		this.margin = { top: 20, right: 20, bottom: 60, left: 80 };
         this.width = 700 - this.margin.left - this.margin.right; //700 is the container width
         this.height = 600 - this.margin.top - this.margin.bottom; //container height is 800 but I probably don't need that much
-		
-		this.circleMinR = 3;
-		this.circleMaxR = 20;
 
 		// variable column names, just in case
 		let energyCol = 'Calories';
@@ -22,7 +20,6 @@ class ScatterPlot {
 		
 		this.curXIndicator = energyCol;
 		this.curYIndicator = priceCol;
-		this.curCIndicator = fatCol;
 		
 		this.energyMax = d3.max(data, d => d[energyCol]);
 		this.priceMax = d3.max(data, d => d[priceCol]);
@@ -31,12 +28,13 @@ class ScatterPlot {
 		this.sugarMax = d3.max(data, d => d[sugarCol]);
 		this.carbMax = d3.max(data, d => d[carbCol]);
 		
-		this.energyPerGramMax = d3.max(data, d => d[energyCol] / d.grams_per_serving);
-		this.pricePerGramMax = d3.max(data, d => d[priceCol] / d.grams_per_serving);
-		this.proteinPerGramMax = d3.max(data, d => d[proteinCol] / d.grams_per_serving);
-		this.fatPerGramMax = d3.max(data, d => d[fatCol] / d.grams_per_serving);
-		this.sugarPerGramMax = d3.max(data, d => d[sugarCol] / d.grams_per_serving);
-		this.carbPerGramMax = d3.max(data, d => d[carbCol] / d.grams_per_serving);
+		//changed to 100 grams but I'm not going to rename everything
+		this.energyPerGramMax = d3.max(data, d => d[energyCol] / d.grams_per_serving * 100);
+		this.pricePerGramMax = d3.max(data, d => d[priceCol] / d.grams_per_serving * 100);
+		this.proteinPerGramMax = d3.max(data, d => d[proteinCol] / d.grams_per_serving * 100);
+		this.fatPerGramMax = d3.max(data, d => d[fatCol] / d.grams_per_serving * 100);
+		this.sugarPerGramMax = d3.max(data, d => d[sugarCol] / d.grams_per_serving * 100);
+		this.carbPerGramMax = d3.max(data, d => d[carbCol] / d.grams_per_serving * 100);
 		
 		//energy scales
 		let energyScaleX = d3
@@ -244,7 +242,7 @@ class ScatterPlot {
 		this.perServing = true;
 		
 		this.createScatterPlot();
-		this.drawDropDown(this.curXIndicator, this.curYIndicator, this.curCIndicator);
+		this.drawDropDown(this.curXIndicator, this.curYIndicator);
 
     }
 
@@ -260,6 +258,7 @@ class ScatterPlot {
 		d3.select('#chart-view')
             .append('div')
             .attr("class", "tooltip")
+			.attr('id', 'scatterTooltip')
             .style("opacity", 0);
 		
 		//create svg for the scatterplot
@@ -311,15 +310,6 @@ class ScatterPlot {
 		//Create dropdowns for selecting axis data
  		let dropdownWrap = d3.select('#chart-view').append('div').classed('dropdown-wrapper', true);
 
-        let cWrap = dropdownWrap.append('div').classed('dropdown-panel', true);
-
-        cWrap.append('div').classed('c-label', true)
-            .append('text')
-            .text('Circle Size');
-
-        cWrap.append('div').attr('id', 'dropdown_c').classed('dropdown', true).append('div').classed('dropdown-content', true)
-            .append('select');
-
         let xWrap = dropdownWrap.append('div').classed('dropdown-panel', true);
 
         xWrap.append('div').classed('x-label', true)
@@ -337,15 +327,6 @@ class ScatterPlot {
 
         yWrap.append('div').attr('id', 'dropdown_y').classed('dropdown', true).append('div').classed('dropdown-content', true)
             .append('select');
-
-		
-		//draw the circle legend
-        d3.select('#chart-view')
-            .append('div')
-            .classed('circle-legend', true)
-            .append('svg')
-            .append('g')
-            .attr('transform', 'translate(10, 0)');
 		
 		//draw the per serving/per gram switch
 		let switchDiv = d3.select('#chart-view')
@@ -362,49 +343,24 @@ class ScatterPlot {
 			.attr('type', 'checkbox')
 			.on('click', function() { 
 				that.perServing = !this.checked;
-				that.updateScatterPlot(that.curXIndicator, that.curYIndicator, that.curCIndicator);
+				that.updateScatterPlot(that.curXIndicator, that.curYIndicator);
 			});
 		
 		switchDiv.append('span')
 			.style("margin-left",  "15px")
-			.html('Per Gram');
+			.html('Per 100 Grams');
 		
 		//draw the initial data
-		this.updateScatterPlot(this.curXIndicator, this.curYIndicator, this.curCIndicator);
+		this.updateScatterPlot(this.curXIndicator, this.curYIndicator);
     }
 
-	//updates all the circles based on the provided xIndicator, yIndicator, and circle size Indicator
-    updateScatterPlot(xIndicator, yIndicator, circleSizeIndicator)
+	//updates all the circles based on the provided xIndicator and yIndicator
+    updateScatterPlot(xIndicator, yIndicator)
     {
 		let that = this;
 		//update global information
 		this.curXIndicator = xIndicator;
 		this.curYIndicator = yIndicator;
-		this.curCIndicator = circleSizeIndicator;
-		
-		//draw the circle size legend
-		let maxSize = 0;
-		let minSize = Number.MAX_SAFE_INTEGER;
-		for (let food of this.tableElements) {
-			let val = this.perServing ? food[circleSizeIndicator] : food[circleSizeIndicator] / food.grams_per_serving;
-			if (val > maxSize) {
-				maxSize = val;
-			}
-			if (val < minSize) {
-				minSize = val;
-			}
-		}
-		
-        let circleSizer = function(d) {
-            let cScale = d3.scaleSqrt().range([that.circleMinR, that.circleMaxR]).domain([minSize, maxSize]);
-			if (d[that.curCIndicator]) {
-				return that.perServing ? cScale(d[that.curCIndicator]) : cScale(d[that.curCIndicator] / d.grams_per_serving);
-			} else {
-				return that.circleMinR;
-			}
-        };
-		
-		this.drawLegend(minSize, maxSize);
 		
 		//set scales
 		let xAxis = d3.axisBottom();
@@ -414,9 +370,13 @@ class ScatterPlot {
 		yAxis.scale(this.perServing ? this.yScales[yIndicator] : this.yScales_perGram[yIndicator]);
 		
 		d3.select('#xAxis')
+			.transition()
+			.duration(1000)
 			.call(xAxis);
 		
 		d3.select('#yAxis')
+			.transition()
+			.duration(1000)
 			.call(yAxis);
 		
 		d3.select("#xAxisLabel")
@@ -429,52 +389,53 @@ class ScatterPlot {
 		let scatterGroup = d3.select('#scatterGroup');
 		
 		//tooltip
-		let tooltip = d3.select(".tooltip");
+		let tooltip = d3.select("#scatterTooltip");
 		
 		//update circles
 		scatterGroup.selectAll("circle")
 			.data(this.tableElements)
 			.join(
 				enter => enter.append("circle")
-//							.attr("id", (d) => d.id)
 							.attr("cx", function (d) { 
 								if (d[xIndicator]) {
-									return that.perServing ? that.xScales[xIndicator](d[xIndicator]) : that.xScales_perGram[xIndicator](d[xIndicator] / d.grams_per_serving);
+									return that.perServing ? that.xScales[xIndicator](d[xIndicator]) : that.xScales_perGram[xIndicator](d[xIndicator] / d.grams_per_serving * 100);
 								} else return that.xScales[xIndicator](0)}) //should be the same whether per gram or per serving
 							.attr("cy", function (d) { 
 								if (d[yIndicator]) {
-									return that.perServing ? that.yScales[yIndicator](d[yIndicator]) : that.yScales_perGram[yIndicator](d[yIndicator] / d.grams_per_serving);
+									return that.perServing ? that.yScales[yIndicator](d[yIndicator]) : that.yScales_perGram[yIndicator](d[yIndicator] / d.grams_per_serving * 100);
 								} else return that.yScales[yIndicator](0)}) //should be the same whether per gram or per serving
-							.attr("r", (d) => circleSizer(d))
+							.attr("r", 10)
 							.attr("transform", "translate(" + this.margin.left + "," + (this.margin.top) + ") scale (1, 1)")
 							.attr("class", (d) => d.category)
 							.on("mouseover", function (d) { //ALSO HIGHLIGHT THE CIRCLE BY INCREASING STROKE WIDTH, AND HIGHLIGHT ROW IN TABLE
 								tooltip.style("opacity", 0.9)
 								   	   .html(that.tooltipRender(d))
-								       .style("left", (d3.event.pageX) + "px")
+								       .style("left", (d3.event.pageX + 20) + "px")
 								       .style("top", (d3.event.pageY - 20) + "px");
+								that.highlightCircle(d, false);
+								that.tableRef.highlightRow(d, false);
 							})
 							.on("mouseout", function(d) {
 								tooltip.style("opacity", 0);
+								that.highlightCircle(null, true);
+								that.tableRef.highlightRow(null, true);
 							})
 							/*.on("click", function(d) {
 								//can call a function for interactivity
 							})*/,
 			
 				update => update
-//							.attr("id", (d) => d.id)
-//							.attr("class", (d) => d.region)
 							.transition()
 							.duration(1000)
 							.attr("cx", function (d) { 
 								if (d[xIndicator]) {
-									return that.perServing ? that.xScales[xIndicator](d[xIndicator]) : that.xScales_perGram[xIndicator](d[xIndicator] / d.grams_per_serving);
+									return that.perServing ? that.xScales[xIndicator](d[xIndicator]) : that.xScales_perGram[xIndicator](d[xIndicator] / d.grams_per_serving * 100);
 								} else return that.xScales[xIndicator](0)}) //should be the same whether per gram or per serving
 							.attr("cy", function (d) { 
 								if (d[yIndicator]) {
-									return that.perServing ? that.yScales[yIndicator](d[yIndicator]) : that.yScales_perGram[yIndicator](d[yIndicator] / d.grams_per_serving);
+									return that.perServing ? that.yScales[yIndicator](d[yIndicator]) : that.yScales_perGram[yIndicator](d[yIndicator] / d.grams_per_serving * 100);
 								} else return that.yScales[yIndicator](0)}) //should be the same whether per gram or per serving
-							.attr("r", (d) => circleSizer(d)),
+							.attr("r", 10),
 			
 				exit => exit.remove()
 		
@@ -485,7 +446,7 @@ class ScatterPlot {
     }
 	
 	//draws the drop down menus. Only needs to be called once on creation
-	drawDropDown(xIndicator, yIndicator, circleSizeIndicator) 
+	drawDropDown(xIndicator, yIndicator) 
 	{
 		let that = this;
         let dropDownWrapper = d3.select('.dropdown-wrapper');
@@ -497,34 +458,6 @@ class ScatterPlot {
                 indicator_name: this.tooltipLabels[key]
             });
         }
-
-        /* CIRCLE DROPDOWN */
-        let dropC = dropDownWrapper.select('#dropdown_c').select('.dropdown-content').select('select');
-
-        let optionsC = dropC.selectAll('option')
-            .data(dropData);
-
-
-        optionsC.exit().remove();
-
-        let optionsCEnter = optionsC.enter()
-            .append('option')
-            .attr('value', (d, i) => d.indicator);
-
-        optionsCEnter.append('text')
-            .text((d, i) => d.indicator_name);
-
-        optionsC = optionsCEnter.merge(optionsC);
-
-        let selectedC = optionsC.filter(d => d.indicator === circleSizeIndicator)
-            .attr('selected', true);
-
-        dropC.on('change', function(d, i) {
-            let cValue = this.options[this.selectedIndex].value;
-            let xValue = dropX.node().value;
-            let yValue = dropY.node().value;
-            that.updateScatterPlot(xValue, yValue, cValue);
-        });
 
         /* X DROPDOWN */
         let dropX = dropDownWrapper.select('#dropdown_x').select('.dropdown-content').select('select');
@@ -549,8 +482,7 @@ class ScatterPlot {
         dropX.on('change', function(d, i) {
             let xValue = this.options[this.selectedIndex].value;
             let yValue = dropY.node().value;
-            let cValue = dropC.node().value;
-            that.updateScatterPlot(xValue, yValue, cValue);
+            that.updateScatterPlot(xValue, yValue);
         });
 
         /* Y DROPDOWN */
@@ -576,63 +508,41 @@ class ScatterPlot {
         dropY.on('change', function(d, i) {
             let yValue = this.options[this.selectedIndex].value;
             let xValue = dropX.node().value;
-            let cValue = dropC.node().value;
-            that.updateScatterPlot(xValue, yValue, cValue);
+            that.updateScatterPlot(xValue, yValue);
         });
 	}
 	
-	//draws the circle size legend. Call every time the circle size indicator changes
-	//min is the smallest circle radius; max is the largest circle radius
-	drawLegend(min, max) {
-        let scale = d3.scaleSqrt().range([this.circleMinR, this.circleMaxR]).domain([min, max]);
-
-        let circleData = [min, max];
-
-        let svg = d3.select('.circle-legend').select('svg').select('g');
-
-        let circleGroup = svg.selectAll('g').data(circleData);
-        circleGroup.exit().remove();
-
-        let circleEnter = circleGroup.enter().append('g');
-        circleEnter.append('circle').classed('neutral', true);
-        circleEnter.append('text').classed('circle-size-text', true);
-
-        circleGroup = circleEnter.merge(circleGroup);
-
-        circleGroup.attr('transform', (d, i) => 'translate(' + ((i * (5 * scale(d))) + 20) + ', 25)');
-
-        circleGroup.select('circle').attr('r', (d) => scale(d));
-        circleGroup.select('circle').attr('cx', '0');
-        circleGroup.select('circle').attr('cy', '0');
-        let numText = circleGroup.select('text').text(d => new Intl.NumberFormat().format(d));
-
-        numText.attr('transform', (d) => 'translate(-12, 40)');
-    }
 	
 	//call on hover of the circles to get a tooltip for it
 	tooltipRender(data) {
 		let x = "";
 		let y = "";
-		let c = "";
 		
 		if (this.perServing) {
 			x = this.tooltipLabels[this.curXIndicator] + ": " + (data[this.curXIndicator] ? data[this.curXIndicator] : "no data");
 			y = this.tooltipLabels[this.curYIndicator] + ": " + (data[this.curYIndicator] ? data[this.curYIndicator] : "no data");
-			c = this.tooltipLabels[this.curCIndicator] + ": " + (data[this.curCIndicator] ? data[this.curCIndicator] : "no data");
 		} else {
-			x = this.tooltipLabels[this.curXIndicator] + ": " + (data[this.curXIndicator] ? (data[this.curXIndicator] / data.grams_per_serving).toPrecision(4) : "no data");
-			y = this.tooltipLabels[this.curYIndicator] + ": " + (data[this.curYIndicator] ? (data[this.curYIndicator] / data.grams_per_serving).toPrecision(4) : "no data");
-			c = this.tooltipLabels[this.curCIndicator] + ": " + (data[this.curCIndicator] ? (data[this.curCIndicator] / data.grams_per_serving).toPrecision(4) : "no data");
+			x = this.tooltipLabels[this.curXIndicator] + ": " + (data[this.curXIndicator] ? (data[this.curXIndicator] / data.grams_per_serving * 100).toPrecision(4) : "no data");
+			y = this.tooltipLabels[this.curYIndicator] + ": " + (data[this.curYIndicator] ? (data[this.curYIndicator] / data.grams_per_serving * 100).toPrecision(4) : "no data");
 		}
 		
         let text = "<span>" + data.title + "</span><br>" 
 			+ "<div>"
 			+ x + "<br>"
-			+ y + "<br>"
-			+ c
+			+ y
 			+ "</div>";
         return text;
     }
+	
+	highlightCircle(data, clear) {
+		if (clear) {
+			d3.select('#scatterGroup').selectAll('circle')
+				.classed('highlighted', false);
+		} else {
+			d3.select('#scatterGroup').selectAll('circle')
+				.classed('highlighted', d => d.title == data.title);
+		}
+	}
 	
 
 }
