@@ -481,6 +481,11 @@ class Table {
 	highlightRow(food, clear) {
 		//TODO
 	}
+	
+	followBrush(brushedData, showAll) {
+		this.tableElements = showAll ? this.data : brushedData;
+		this.updateTable();
+	}
     
 }
 

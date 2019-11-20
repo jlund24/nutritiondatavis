@@ -270,6 +270,38 @@ class ScatterPlot {
 		//create wrapper group for scatterplot points
 		let svgGroup = d3.select('#chart-view').select('.plot-svg').append('g').classed('wrapper-group', true).attr("id", "scatterGroup");
 		
+		//create brush
+		let brushGroup = svgGroup.append('g')
+			.classed('brush', true);
+		
+		brushGroup.append('rect')
+			.attr('transform', 'translate(' + (this.margin.left - 10) + ',' + (this.margin.top - 10) + ')')
+			.attr('height', this.height + 20)
+			.attr('width', this.width + 20)
+			.attr('fill', 'none')
+			.attr('stroke', 'red');
+		
+		let brush = d3.brush()
+			.extent([[this.margin.left - 10, this.margin.top - 10], [this.margin.left + this.width + 10, this.margin.top + this.height + 10]])
+			.on('start', () => {
+				if (d3.event.selection)
+					that.brushHighlight(d3.event.selection);
+			})
+			.on('brush', () => {
+				if (d3.event.selection)
+					that.brushHighlight(d3.event.selection);
+			});
+		
+		brushGroup.call(brush);
+		
+		//clear brush on click
+		d3.select('#food-scatterplot-container')
+			.on('click', function() {
+				brushGroup.call(brush.move, null);
+				that.brushHighlight([[that.margin.left - 10, that.margin.top - 10],[that.margin.left - 10, that.margin.top - 10]])
+			});
+		
+		
 		//create x-Axis
 		let xAxis = d3.axisBottom();
 		xAxis.scale(this.xScales[this.curXIndicator]);
@@ -543,6 +575,39 @@ class ScatterPlot {
 				.classed('highlighted', d => d.title == data.title);
 		}
 	}
+	
+	brushHighlight(extent) {
+		
+		let circles = d3.select('#scatterGroup').selectAll('circle');
+		
+		let insideCircles = circles.filter((d,i,c) => {
+			let circleX = parseInt(c[i].getAttribute('cx')) + this.margin.left;
+			let circleY = parseInt(c[i].getAttribute('cy')) + this.margin.top;
+			return circleX >= extent[0][0] && circleX <= extent[1][0] && circleY >= extent[0][1] && circleY <= extent[1][1];
+		});
+		
+		
+		if (insideCircles.size() == 0) {
+			circles.each((d,i,c) => {
+				d3.select(c[i]).classed(d.category, true);
+			});
+			this.tableRef.followBrush([], true);
+			
+		} else {
+			circles.each((d,i,c) => {
+				d3.select(c[i]).classed(d.category, false);
+			});
+			insideCircles.each((d,i,c) => {
+				d3.select(c[i]).classed(d.category, true);
+			});
+			
+			let highlightedData = [];
+			insideCircles.each(d => highlightedData.push(d))
+			this.tableRef.followBrush(highlightedData, false);
+		}
+		
+	}
+
 	
 
 }
