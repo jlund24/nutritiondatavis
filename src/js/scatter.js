@@ -279,7 +279,7 @@ class ScatterPlot {
 			.attr('height', this.height + 20)
 			.attr('width', this.width + 20)
 			.attr('fill', 'none')
-			.attr('stroke', 'red');
+			.attr('stroke', 'none');
 		
 		let brush = d3.brush()
 			.extent([[this.margin.left - 10, this.margin.top - 10], [this.margin.left + this.width + 10, this.margin.top + this.height + 10]])
@@ -300,7 +300,6 @@ class ScatterPlot {
 				brushGroup.call(brush.move, null);
 				that.brushHighlight([[that.margin.left - 10, that.margin.top - 10],[that.margin.left - 10, that.margin.top - 10]])
 			});
-		
 		
 		//create x-Axis
 		let xAxis = d3.axisBottom();
