@@ -1,3 +1,5 @@
 raw/
 .Rhistory
 preprocess/nutrition_extract_*
+*.Rapp.history
+*.numbers
