@@ -26,6 +26,8 @@ nutrients_spread <- nutrients %>%
 # pick a serving that makes sense
 nutrients_spread$na <- rowSums(is.na(nutrients_spread))
 nutrients_spread <- nutrients_spread %>%
+  # for butter, we are going with a tablespoon
+  filter(!(description == 'Butter, stick, salted' & !(serving == '1 tablespoon'))) %>%
   group_by(fdc_id, description) %>%
   # has "cup" in it, or has the least NA's
   filter(str_detect(serving, 'cup') | (!(any(str_detect(serving, 'cup'))) & min_rank(na) == 1)) %>%
@@ -76,7 +78,7 @@ age_dat <- data.frame(Age = c('1–3 y', '4–8 y', '9–13 y', '14–18 y', '19
                              age_cut = c('(0,3]', '(3,8]', '(8,13]', '(13,18]',
                                          '(18,30]', '(30,50]', '(50,70]'))
 
-dat <- expand.grid(actual_age = c(19, 4:14 * 5),
+dat <- expand.grid(actual_age = c(4:14 * 5),
                     weight = 16:55 * 5,
                     Sex = c('Male', 'Female'),
                    height_in = c(48:78))
@@ -88,7 +90,7 @@ dat %>%
          bmr = if_else(Sex == 'Male',
                        66 + (13.7 * weight_kg) + (5 * height_cm) - (6.8 * actual_age),
                        655 + (9.6 * weight_kg) + (1.8 * height_cm) - (4.7 * actual_age)),
-         tdee = 1.2 * bmr) %>%
+         tdee = round(1.2 * bmr)) %>%
   left_join(age_dat) %>%
   left_join(macros_raw) %>%
   mutate(cals_from_fat = `Fat (calories from fat / total calories)` * tdee,
@@ -96,6 +98,6 @@ dat %>%
          grams_of_protein = round(`Protein (g/kg/day)` * weight_kg),
          grams_of_carbs = `Carbohydrates (g/day)`) %>%
   select(age = actual_age, sex = Sex, height = height_in, weight,
-         grams_of_fat, grams_of_protein, grams_of_carbs) %>%
+         calories = tdee, grams_of_fat, grams_of_protein, grams_of_carbs) %>%
   write_json('src/data/recommended_values.json')
 
