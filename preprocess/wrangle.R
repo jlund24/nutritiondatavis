@@ -57,10 +57,45 @@ nutrients_and_price <- nutrients_spread %>%
   left_join(key_table, by = c('description' = 'fda_description')) %>%
   left_join(prices, by = 'price_name') %>%
   mutate(price = price_per_gram * grams_per_serving) %>%
-  select(-c(data_type, portion_amount, food_category_id))
+  select(-c(data_type, food_category_id))
 
 nutrients_and_price %>%
   write_csv('preprocess/nutrients_and_price.csv')
 
 nutrients_and_price %>%
   write_json('src/data/nutrients_and_price.json')
+
+
+
+# macros
+
+macros_raw <- read_csv('preprocess/macros.csv')
+
+age_dat <- data.frame(Age = c('1–3 y', '4–8 y', '9–13 y', '14–18 y', '19–30 y',
+                                     '31–50 y', '51–70 y'),
+                             age_cut = c('(0,3]', '(3,8]', '(8,13]', '(13,18]',
+                                         '(18,30]', '(30,50]', '(50,70]'))
+
+dat <- expand.grid(actual_age = c(19, 4:14 * 5),
+                    weight = 16:55 * 5,
+                    Sex = c('Male', 'Female'),
+                   height_in = c(48:78))
+
+dat %>%
+  mutate(weight_kg = weight / 2.205,
+         height_cm = height_in * 2.54,
+         age_cut = cut(actual_age, breaks = c(0, 3, 8, 13, 18, 30, 50, 70)),
+         bmr = if_else(Sex == 'Male',
+                       66 + (13.7 * weight_kg) + (5 * height_cm) - (6.8 * actual_age),
+                       655 + (9.6 * weight_kg) + (1.8 * height_cm) - (4.7 * actual_age)),
+         tdee = 1.2 * bmr) %>%
+  left_join(age_dat) %>%
+  left_join(macros_raw) %>%
+  mutate(cals_from_fat = `Fat (calories from fat / total calories)` * tdee,
+         grams_of_fat = round(cals_from_fat / 9),
+         grams_of_protein = round(`Protein (g/kg/day)` * weight_kg),
+         grams_of_carbs = `Carbohydrates (g/day)`) %>%
+  select(age = actual_age, sex = Sex, height = height_in, weight,
+         grams_of_fat, grams_of_protein, grams_of_carbs) %>%
+  write_json('src/data/recommended_values.json')
+
