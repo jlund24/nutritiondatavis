@@ -314,12 +314,14 @@ li {
     padding: 0px;
     margin: 0px;
     font-weight: bold;
+    
 }
 
 .header-line-2 {
-    font-weight: normal;
+    /* font-weight: normal; */
     padding: 0px;
     margin: 0px;
+    font-size: 10pt;
 }
 
 table {
@@ -344,16 +346,18 @@ table {
     background-color: #99a;
     min-width: 120px;
     height: 32px;
-    border: 1px solid #222;
+    /* border: 1px solid #222; */
+    border: 1px solid rgb(235, 235, 235);
     cursor: pointer;
   }
 
   .header-row {
     /* background-color: #99a; */
-    background-color: rgb(213, 213, 226);
+    /* background-color: rgb(213, 213, 226); */
+    background-color: white;
     min-width: 120px;
     height: 32px;
-    border: 1px solid #222;
+    border: 1px solid rgb(235, 235, 235);
     font-weight: bold;
     cursor: pointer;
   }
@@ -375,9 +379,11 @@ table {
   }
   
   tbody th {
-    background-color: #bbc;
+    /* background-color: #bbc; */
+    background-color: white;
     min-width: 120px;
-    border: 1px solid #222;
+    /* border: 1px solid #222; */
+    border: 1px solid rgb(235, 235, 235);
   }
 
   tbody td {
@@ -385,13 +391,15 @@ table {
     background-color: white;
     min-width: 120px;
     max-width: 120px;
-    border: 1px solid #222;
+    /* border: 1px solid #222; */
+    border: 1px solid rgb(235, 235, 235);
   }
 
   #food-title-header {
     position: relative;
     display: block; /*seperates the first cell in the header from the header*/
-    background-color: #88b;
+    /* background-color: #88b; */
+    background-color: white;
     min-height: 43px;
     min-width: 120px;
     margin: 0px;
@@ -403,7 +411,8 @@ table {
     display: block; /*seperates the first column from the tbody*/
     height: auto;
     max-width: 122px;
-    background-color: rgb(213, 213, 226);
+    /* background-color: rgb(213, 213, 226); */
+    background-color: white;
   }
 
   .cell {
