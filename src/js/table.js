@@ -285,7 +285,24 @@ class Table {
             .data(d => [d])
             .join("p")
                 .classed("header-line-2", true)
-                .text(d => ("unit" in d) ? d.unit : "");
+                .text(d => {
+                    if ("unit" in d)
+                    {
+                        if ("totalValue" in d.visData)
+                        {
+                            return d.visData.totalValue() + " " + d.unit;
+                        }
+                        else
+                        {
+                            return d.unit;
+                        }
+                    }
+                    else
+                    {
+                        return "";
+                    }
+                    
+                });
 
         //add sort icons
         d3.selectAll(".header-cell-container")
