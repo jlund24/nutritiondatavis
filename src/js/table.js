@@ -129,7 +129,7 @@ class Table {
         };
 
         this.selectedColumns = [
-            this.columnData["serving_size"],
+            // this.columnData["serving_size"],
             // this.columnData["food_group"],
             this.columnData["calories"],
             this.columnData["carbs"],
@@ -198,6 +198,7 @@ class Table {
             .data([this.columnData.food_title])
                 .join("th")
                     .attr("id", d => `${d.id}-header`)
+                    // .classed("header-row", true)
                     .on("click", function(d) {
                         instance.sortByColumn(d, instance, this);
                     })
@@ -286,7 +287,24 @@ class Table {
             .data(d => [d])
             .join("p")
                 .classed("header-line-2", true)
-                .text(d => ("unit" in d) ? d.unit : "");
+                .text(d => {
+                    if ("unit" in d)
+                    {
+                        if ("totalValue" in d.visData)
+                        {
+                            return d.visData.totalValue() + " " + d.unit;
+                        }
+                        else
+                        {
+                            return d.unit;
+                        }
+                    }
+                    else
+                    {
+                        return "";
+                    }
+                    
+                });
 
         //add sort icons
         d3.selectAll(".header-cell-container")
@@ -316,7 +334,22 @@ class Table {
                 .data(d => [d])
                 .join("th")
                     .classed("first-col-cell", true)
-                    .classed("food-title-cell", true)
+                    .classed("food-title-cell", true);
+                    
+        d3.selectAll(".food-title-cell")
+            .selectAll(".food-title-image")
+            .data(d => [d])
+                .join('img')
+                .classed("food-title-image", true)
+                .attr('src', d => ("icon_name" in d && d.icon_name != null) ? `assets/${d.icon_name}.svg` : "")
+                .attr("width", d => ("icon_name" in d && d.icon_name != null) ? 30 : 30)
+                .attr("height", d => ("icon_name" in d && d.icon_name != null) ? 30 : 30);          
+                    
+        d3.selectAll(".food-title-cell")
+            .selectAll(".food-title-text-container")
+            .data(d => [d])
+            .join("div")
+                .classed("food-title-text-container", true)
                     .selectAll(".food-title-text")
                         .data(d => [d])
                         .join("p")
@@ -324,14 +357,17 @@ class Table {
                             .classed("food-title-text", true)
                             .text(d => d.title);
 
-        d3.selectAll(".food-title-cell")
-            .selectAll(".food-title-image")
+        
+
+
+        
+
+        d3.selectAll(".food-title-text-container")
+            .selectAll(".food-serving-size")
             .data(d => [d])
-                .join('img')
-                .classed("food-title-image", true)
-                .attr('src', d => ("icon_name" in d && d.icon_name != null) ? `assets/${d.icon_name}.svg` : "")
-                .attr("width", d => ("icon_name" in d && d.icon_name != null) ? 30 : 0)
-                .attr("height", d => ("icon_name" in d && d.icon_name != null) ? 30 : 0);
+                .join("text")
+                .classed("food-serving-size", true)
+                .text(d => d.serving);
 
         let td = d3.selectAll(".body-row")
             .selectAll("td")  
