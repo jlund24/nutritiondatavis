@@ -7,9 +7,11 @@
 
 #controls {
     width: 1500px;
-    height: 100px;
+    height: 150px;
 /*    background-color: yellow;*/
 /*    border: solid 1px black;*/
+
+  overflow: auto;
 }
 
 
@@ -17,7 +19,6 @@
     width: 1800px;
     height: 900px;
 /*    background-color: gray;*/
-    /* float: left; */
 }
 
 #food-table-container {
