@@ -1,9 +1,10 @@
 // JavaScript Document
 class ScatterPlot {
-    constructor(data)
+    constructor(data, table)
     {
         this.data = data;
         this.tableElements = data;
+		this.tableRef = table;
 		
 		this.margin = { top: 20, right: 20, bottom: 60, left: 80 };
         this.width = 700 - this.margin.left - this.margin.right; //700 is the container width
@@ -269,6 +270,37 @@ class ScatterPlot {
 		//create wrapper group for scatterplot points
 		let svgGroup = d3.select('#chart-view').select('.plot-svg').append('g').classed('wrapper-group', true).attr("id", "scatterGroup");
 		
+		//create brush
+		let brushGroup = svgGroup.append('g')
+			.classed('brush', true);
+		
+		brushGroup.append('rect')
+			.attr('transform', 'translate(' + (this.margin.left - 10) + ',' + (this.margin.top - 10) + ')')
+			.attr('height', this.height + 20)
+			.attr('width', this.width + 20)
+			.attr('fill', 'none')
+			.attr('stroke', 'none');
+		
+		let brush = d3.brush()
+			.extent([[this.margin.left - 10, this.margin.top - 10], [this.margin.left + this.width + 10, this.margin.top + this.height + 10]])
+			.on('start', () => {
+				if (d3.event.selection)
+					that.brushHighlight(d3.event.selection);
+			})
+			.on('brush', () => {
+				if (d3.event.selection)
+					that.brushHighlight(d3.event.selection);
+			});
+		
+		brushGroup.call(brush);
+		
+		//clear brush on click
+		d3.select('#food-scatterplot-container')
+			.on('click', function() {
+				brushGroup.call(brush.move, null);
+				that.brushHighlight([[that.margin.left - 10, that.margin.top - 10],[that.margin.left - 10, that.margin.top - 10]])
+			});
+		
 		//create x-Axis
 		let xAxis = d3.axisBottom();
 		xAxis.scale(this.xScales[this.curXIndicator]);
@@ -395,7 +427,6 @@ class ScatterPlot {
 			.data(this.tableElements)
 			.join(
 				enter => enter.append("circle")
-//							.attr("id", (d) => d.id)
 							.attr("cx", function (d) { 
 								if (d[xIndicator]) {
 									return that.perServing ? that.xScales[xIndicator](d[xIndicator]) : that.xScales_perGram[xIndicator](d[xIndicator] / d.grams_per_serving * 100);
@@ -412,17 +443,19 @@ class ScatterPlot {
 								   	   .html(that.tooltipRender(d))
 								       .style("left", (d3.event.pageX + 20) + "px")
 								       .style("top", (d3.event.pageY - 20) + "px");
+								that.highlightCircle(d, false);
+								that.tableRef.highlightRow(d, false);
 							})
 							.on("mouseout", function(d) {
 								tooltip.style("opacity", 0);
+								that.highlightCircle(null, true);
+								that.tableRef.highlightRow(null, true);
 							})
 							/*.on("click", function(d) {
 								//can call a function for interactivity
 							})*/,
 			
 				update => update
-//							.attr("id", (d) => d.id)
-//							.attr("class", (d) => d.region)
 							.transition()
 							.duration(1000)
 							.attr("cx", function (d) { 
@@ -531,6 +564,49 @@ class ScatterPlot {
 			+ "</div>";
         return text;
     }
+	
+	highlightCircle(data, clear) {
+		if (clear) {
+			d3.select('#scatterGroup').selectAll('circle')
+				.classed('highlighted', false);
+		} else {
+			d3.select('#scatterGroup').selectAll('circle')
+				.classed('highlighted', d => d.title == data.title);
+		}
+	}
+	
+	brushHighlight(extent) {
+		
+		let circles = d3.select('#scatterGroup').selectAll('circle');
+		
+		let insideCircles = circles.filter((d,i,c) => {
+			let circleX = parseInt(c[i].getAttribute('cx')) + this.margin.left;
+			let circleY = parseInt(c[i].getAttribute('cy')) + this.margin.top;
+			return circleX >= extent[0][0] && circleX <= extent[1][0] && circleY >= extent[0][1] && circleY <= extent[1][1];
+		});
+		
+		
+		if (insideCircles.size() == 0) {
+			circles.each((d,i,c) => {
+				d3.select(c[i]).classed(d.category, true);
+			});
+			this.tableRef.followBrush([], true);
+			
+		} else {
+			circles.each((d,i,c) => {
+				d3.select(c[i]).classed(d.category, false);
+			});
+			insideCircles.each((d,i,c) => {
+				d3.select(c[i]).classed(d.category, true);
+			});
+			
+			let highlightedData = [];
+			insideCircles.each(d => highlightedData.push(d))
+			this.tableRef.followBrush(highlightedData, false);
+		}
+		
+	}
+
 	
 
 }

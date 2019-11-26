@@ -5,9 +5,10 @@
 #controls {
     width: 1500px;
     height: 100px;
-    background-color: yellow;
-    border: solid 1px black;
+/*    background-color: yellow;*/
+/*    border: solid 1px black;*/
 }
+
 
 #main-container {
     width: 1500px;
@@ -36,10 +37,20 @@
     float: left;
 }
 
+#chart-view {
+	margin-top: 125px;
+}
+
 circle {
     fill: #d9d9d9;
     stroke: gray;
-    opacity: .8;
+    opacity: 1;
+	stroke-width: 1px;
+}
+
+circle.highlighted {
+	stroke-width: 3px;
+	stroke: black;
 }
 
 .axis path,
@@ -67,7 +78,7 @@ div.tooltip {
     text-align: center;
     min-width: 60px;
 /*    height: 28px;*/
-    padding: 2px;
+    padding: 5px;
     background: #94ffff;
     stroke: gray;
     border-radius: 8px;

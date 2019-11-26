@@ -18,7 +18,16 @@ FROM (SELECT FIRST(fdc_id) AS fdc_id, FIRST(data_type) AS data_type, description
     "Muffin, fruit","DIGIORNO Pizza, cheese topping, rising crust, frozen, baked",
     "Ice pop","White potato chips, lightly salted","Pretzels, hard",
     "Pudding, ready-to-eat, chocolate and non-chocolate flavors combined",
-    "Breakfast tart")
+    "Breakfast tart",
+"Rice, white, cooked, fat not added in cooking","Bread, white",
+"Bread, whole wheat","Spaghetti, cooked, fat not added in cooking","Milk, whole",
+"Milk, fat free (skim)","Egg, whole, raw","Ground beef, raw",
+"Chicken, breast, NS as to cooking method, skin not eaten",
+"Pork cured, bacon, unprepared",
+'Beef, loin, top sirloin cap steak, boneless, separable lean and fat, trimmed to 1/8" fat, all grades, raw',
+"Black, brown, or Bayo beans, dry, cooked, fat not added in cooking",
+"Cheese, cheddar, sharp, sliced","Yogurt, Greek, plain, nonfat milk",
+"Butter, stick, salted")
     AND data_type != "branded_food"
     GROUP BY description) f
 LEFT JOIN food_portion ON f.fdc_id = food_portion.fdc_id
@@ -34,3 +43,4 @@ LEFT JOIN (SELECT food_nutrient.fdc_id, nutrient.name AS nutrient, food_nutrient
     "Vitamin C, total ascorbic acid","Folate, DFE","Cholesterol",
     "Fatty acids, total trans","Fatty acids, total saturated") AND unit_name != "kJ") fn
 ON f.fdc_id = fn.fdc_id;
+

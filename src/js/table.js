@@ -6,6 +6,8 @@ class Table {
     {
         this.data = data;
         this.tableElements = data;
+		
+		this.scatterRef = null;
 
         this.width = 775;
         this.height = 800;
@@ -172,6 +174,10 @@ class Table {
             .select(`.sorted-${direction}-icon`)
             .classed("hidden", false);
     }
+	
+	saveScatterReference(scatter) {
+		this.scatterRef = scatter;
+	}
 
     createTable()
     {
@@ -471,6 +477,15 @@ class Table {
                     .attr("class", d => d.columnData.color(d.rowData));
 
     }
+	
+	highlightRow(food, clear) {
+		//TODO
+	}
+	
+	followBrush(brushedData, showAll) {
+		this.tableElements = showAll ? this.data : brushedData;
+		this.updateTable();
+	}
     
 }
 

@@ -54,6 +54,7 @@ class MealPlanner {
 		for (let food of this.data) {
 			foodNames.push(food.title)
 		}
+		foodNames.sort();
 	
 		let label = menuDiv.append('label')
 			.attr('for', 'searchBar')
