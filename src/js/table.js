@@ -298,13 +298,13 @@ class Table {
         
         // bind data to rows
         let rows = d3.select("#food-table tbody")
-            .selectAll(".row")
+            .selectAll(".body-row")
                 .data(this.tableElements);
 
         // console.log("table elements");
         // console.log(this.tableElements);
         rows.join("tr")
-            .classed("row", true)
+            .classed("body-row", true)
             .selectAll(".food-title-cell")
                 .data(d => [d])
                 .join("th")
@@ -326,7 +326,7 @@ class Table {
                 .attr("width", d => ("icon_name" in d && d.icon_name != null) ? 30 : 0)
                 .attr("height", d => ("icon_name" in d && d.icon_name != null) ? 30 : 0);
 
-        let td = d3.selectAll(".row")
+        let td = d3.selectAll(".body-row")
             .selectAll("td")  
             .data((d) => {
                 let rowData = [];
@@ -401,13 +401,13 @@ class Table {
             .data(d => [d])
             .join("svg")
                 .classed("donut-svg", true)
-                .attr("width", 120)
+                .attr("width", 90)
                 .attr("height", 52)
                 .selectAll(".donut-group")
                 .data(d => [d])
                 .join("g")
                     .classed("donut-group", true)
-                    .attr("transform", "translate(" + 120 / 2 + "," + 52 / 2 + ")");
+                    .attr("transform", "translate(" + 90 / 2 + "," + 52 / 2 + ")");
 
         d3.selectAll(".donut-group")
             .selectAll(".slice-group")
