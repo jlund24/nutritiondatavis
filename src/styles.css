@@ -318,11 +318,11 @@ li {
     padding: 0px;
     margin: 0px;
     font-weight: bold;
-    
+    font-size: 14pt;
 }
 
 .header-line-2 {
-    /* font-weight: normal; */
+    font-weight: normal;
     padding: 0px;
     margin: 0px;
     font-size: 10pt;
@@ -363,13 +363,13 @@ table {
     min-width: 120px;
     height: 32px;
     border: 1px solid rgb(235, 235, 235);
-    font-weight: bold;
+    /* font-weight: bold; */
     cursor: pointer;
   }
   
   thead th:nth-child(1) {/*first cell in the header*/
     position: relative;
-    display: block; /*seperates the first cell in the header from the header*/
+    /* display: block; seperates the first cell in the header from the header */
     background-color: #88b;
     
   }
@@ -403,20 +403,25 @@ table {
 
   #food-title-header {
     position: relative;
-    display: block; /*seperates the first cell in the header from the header*/
+    /* display: block; seperates the first cell in the header from the header */
     /* background-color: #88b; */
     background-color: white;
     min-height: 43px;
-    min-width: 120px;
+    min-width: 200px;
     margin: 0px;
     /* padding: 0px; */
   }
 
   .food-title-cell {
-    position: relative;
-    display: block; /*seperates the first column from the tbody*/
-    height: auto;
-    max-width: 122px;
+    /* position: relative; */
+    /* display: block; seperates the first column from the tbody */
+    height: 63px;
+    min-width: 199px;
+    max-width: 199px;
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: space-around;
+    align-items: center;
     /* background-color: rgb(213, 213, 226); */
     background-color: white;
   }
@@ -434,7 +439,8 @@ table {
   .header-cell-container {
       display: flex;
       flex-flow: row nowrap;
-      justify-content: center;
+      justify-content: space-evenly;
+      /* height: 43px; */
   }
 
   .hidden {
@@ -452,7 +458,7 @@ ul {
     display: flex;
     flex-flow: row nowrap;
     justify-content: space-between;
-    font-weight: bold;
+    /* font-weight: bold; */
     margin-right: 10px;
     margin-left: 10px;
     margin-top: 10px;
@@ -472,8 +478,24 @@ ul {
     flex-flow: row nowrap;
 }
 
-
+.food-serving-size {
+    font-size: 10pt;
+    font-weight: normal;
+    text-align: left;
+}
 
 .food-title-text {
-    /* margin: 0px; */
+    margin: 0px;
+    text-align: left;
+}
+
+.food-title-text-container {
+    width: 100%;
+    display: flex;
+    flex-flow: column nowrap;
+    align-items: flex-start;
+    padding-left: 15px;
+}
+.food-title-image {
+    margin-left: 10px;
 }
