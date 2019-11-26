@@ -1,5 +1,8 @@
 * {
-    font-family: 'Roboto', sans-serif;
+    /* font-family: "Roboto", "Helvetica Neue", Helvetica, Arial, sans-serif; */
+    /* font-family: 'Source Code Pro', monospace; */
+    font-family: 'Inconsolata', monospace;
+    /* font-family: sans-serif; */
 }
 
 #controls {
@@ -11,14 +14,14 @@
 
 
 #main-container {
-    width: 1500px;
+    width: 1800px;
     height: 900px;
 /*    background-color: gray;*/
     /* float: left; */
 }
 
 #food-table-container {
-    width: 800px;
+    width: 1000px;
     height: 800px;
     /* background-color: red; */
     float: left;
@@ -88,7 +91,8 @@ div.tooltip {
 .tooltip span {
     margin: auto;
     font: 20px sans-serif;
-	font-weight: bold;
+    font-weight: bold;
+    color: rgb(95, 95, 95);
 }
 
 .tooltip div {
@@ -326,7 +330,7 @@ li {
 
 table {
     position: relative;
-    width: 800px;
+    width: 1000px;
     /* background-color: #aaa; */
     background-color: white;
     overflow: hidden;
@@ -338,8 +342,9 @@ table {
   thead {
     position: relative;
     display: block; /*seperates the header from the body allowing it to be positioned*/
-    width: 800px;
-    overflow: visible;
+    width: 1000px;
+    overflow-y: visible;
+    overflow-x: hidden;
   }
   
   thead th {
@@ -373,9 +378,10 @@ table {
   tbody {
     position: relative;
     display: block; /*seperates the tbody from the header*/
-    width: 800px;
+    width: 1000px;
     height: 850px;
-    overflow: scroll;
+    overflow-y: scroll;
+    overflow-x: hidden;
   }
   
   tbody th {

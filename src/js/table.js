@@ -376,24 +376,27 @@ class Table {
 
         this.updateTextCells(textCells);
         
-        this.setScroll();
+        // this.setScroll();
     }
 
-    setScroll() {
-        $('tbody').scroll(function(e) { //detect a scroll event on the tbody
-            /*
-          Setting the thead left value to the negative valule of tbody.scrollLeft will make it track the movement
-          of the tbody element. Setting an elements left value to that of the tbody.scrollLeft left makes it maintain 			it's relative position at the left of the table.    
-          */
-          $('thead').css("left", -$("tbody").scrollLeft()); //fix the thead relative to the body scrolling
-          $('thead th:nth-child(1)').css("left", $("tbody").scrollLeft()); //fix the first cell of the header
-          $('.food-title-cell').css("left", $("tbody").scrollLeft()); //fix the first column of tdbody
-        });
-    }
+    // setScroll() {
+    //     $('tbody').scroll(function(e) { //detect a scroll event on the tbody
+    //         /*
+    //       Setting the thead left value to the negative valule of tbody.scrollLeft will make it track the movement
+    //       of the tbody element. Setting an elements left value to that of the tbody.scrollLeft left makes it maintain 			it's relative position at the left of the table.    
+    //       */
+    //       $('thead').css("left", -$("tbody").scrollLeft()); //fix the thead relative to the body scrolling
+    //       $('thead th:nth-child(1)').css("left", $("tbody").scrollLeft()); //fix the first cell of the header
+    //       $('.food-title-cell').css("left", $("tbody").scrollLeft()); //fix the first column of tdbody
+    //     });
+    // }
 
     updateDonutCells(donutCells)
     {
-        let radius = 25;
+        let svgWidth = 90;
+        let svgHeight = 60;
+        
+        let radius = svgHeight / 2;
         let arc = d3.arc()
             .innerRadius(radius * .75)
             .outerRadius(radius);
@@ -407,13 +410,13 @@ class Table {
             .data(d => [d])
             .join("svg")
                 .classed("donut-svg", true)
-                .attr("width", 90)
-                .attr("height", 52)
+                .attr("width", svgWidth)
+                .attr("height", svgHeight)
                 .selectAll(".donut-group")
                 .data(d => [d])
                 .join("g")
                     .classed("donut-group", true)
-                    .attr("transform", "translate(" + 90 / 2 + "," + 52 / 2 + ")");
+                    .attr("transform", "translate(" + svgWidth / 2 + "," + svgHeight / 2 + ")");
 
         d3.selectAll(".donut-group")
             .selectAll(".slice-group")
@@ -424,7 +427,7 @@ class Table {
                 let pieData = [
                     {
                         share: value / totalValue,
-                        color: "green"
+                        color: "rgb(59, 59, 59)"
                     },
                     {
                         share: (totalValue - value) / totalValue,
@@ -443,24 +446,38 @@ class Table {
                     .style("fill", d => d.data.color)
                 ;
 
-        donutCells
-            .selectAll(".donut-label")
+        donutCells.selectAll(".donut-svg")
+            .selectAll(".donut-label-group")
             .data(d => [d])
-            .join("div")
-                .classed("donut-label", true)
-                .selectAll(".donut-label-value", true)
+            .join("g")
+                .classed("donut-label-group", true)
+                .selectAll(".donut-label")
                 .data(d => [d])
-                .join("span")
-                    .classed("donut-label-value", true)
+                .join("text")
+                    .classed("donut-label", true)
                     .text(d => +d.columnData.value(d.rowData).toFixed(2))
-                ;
+                    .attr("transform", "translate(" + svgWidth / 2 + "," + ((svgHeight / 2) + 5) + ")")
+                    .attr("text-anchor", "middle")
+                    ;
 
-        donutCells.selectAll(".donut-label")
-            .selectAll(".donut-label-totalValue")
-            .data(d => [d])
-            .join("span")
-                .classed("donut-label-totalValue", true)
-                .text(d => ` / ${+d.columnData.totalValue(d.rowData).toFixed(2)}`);
+        // donutCells
+        //     .selectAll(".donut-label")
+        //     .data(d => [d])
+        //     .join("div")
+        //         .classed("donut-label", true)
+        //         .selectAll(".donut-label-value", true)
+        //         .data(d => [d])
+        //         .join("span")
+        //             .classed("donut-label-value", true)
+        //             .text(d => +d.columnData.value(d.rowData).toFixed(2))
+        //         ;
+
+        // donutCells.selectAll(".donut-label")
+        //     .selectAll(".donut-label-totalValue")
+        //     .data(d => [d])
+        //     .join("span")
+        //         .classed("donut-label-totalValue", true)
+        //         .text(d => ` / ${+d.columnData.totalValue(d.rowData).toFixed(2)}`);
     }
 
     updateTextCells(textCells)
