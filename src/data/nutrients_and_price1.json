@@ -756,7 +756,7 @@
     {
         "fdc_id": 339743,
         "description": "Muffin, fruit",
-        "serving": "1 Hostess package of 5 mini muffins (2 oz)",
+        "serving": "5 mini muffins",
         "grams_per_serving": 57,
         "Vitamin E": 0.9291,
         "Caffeine": 0,
@@ -855,7 +855,7 @@
     {
         "fdc_id": 340112,
         "description": "Doughnut, raised or yeast",
-        "serving": "1 small doughnut (approx 3\" dia)",
+        "serving": "1 small donut",
         "grams_per_serving": 31,
         "Vitamin E": 0.4433,
         "Caffeine": 0,

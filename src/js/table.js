@@ -2,10 +2,11 @@
 
 
 class Table {
-    constructor(data)
+    constructor(data, valuedata)
     {
         this.data = data;
         this.tableElements = data;
+        this.recommendedValues = valuedata;
 		
 		this.scatterRef = null;
 
@@ -539,6 +540,31 @@ class Table {
 		this.tableElements = showAll ? this.data : brushedData;
 		this.updateTable();
 	}
+
+
+    updateDailyValues() {
+        let currAge = d3.select("#ageSelect").node().value;
+        let currSex = d3.select("#sexSelect").node().value;;
+        let currHeight = d3.select("#heightSelect").node().value;;
+        let currWeight = d3.select("#weightSelect").node().value;;
+
+        let currRow = this.recommendedValues
+            .filter(d => d.age == currAge)
+            .filter(d => d.sex == currSex)
+            .filter(d => d.height == currHeight)
+            .filter(d => d.weight == currWeight);
+
+        console.log(currRow);
+
+        this.columnData.calories.visData.totalValue = _ => currRow[0].calories;
+        this.columnData.carbs.visData.totalValue = _ => currRow[0].grams_of_carbs;
+        this.columnData.protein.visData.totalValue = _ => currRow[0].grams_of_protein;
+        this.columnData.fat.visData.totalValue = _ => currRow[0].grams_of_fat;
+
+        console.log(this.columnData);
+        this.updateTable();
+    }
+
     
 }
 
