@@ -138,7 +138,8 @@ div.dropdown-wrapper {
   outline: none;
   border: none;
   cursor: pointer;
-  background-color: #2196F3;
+  /* background-color: #2196F3; */
+  background-color: navy;
   transition: background-color ease 0.3s;
 }
 
@@ -211,7 +212,8 @@ div.dropdown-wrapper {
 
 /*Designed with https://dabuttonfactory.com/*/
 #addFoodButton {
-	background:    #2196f3;
+    /* background:    #2196f3; */
+    background: navy;
 	border-radius: 1000px;
 	padding:       8px 20px;
 	color:         #ffffff;

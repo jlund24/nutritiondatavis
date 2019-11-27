@@ -464,7 +464,7 @@ class Table {
                 let pieData = [
                     {
                         share: value / totalValue,
-                        color: "rgb(59, 59, 59)"
+                        color: "navy"
                     },
                     {
                         share: (totalValue - value) / totalValue,
