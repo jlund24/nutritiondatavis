@@ -349,7 +349,7 @@ table {
   
   thead th {
     background-color: #99a;
-    min-width: 120px;
+    min-width: 130px;
     height: 32px;
     /* border: 1px solid #222; */
     border: 1px solid rgb(235, 235, 235);
@@ -360,7 +360,7 @@ table {
     /* background-color: #99a; */
     /* background-color: rgb(213, 213, 226); */
     background-color: white;
-    min-width: 120px;
+    min-width: 130px;
     height: 32px;
     border: 1px solid rgb(235, 235, 235);
     /* font-weight: bold; */
@@ -387,7 +387,7 @@ table {
   tbody th {
     /* background-color: #bbc; */
     background-color: white;
-    min-width: 120px;
+    min-width: 130px;
     /* border: 1px solid #222; */
     border: 1px solid rgb(235, 235, 235);
   }
@@ -395,8 +395,8 @@ table {
   tbody td {
     /* background-color: #bbc; */
     background-color: white;
-    min-width: 120px;
-    max-width: 120px;
+    min-width: 130px;
+    max-width: 130px;
     /* border: 1px solid #222; */
     border: 1px solid rgb(235, 235, 235);
   }
