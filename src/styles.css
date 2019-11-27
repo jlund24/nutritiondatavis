@@ -22,7 +22,7 @@
 }
 
 #food-table-container {
-    width: 1000px;
+    width: 1020px;
     height: 800px;
     /* background-color: red; */
     float: left;
@@ -270,10 +270,6 @@ li {
 	fill: lightgreen;
 }
 
-
-
-
-
 /*Table*/
 
 #table-svg {
@@ -333,7 +329,7 @@ li {
 
 table {
     position: relative;
-    width: 1000px;
+    width: 1020px;
     /* background-color: #aaa; */
     background-color: white;
     overflow: hidden;
@@ -345,7 +341,7 @@ table {
   thead {
     position: relative;
     display: block; /*seperates the header from the body allowing it to be positioned*/
-    width: 1000px;
+    width: 1012px;
     overflow-y: visible;
     overflow-x: hidden;
   }
@@ -381,7 +377,7 @@ table {
   tbody {
     position: relative;
     display: block; /*seperates the tbody from the header*/
-    width: 1000px;
+    width: 1012px;
     height: 850px;
     overflow-y: scroll;
     overflow-x: hidden;
