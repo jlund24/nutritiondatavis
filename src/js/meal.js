@@ -149,9 +149,31 @@ class MealPlanner {
 			.attr('height', this.priceHeight)
 			.attr('id', 'priceSvg');
 
+		//chart border
+		priceSvg.append("g")
+			.attr("id", "price-chart-border-group")
+			.attr("transform", "translate(" + this.priceWidth / 2 + "," 
+				+ this.priceHeight / 2 + ")")
+			.append("circle")
+				.classed("price-chart-border", true)
+				.attr("r", this.priceHeight / 2 - 4)
+				.attr("cx", 0)
+				.attr("cy", 0)
+			;
+
+		d3.select("#price-chart-border-group")
+			.append("circle")
+				.classed("price-chart-border", true)
+				.attr("r", (this.priceHeight / 2 - 6) * 0.75)
+				.attr("cx", 0)
+				.attr("cy", 0)
+		;
+
 		priceSvg.append("g")
 			.attr("transform", "translate(" + this.priceWidth / 2 + "," 
 				+ this.priceHeight / 2 + ")");
+
+		let format = function(d) { return "$" + d3.format(",.2f")(d); };
 
 		priceSvg.append("g")
 			.attr("transform", `translate(${this.priceWidth / 2}, ${this.priceHeight / 2})`)
@@ -159,7 +181,8 @@ class MealPlanner {
 			.attr("id", "price-label")
 				.attr("text-anchor", "middle")
 				.append("tspan")
-				.attr("id", "price-label-value");
+				.attr("id", "price-label-value")
+				.text(format(0));
 
 		priceDiv.append("div")
             .attr("class", "tooltip")
@@ -356,7 +379,7 @@ class MealPlanner {
 		let instance = this;
 		let priceSvg = d3.select("#priceSvg");
 
-		let radius = this.priceHeight / 2;
+		let radius = this.priceHeight / 2 - 5;
 		let arc = d3.arc()
 			.innerRadius(radius * 0.75)
 			.outerRadius(radius);
