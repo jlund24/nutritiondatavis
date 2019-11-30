@@ -83,7 +83,7 @@ div.tooltip {
     min-width: 60px;
 /*    height: 28px;*/
     padding: 5px;
-    background: #94ffff;
+    background: #B5CDDD;
     stroke: gray;
     border-radius: 8px;
     pointer-events: none;
@@ -139,7 +139,7 @@ div.dropdown-wrapper {
   border: none;
   cursor: pointer;
   /* background-color: #2196F3; */
-  background-color: navy;
+  background-color: #2E4B7C;
   transition: background-color ease 0.3s;
 }
 
@@ -213,7 +213,7 @@ div.dropdown-wrapper {
 /*Designed with https://dabuttonfactory.com/*/
 #addFoodButton {
     /* background:    #2196f3; */
-    background: navy;
+    background: #2E4B7C;
 	border-radius: 1000px;
 	padding:       8px 20px;
 	color:         #ffffff;
@@ -288,8 +288,8 @@ li {
 }
 
 .protein {
-    fill: #462255;
-    color: #462255;
+    fill: #552968;
+    color: #552968;
 }
 
 .dairy {
