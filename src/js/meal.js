@@ -18,7 +18,7 @@ class MealPlanner {
 						{title: 'Chicken Sandwich', desc: "Cold-cut sandwiches are a great lunch option, but watch how much adding a single extra slice of cheese can contribute to the caloric content.",
 							foods: [['White Bread', 2], ['Cheddar Cheese', 2], ['Chicken Breast', 1]]},
 						{title: 'Pasta with Sauteed Vegetables', desc: "If you make your own pasta sauce, you can control the amount of sugars and fats that get added to the vegetable base.",
-							foods: [['Pasta', 1], ['Salted Butter', 1], ['Cherry Tomatoes', .5], ['Broccoli', .5], ['Red peppers', .5], ['Cheddar Cheese', 0.5]]},
+							foods: [['Pasta', 1], ['Salted Butter', 1], ['Broccoli', .5], ['Red peppers', .5], ['Cheddar Cheese', 0.5]]},
 						{title: 'Cheat Day', desc: "Eating processed foods is okay sometimes... as long as you know what's in them!",
 							foods: [['Pizza', 1], ['Potato Chips', 1]]}];
 		//sizing for bar chart
