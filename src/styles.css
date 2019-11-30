@@ -291,7 +291,7 @@ li {
 }
 
 .barHighlighted {
-	fill: steelblue;
+	fill: lightsteelblue;
 }
 
 /*Table*/
@@ -532,7 +532,7 @@ ul {
 }
 
 .priceHighlighted {
-    fill: steelblue;
+    fill: lightsteelblue;
 }
 
 .menu-icon-svg {
@@ -541,7 +541,7 @@ ul {
 }
 
 .food-list-item-highlighted {
-    background-color: steelblue;
+    background-color: lightsteelblue;
     border-radius: 5px;
 }
 
