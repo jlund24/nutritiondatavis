@@ -17,6 +17,9 @@ class MealPlanner {
 		this.barWidth = 100;
 		this.barSpacing = 18;
 
+		this.priceWidth = 260;
+		this.priceHeight = 260;
+
 		this.createMealPlanner();
     }
 
@@ -107,9 +110,11 @@ class MealPlanner {
 			.attr("id", "menu-headers-container");
 
 		menuHeadersContainer.append('span')
-			.html("Food")
+			.classed("menu-headers-text", true)
+			.html("Food - Price per serving");
 		
 		menuHeadersContainer.append('span')
+			.classed("menu-headers-text", true)
 			.html("Servings")
 		
 		menuDiv.append('ul')
@@ -138,7 +143,28 @@ class MealPlanner {
 		/* INITIALIZE PRICE CHART */
 		
 		//TODO
-		
+		let priceSvg = d3.select("#price-div")
+			.append('svg')
+			.attr('width', this.priceWidth)
+			.attr('height', this.priceHeight)
+			.attr('id', 'priceSvg');
+
+		priceSvg.append("g")
+			.attr("transform", "translate(" + this.priceWidth / 2 + "," 
+				+ this.priceHeight / 2 + ")");
+
+		priceSvg.append("g")
+			.attr("transform", `translate(${this.priceWidth / 2}, ${this.priceHeight / 2})`)
+			.append("text")
+			.attr("id", "price-label")
+				.attr("text-anchor", "middle")
+				.append("tspan")
+				.attr("id", "price-label-value");
+
+		priceDiv.append("div")
+            .attr("class", "tooltip")
+			.attr('id', 'priceTooltip')
+            .style("opacity", 0);
 		
 		/* INITIALIZE BAR CHART */
 		let barSvg = barDiv.append('svg')
@@ -152,7 +178,8 @@ class MealPlanner {
 			.attr('y1', 0)
 			.attr('x2', this.barChartWidth)
 			.attr('y2', 0)
-			.attr('transform', 'translate(' + this.barChartmargin.left + ',' + (this.barChartmargin.top + this.barChartHeight) + ')')
+			.attr('transform', 'translate(' + this.barChartmargin.left + ',' + 
+				(this.barChartmargin.top + this.barChartHeight) + ')')
 			.attr('stroke-width', 1)
 			.attr('stroke', 'black');
 		
@@ -237,6 +264,8 @@ class MealPlanner {
 			that.updatePriceChart();
 			that.updateBarGraph();
 		}
+
+		let format = function(d) { return "$" + d3.format(",.2f")(d); };
 		
 		let menuList = d3.select('#menu-list');
 		menuList.selectAll('li')
@@ -245,6 +274,7 @@ class MealPlanner {
 				enter => {	
 					let li = enter.append('li')
 						.classed("food-list-item", true)
+						// .classed("food-list-item-highlighted", true)
 						// .style('list-style', 'none')
 						;
 					let foodItemLeft = li.append("div")
@@ -257,8 +287,18 @@ class MealPlanner {
 						.append('img')
 						.classed('remove-svg', true)
 						.attr('src', `assets/delete.svg`)
+						// .attr('src', d => `assets/${d[0].icon_name}.svg`)
 						.attr('width', '20px')
 						.attr('height', '20px');
+
+					foodItemLeft.append('div')
+						.classed('food-icon-div', true)
+						.attr('width', '20px')
+						.append('img')
+							.classed("menu-icon-svg", true)
+							.attr('src', d => `assets/${d[0].icon_name}.svg`)
+							.attr('width', '20px')
+							.attr('height', '20px');
 
 					d3.selectAll('.remove-div')
 						.on("click", function (d, i) {
@@ -269,7 +309,7 @@ class MealPlanner {
 					});
 					foodItemLeft.append('div')
 						.classed('foodName-div', true)
-						.html(d => d[0].title);
+						.html(d => d[0].title + " - " + format(d[0].price));
 					li.append('input')
 						.classed('servingInput', true)
 						.attr('id', (d,i) => "servingInput" + i)
@@ -283,15 +323,19 @@ class MealPlanner {
 							.select(".remove-div")
 							.classed("hidden", false);
 						
+						that.highlightFood(d[0]);
+						// d3.select(this)
+						// 	.classed("food-list-item-highlighted", true);
 					});
 					li.on("mouseout", function (d) {
 						d3.select(this).select(".remove-div")
 							.classed("hidden", true);
+						that.highlightFood(null, true);
 					});
 				},
 				update => { //I DON'T THINK THIS IS EVER USED, SO A JOIN IS UNNECESSARY
 					update.select('.foodName-div')
-						.html(d => d[0].title);
+						.html(d => d[0].title + " - " + format(d[0].price));
 					update.select('.servingInput')
 						.attr('value', d => d[1])
 						.attr('id', (d,i) => "servingInput" + i);
@@ -307,7 +351,143 @@ class MealPlanner {
 	updatePriceChart() 
 	{
 		
+		let instance = this;
+		let priceSvg = d3.select("#priceSvg");
+
+		let radius = this.priceHeight / 2;
+		let arc = d3.arc()
+			.innerRadius(radius * 0.75)
+			.outerRadius(radius);
+
+		let pie = d3.pie();
+		pie.value(d => d.share)
+			
+			.sort(null)
+			;
+
+		let reducer = (accumulator, currentValue) => {
+			let value = accumulator + ((currentValue[0]["price"] * currentValue[1]));
+			
+			return value;
+		};
+		
+		let totalValue = this.menuItems.reduce(reducer, 0);
+		let priceData = this.menuItems.map((item, ind) => {
+			return {
+				share: item[0]["price"] * item[1] / totalValue,
+				// color: `rgb(${ind * 100}, ${ind * 50}, ${ind * 10})`,
+				color: "green",
+				data: item[0],
+				servings: item[1]
+			};
+		});
+		
+
+		// let format = d3.format('0.2n');
+		let format = function(d) { return "$" + d3.format(",.2f")(d); };
+
+		//round to dollars cents format
+		d3.select("#price-label-value")
+			.data([totalValue.toFixed(2)])
+			.join(
+				enter => {
+					enter
+					.call(enter => enter
+						.transition()
+						.duration(500)
+						.textTween(function(d) {
+							const i = d3.interpolate(format(0), d);
+							return function(t) { return format(this._current = i(t)); };
+							})
+						)
+						;
+					
+				},
+				update => {
+					update
+						.call(update => update
+							.transition()
+							.duration(500)
+							.textTween(function(d) {
+								if (this._current == null){
+									this._current = format(0);
+								}
+								const i = d3.interpolate(this._current, d);
+								return function(t) {
+									return format(this._current = i(t));
+								};
+							})
+							)
+				}
+			);
+
+		let pieData = pie(priceData);
+
+		let tooltip = d3.select("#priceTooltip");
+
+		priceSvg.select("g")
+			.selectAll(".price-donut-slice-path")
+			.data(pieData)
+			.join(
+				enter => {
+					enter.append("path")
+						.classed("price-donut-slice-path", true)
+						
+						.attr("fill", d => d.data.color)
+						.attr("stroke", "white")
+						.style("stroke-width", "1px")
+						.on("mouseover", function(d) {
+							instance.highlightFood(d.data.data, false);
+							tooltip.style("opacity", 0.9)
+								.html(instance.sliceTooltipRender(d))
+								.style("left", (d3.event.pageX + 20) + "px")
+								.style("top", (d3.event.pageY - 20) + "px");
+						})
+						.on("mouseout", d => {
+							instance.highlightFood(null, true);
+							tooltip.style("opacity", 0);
+						})
+						// .attr("d", arc)
+						.call(enter => enter
+							.transition()
+							.delay(function(d, i) { return i * 50; })
+							.duration(500)
+							.attrTween("d", enterTween)
+							.each(d => { this._current = d; }) // store the initial angles
+							)
+							;
+				},
+				update => {
+					update
+						.call(update => update
+							.transition()
+							.duration(500)
+							.attrTween("d", arcTween)
+							)
+							// .attr("d", arc)
+						;
+				},
+				exit => exit.remove()
+			)
+			;
+
+		
+
+		function arcTween(a) {
+			var i = d3.interpolate(this._current, a);
+			this._current = i(0);
+			return function(t) {
+			  return arc(i(t));
+			};
+		}
+	
+		function enterTween(b) {
+			let i = d3.interpolate({startAngle: 0, endAngle: 0}, b);
+			return t => arc(i(t));
+		}
 	}
+
+	
 	
 	updateBarGraph() 
 	{
@@ -437,10 +617,27 @@ class MealPlanner {
 	
 	highlightMenu(food, clear) {
 		
+		if (clear) {
+			d3.select('#menu-list').selectAll("li")
+				.classed("food-list-item-highlighted", false);
+		}
+		else {
+			d3.select('#menu-list').selectAll("li")
+				.classed("food-list-item-highlighted", d => d[0].title == food.title);
+		}
 	}
 	
 	highlightPrice(food, clear) {
-		
+		if (clear) {
+			d3.select('#priceSvg').selectAll('.price-donut-slice-path')
+				.classed('priceHighlighted', false);
+		}
+		else {
+			d3.select("#priceSvg").selectAll('.price-donut-slice-path')
+				.classed("priceHighlighted", d => {
+					return d.data.data.title == food.title;
+				})
+		}
 	}
 	
 	
@@ -459,6 +656,17 @@ class MealPlanner {
 			+ "<div>"
 			+ data.food[data.nutrient] + (data.nutrient == "Calories" ? " KCal" : " g") +"<br>"
 			+ (data.val - data.previous).toFixed(2) + "%"
+			+ "</div>";
+        return text;
+	}
+
+	sliceTooltipRender(data) {
+		let format = function(d) { return "$" + d3.format(",.2f")(d); };
+		let price = format(data.data.data.price * data.data.servings);
+		
+		let text = "<span>" + data.data.data.title + "</span><br>" 
+			+ "<div>"
+			+ price
 			+ "</div>";
         return text;
 	}

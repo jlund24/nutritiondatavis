@@ -231,7 +231,8 @@ li {
 .remove-div {
 	/* display: inline-block; */
     /* float: left; */
-    padding-right: 10px;
+    padding-right: 5px;
+    padding-left: 5px;
     cursor: pointer;
 }
 
@@ -242,14 +243,16 @@ li {
 
 .servingInput {
 	/* display: inline-block; */
-	/* float: left; */
+    /* float: left; */
+    margin-right: 5px;
 }
 
 
 #price-div {
 	width: 300px;
-	height: 100%;
-	    background-color: red;
+    height: 100%;
+    text-align: center;
+	    /* background-color: red; */
 	/* display: inline-block;
 	float: left; */
 
@@ -497,4 +500,26 @@ ul {
 }
 .food-title-image {
     margin-left: 10px;
+}
+
+.menu-headers-text {
+    font-weight: bold;
+}
+
+#price-label-value {
+    font-size: 18pt;
+}
+
+.priceHighlighted {
+    fill: lightgreen;
+}
+
+.menu-icon-svg {
+    margin-right: 10px;
+    margin-left: 5px;
+}
+
+.food-list-item-highlighted {
+    background-color: lightgreen;
+    border-radius: 5px;
 }
