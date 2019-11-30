@@ -339,6 +339,8 @@ class MealPlanner {
 					update.select('.servingInput')
 						.attr('value', d => d[1])
 						.attr('id', (d,i) => "servingInput" + i);
+					update.select('.menu-icon-svg')
+						.attr('src', d => `assets/${d[0].icon_name}.svg`);
 				},
 				exit => exit.remove()
 			);
