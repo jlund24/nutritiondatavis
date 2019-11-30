@@ -12,7 +12,7 @@ d3.json('data/nutrients_and_price1.json').then( data => {
         table.createTable();
         table.updateTable();
         table.updateTable();
-        let meal_planner = new MealPlanner(data);
+        let meal_planner = new MealPlanner(data, valuedata);
         
         //set up controls container
         let controls = d3.select('#legend');
@@ -83,11 +83,26 @@ d3.json('data/nutrients_and_price1.json').then( data => {
             .text(function (d) { return d; }) // text showed in the menu
             .attr("value", function (d) { return d; });
 
-
-
-
-        d3.select('#submitButton')
-            .on("click", function(d) {table.updateDailyValues();} )
+        d3.select('#ageSelect')
+            .on("change", function(d) {
+                table.updateDailyValues();
+                meal_planner.updateDailyValues();
+            } )
+        d3.select('#sexSelect')
+            .on("change", function(d) {
+                table.updateDailyValues();
+                meal_planner.updateDailyValues();
+            } )
+        d3.select('#heightSelect')
+            .on("change", function(d) {
+                table.updateDailyValues();
+                meal_planner.updateDailyValues();
+            } )
+        d3.select('#weightSelect')
+            .on("change", function(d) {
+                table.updateDailyValues();
+                meal_planner.updateDailyValues();
+            } )
 
         //draw legend
         controlsSvg.append('rect')

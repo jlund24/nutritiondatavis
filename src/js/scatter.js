@@ -224,12 +224,12 @@ class ScatterPlot {
 
 		
 		this.labels = {};
-		this.labels[energyCol] = "CALORIES (DIETARY)";
-		this.labels[priceCol] = "PRICE (DOLLARS)";
-		this.labels[proteinCol] = "PROTEIN (GRAMS)";
-		this.labels[fatCol] = "TOTAL FAT (GRAMS)";
-		this.labels[sugarCol] = "TOTAL SUGAR (GRAMS)";
-		this.labels[carbCol] ="TOTAL CARBOHYDRATES (GRAMS)";
+		this.labels[energyCol] = "Calories (cal)";
+		this.labels[priceCol] = "Price (dollars)";
+		this.labels[proteinCol] = "Protein (grams)";
+		this.labels[fatCol] = "Total Fat (grams)";
+		this.labels[sugarCol] = "Total Sugar (grams)";
+		this.labels[carbCol] ="Total Carbohydrates (grams)";
 		
 		this.tooltipLabels = {};
 		this.tooltipLabels[energyCol] = "Calories";

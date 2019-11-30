@@ -343,7 +343,7 @@ class Table {
                 .classed("food-title-image", true)
                 .attr('src', d => ("icon_name" in d && d.icon_name != null) ? `assets/${d.icon_name}.svg` : "")
                 .attr("width", d => ("icon_name" in d && d.icon_name != null) ? 30 : 30)
-                .attr("height", d => ("icon_name" in d && d.icon_name != null) ? 30 : 30);          
+                .attr("height", d => ("icon_name" in d && d.icon_name != null) ? 30 : 30);   
                     
         d3.selectAll(".food-title-cell")
             .selectAll(".food-title-text-container")
@@ -464,7 +464,7 @@ class Table {
                 let pieData = [
                     {
                         share: value / totalValue,
-                        color: "navy"
+                        color: "#2E4B7C"
                     },
                     {
                         share: (totalValue - value) / totalValue,
@@ -544,9 +544,9 @@ class Table {
 
     updateDailyValues() {
         let currAge = d3.select("#ageSelect").node().value;
-        let currSex = d3.select("#sexSelect").node().value;;
-        let currHeight = d3.select("#heightSelect").node().value;;
-        let currWeight = d3.select("#weightSelect").node().value;;
+        let currSex = d3.select("#sexSelect").node().value;
+        let currHeight = d3.select("#heightSelect").node().value;
+        let currWeight = d3.select("#weightSelect").node().value;
 
         let currRow = this.recommendedValues
             .filter(d => d.age == currAge)
@@ -554,14 +554,11 @@ class Table {
             .filter(d => d.height == currHeight)
             .filter(d => d.weight == currWeight);
 
-        console.log(currRow);
-
         this.columnData.calories.visData.totalValue = _ => currRow[0].calories;
         this.columnData.carbs.visData.totalValue = _ => currRow[0].grams_of_carbs;
         this.columnData.protein.visData.totalValue = _ => currRow[0].grams_of_protein;
         this.columnData.fat.visData.totalValue = _ => currRow[0].grams_of_fat;
 
-        console.log(this.columnData);
         this.updateTable();
     }
 

@@ -1,14 +1,26 @@
 // JavaScript Document
 class MealPlanner {
-    constructor(data)
+    constructor(data, rvData)
     {
         this.data = data;
         this.tableElements = data;
+        this.recommendedValues = rvData;
 		
 		this.menuItems = []; //each index will contain the food and quantity
 		this.nutrients = [['Calories', 2400], ['Carbohydrates', 130], ['Protein', 56], ['Fat', 93], ['Sugars', 60]]; //data keys and default max values (needs) -- will need to programatically set
 		this.barLabels = ['Calories', 'Total Carbs', 'Protein', 'Total Fat', 'Total Sugar'];
-		
+		this.presets = [{title: 'Eggs and Toast', desc: 'How much does this simple meal help you achieve your protein goals?',
+							foods: [['Eggs', 0.5], ['Wheat Bread', 1], ['Salted Butter', 1]]},
+						{title: 'Breakfast on the Go', desc: 'While this sugary breakfast has fewer calories than Eggs and Toast, it has far more carbohydrates!',
+							foods: [['Pop-Tart', 1.5]]},
+						{title: 'Yogurt Parfait', desc: "Greek yogurt can be expensive, but even when you mix in sweet, syrupy peaches, it's a very healthy breakfast.",
+							foods: [['Nonfat Greek Yogurt', 1], ['Canned Peaches', .25]]},
+						{title: 'Chicken Sandwich', desc: "Cold-cut sandwiches are a great lunch option, but watch how much adding a single extra slice of cheese can contribute to the caloric content.",
+							foods: [['White Bread', 2], ['Cheddar Cheese', 2], ['Chicken Breast', 1]]},
+						{title: 'Pasta with Sauteed Vegetables', desc: "If you make your own pasta sauce, you can control the amount of sugars and fats that get added to the vegetable base.",
+							foods: [['Pasta', 1], ['Salted Butter', 1], ['Cherry Tomatoes', .5], ['Broccoli', .5], ['Red peppers', .5], ['Cheddar Cheese', 0.5]]},
+						{title: 'Cheat Day', desc: "Eating processed foods is okay sometimes... as long as you know what's in them!",
+							foods: [['Pizza', 1], ['Potato Chips', 1]]}];
 		//sizing for bar chart
 		this.barChartmargin = { top: 20, right: 20, bottom: 60, left: 80 };
         this.barChartWidth = 700 - this.barChartmargin.left - this.barChartmargin.right; 
@@ -31,7 +43,7 @@ class MealPlanner {
 		
 		let mealTitleDiv = mealContainer.append('div')
 			.attr('id', "mealTitle-div")
-			.html("MEAL PLANNER");
+			.html("Meal Planner");
 
 		let mealContentContainer = mealContainer.append('div')
 			.attr("id", "mealContent-div");
@@ -92,6 +104,7 @@ class MealPlanner {
 			//don't allow duplicates
 			if(that.menuItems.filter(d => d[0].title == newFood).length == 0) {
 				that.menuItems.push([foodData[0], 1]);
+				console.log(that.menuItems);
 				that.updateMenu();
 				that.updatePriceChart();
 				that.updateBarGraph();
@@ -103,8 +116,66 @@ class MealPlanner {
 		menuDiv.append('button')
 			.attr('type', 'button')
 			.attr('id', 'addFoodButton')
-			.html('ADD TO MENU')
+			.html('Add to menu')
 			.on('click', addFood);
+
+		menuDiv.append('br');
+		menuDiv.append('br');
+
+
+
+		// storytelling aka presets
+
+		let presetLabel = menuDiv.append('label')
+			.attr('for', 'presetSearchBar')
+			.html('...or apply a preset')
+//			.style('margin', '20px');
+		presetLabel.append('br');
+		let presetSearchBar = presetLabel.append('select')
+			.attr('name', 'presetSearch')
+			.classed('search-select2', true)
+			.attr('id', 'presetSearchBar')
+			.style('width', '300px');
+		
+		let presetOptions = presetSearchBar.selectAll('option')
+			.data(that.presets)
+			.enter()
+			.append("option")
+		
+		presetOptions.text(d => d.title)
+			.attr("value", d => d.title)
+		
+		//stylize with select2
+		$(document).ready(function() {
+			$('.search-select2').select2();
+		});
+		
+		$('#presetSearchBar').on('select2:select', e => optionSelect(e.params.data.id));
+
+		let loadPreset = function(e) {
+			let newPreset = $("#presetSearchBar").select2("val");
+			let foodData = that.presets.filter(d => d.title == newPreset)[0];
+			console.log(foodData);
+			that.menuItems = [];
+			for (let item of foodData.foods) {
+				that.menuItems.push([that.data.filter(d => d.title == item[0])[0], item[1]]);
+			}
+			that.updateMenu();
+			that.updatePriceChart();
+			that.updateBarGraph();
+			d3.select('#descriptionDiv').text(foodData.desc);	
+		}
+		
+		//"add to menu" button
+		menuDiv.append('button')
+			.attr('type', 'button')
+			.attr('id', 'addPresetButton')
+			.html('Load preset')
+			.on('click', loadPreset);
+
+
+
+
 		
 		let menuHeadersContainer = menuDiv.append('div')
 			.attr("id", "menu-headers-container");
@@ -139,6 +210,10 @@ class MealPlanner {
 //		
 //		menuTable.append('tbody')
 //			.attr('id', 'menuTableBody');
+
+
+        menuDiv.append('div').attr('id', 'descriptionDiv');
+
 		
 		/* INITIALIZE PRICE CHART */
 		
@@ -165,6 +240,8 @@ class MealPlanner {
             .attr("class", "tooltip")
 			.attr('id', 'priceTooltip')
             .style("opacity", 0);
+
+
 		
 		/* INITIALIZE BAR CHART */
 		let barSvg = barDiv.append('svg')
@@ -485,6 +562,27 @@ class MealPlanner {
 			let i = d3.interpolate({startAngle: 0, endAngle: 0}, b);
 			return t => arc(i(t));
 		}
+	}
+
+	updateDailyValues() {
+		let currAge = d3.select("#ageSelect").node().value;
+        let currSex = d3.select("#sexSelect").node().value;
+        let currHeight = d3.select("#heightSelect").node().value;
+        let currWeight = d3.select("#weightSelect").node().value;
+
+        let currRow = this.recommendedValues
+            .filter(d => d.age == currAge)
+            .filter(d => d.sex == currSex)
+            .filter(d => d.height == currHeight)
+            .filter(d => d.weight == currWeight);
+
+       	this.nutrients = [['Calories', currRow[0].calories],
+       					  ['Carbohydrates', currRow[0].grams_of_carbs],
+       					  ['Protein', currRow[0].grams_of_protein],
+       					  ['Fat', currRow[0].grams_of_fat],
+       					  ['Sugars', 60]];
+
+		this.updateBarGraph();
 	}
 
 	
