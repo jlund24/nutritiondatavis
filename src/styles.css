@@ -167,7 +167,7 @@ div.dropdown-wrapper {
 }
 
 .toggle:checked {
-  background-color: #2196F3;
+  background-color: navy;
 }
 
 .toggle:checked:before {
@@ -178,7 +178,7 @@ div.dropdown-wrapper {
 /*Meal Planner*/
 
 #meal-container {
-    width: 1500px;
+    width: 1800px;
     height: 800px;
     display: flex;
     flex-flow: column nowrap;
@@ -199,16 +199,20 @@ div.dropdown-wrapper {
 #mealContent-div {
     display: flex;
     flex-flow: row nowrap;
-	height: 700px;
+    height: 700px;
+    width: 
 }
 
 #menu-div {
 	width: 500px;
-	height: 100%;
+    height: 100%;
+    margin-right: 50px;
 /*	    background-color: green;*/
 	/* display: inline-block; */
 	/* float: left; */
 }
+
+
 
 /*Designed with https://dabuttonfactory.com/*/
 #addFoodButton {
@@ -266,6 +270,7 @@ li {
 	width: 300px;
     height: 100%;
     text-align: center;
+    margin-right: 50px;
 	    /* background-color: red; */
 	/* display: inline-block;
 	float: left; */
@@ -536,4 +541,10 @@ ul {
 .food-list-item-highlighted {
     background-color: lightgreen;
     border-radius: 5px;
+}
+
+.price-chart-border {
+    fill: none;
+    stroke: black;
+    stroke-width: 1px;
 }
