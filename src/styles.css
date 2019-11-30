@@ -167,7 +167,7 @@ div.dropdown-wrapper {
 }
 
 .toggle:checked {
-  background-color: navy;
+  background-color: '#2E4B7C';
 }
 
 .toggle:checked:before {
@@ -289,7 +289,7 @@ li {
 }
 
 .barHighlighted {
-	fill: lightgreen;
+	fill: steelblue;
 }
 
 /*Table*/
@@ -530,7 +530,7 @@ ul {
 }
 
 .priceHighlighted {
-    fill: lightgreen;
+    fill: steelblue;
 }
 
 .menu-icon-svg {
@@ -539,7 +539,7 @@ ul {
 }
 
 .food-list-item-highlighted {
-    background-color: lightgreen;
+    background-color: steelblue;
     border-radius: 5px;
 }
 

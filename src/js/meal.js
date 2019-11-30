@@ -108,6 +108,7 @@ class MealPlanner {
 				that.updateMenu();
 				that.updatePriceChart();
 				that.updateBarGraph();
+				d3.select('#descriptionDiv').text('');	
 			}
 			
 		}
@@ -478,7 +479,7 @@ class MealPlanner {
 			return {
 				share: item[0]["price"] * item[1] / totalValue,
 				// color: `rgb(${ind * 100}, ${ind * 50}, ${ind * 10})`,
-				color: "green",
+				color: "#2E4B7C",
 				data: item[0],
 				servings: item[1]
 			};
@@ -684,7 +685,7 @@ class MealPlanner {
 				enter => enter.append('rect')
 					.attr('width', this.barWidth)
 					.attr('transform', (d,i) => 'translate(0,' + (barScale(0) - (i == 0 ? barScale(0) : barScale(d.previous))) + ')')
-					.attr('fill', 'green')
+					.attr('fill', '#2E4B7C')
 					.attr('stroke', 'black')
 					.on('mouseover', d => {
 						this.highlightFood(d.food, false);
