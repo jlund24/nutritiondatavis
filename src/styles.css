@@ -200,7 +200,7 @@ div.dropdown-wrapper {
     display: flex;
     flex-flow: row nowrap;
     height: 700px;
-    width: 
+    
 }
 
 #menu-div {
@@ -549,4 +549,9 @@ ul {
     fill: none;
     stroke: black;
     stroke-width: 1px;
+}
+
+.highlightTableRow {
+    background-color: lightsteelblue;
+    border-style: none;
 }

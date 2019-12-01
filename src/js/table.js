@@ -330,11 +330,33 @@ class Table {
         // console.log(this.tableElements);
         rows.join("tr")
             .classed("body-row", true)
+            .classed("highlightTableRow", true)
+            .on("mouseover", function(d) {
+                d3.select(this)
+                    .selectAll("td")
+                    .classed("highlightTableRow", true);
+
+                d3.select(this)
+                    .selectAll("th")
+                    .classed("highlightTableRow", true);
+                instance.scatterRef.highlightCircle(d, false);
+            })
+            .on("mouseout", function(d) {
+                d3.selectAll("td")
+                    .classed("highlightTableRow", false);
+
+                d3.selectAll("th")
+                    .classed("highlightTableRow", false);
+
+                instance.scatterRef.highlightCircle(null, true);
+
+            })
             .selectAll(".food-title-cell")
                 .data(d => [d])
                 .join("th")
                     .classed("first-col-cell", true)
-                    .classed("food-title-cell", true);
+                    .classed("food-title-cell", true)
+                    ;
                     
         d3.selectAll(".food-title-cell")
             .selectAll(".food-title-image")
@@ -533,8 +555,34 @@ class Table {
     }
 	
 	highlightRow(food, clear) {
-		//TODO
-	}
+        //TODO
+        if (clear) {
+            d3.select('#food-table')
+                .selectAll("td")
+                    .classed("highlightTableRow", false);
+                    
+            d3.select('#food-table')
+                .selectAll("th")
+                    .classed("highlightTableRow", false);
+        }
+        else {
+
+            let row = d3.select("#food-table")
+                .selectAll("tr")
+                .filter(function(d) {
+                    
+                    return d ? d.title == food.title : false;
+                });
+
+            row
+                .selectAll("td")
+                    .classed("highlightTableRow", true);
+                    
+            row
+                .selectAll("th")
+                    .classed("highlightTableRow", true);
+        }
+    }
 	
 	followBrush(brushedData, showAll) {
 		this.tableElements = showAll ? this.data : brushedData;
