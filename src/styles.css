@@ -486,6 +486,7 @@ ul {
 
 .menu-headers-text {
     font-weight: bold;
+    font-size: 14pt;
 }
 
 #price-label-value {
@@ -526,4 +527,8 @@ header {
     height: 100%;
     width: 100%;
     
+}
+
+.foodName {
+    font-weight: bold;
 }

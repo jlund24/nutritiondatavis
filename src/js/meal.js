@@ -358,7 +358,9 @@ class MealPlanner {
 					});
 					foodItemLeft.append('div')
 						.classed('foodName-div', true)
-						.html(d => d[0].title + " - " + d[0].serving);
+						.html(d => {
+							return `<span class='${d[0].category} foodName'>${d[0].title}</span>` + " - " + d[0].serving;
+						});
 					li.append('input')
 						.classed('servingInput', true)
 						.attr('id', (d,i) => "servingInput" + i)
@@ -382,7 +384,9 @@ class MealPlanner {
 				},
 				update => { //We dont necessarily need this since it's probably not used (could just have enter and not join)
 					update.select('.foodName-div')
-						.html(d => d[0].title + " - " + d[0].serving);
+					.html(d => {
+						return `<span class='${d[0].category} foodName'>${d[0].title}</span>` + " - " + d[0].serving;
+					});
 					
 					update.select('.servingInput')
 						.property('value', d => {
@@ -728,8 +732,8 @@ class MealPlanner {
 		
 		let text = "<span>" + data.data.data.title + "</span><br>" 
 			+ "<div>"
-			+ `<strong>${totalPrice}</strong><br>`
-			+ `<text class='totalPrice-tooltip'>${individualPrice} x ${data.data.servings}</text>`
+			+ `${totalPrice}`
+			// + `<text class='totalPrice-tooltip'>${individualPrice} x ${data.data.servings}</text>`
 			+ "</div>";
         return text;
 	}
