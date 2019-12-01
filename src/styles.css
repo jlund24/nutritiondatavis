@@ -2,12 +2,6 @@
     font-family: 'Inconsolata', monospace;
 }
 
-#controls {
-    width: 1500px;
-    height: 153px;
-  	overflow: auto;
-}
-
 
 #main-container {
     width: 1800px;
@@ -224,14 +218,13 @@ div.dropdown-wrapper {
 #controls {
     display: flex;
     flex-flow: row nowrap;
-    margin-bottom: 50px;
     justify-content: center;
+    height: 125px;
 }
 
 .controls-child {
     width: 45%;
     text-align: center;
-    justify-content: center;
     margin-left: 15px;
 }
 
