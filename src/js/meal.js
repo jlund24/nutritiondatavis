@@ -295,7 +295,7 @@ class MealPlanner {
 		//draw y-axis label
 		barSvg.append('text')
 			.attr('transform', 'translate(' + (this.barChartmargin.left / 2) + ',' + (this.barChartmargin.top + (this.barChartHeight / 2)) + ') rotate(-90)')
-			.text('% DAILY VALUE')
+			.text('% Daily Value')
 			.classed("axis-label", true);
 		
 		//create y-axis
