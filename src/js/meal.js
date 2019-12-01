@@ -336,7 +336,7 @@ class MealPlanner {
 						.attr('width', '20px')
 						.append('img')
 						.classed('remove-svg', true)
-						.attr('src', `assets/delete.svg`)
+						.attr('src', `src/assets/delete.svg`)
 						.attr('width', '20px')
 						.attr('height', '20px');
 
@@ -345,7 +345,7 @@ class MealPlanner {
 						.attr('width', '20px')
 						.append('img')
 							.classed("menu-icon-svg", true)
-							.attr('src', d => `assets/${d[0].icon_name}.svg`)
+							.attr('src', d => `src/assets/${d[0].icon_name}.svg`)
 							.attr('width', '20px')
 							.attr('height', '20px');
 
@@ -387,7 +387,7 @@ class MealPlanner {
 						.attr('value', d => d[1])
 						.attr('id', (d,i) => "servingInput" + i);
 					update.select('.menu-icon-svg')
-						.attr('src', d => `assets/${d[0].icon_name}.svg`);
+						.attr('src', d => `src/assets/${d[0].icon_name}.svg`);
 				},
 				exit => exit.remove()
 			);
