@@ -493,6 +493,8 @@ class Table {
             row
                 .selectAll("th")
                     .classed("highlightTableRow", true);
+            
+            this.scrollToFood(row.data()[0].title);
         }
     }
 	
@@ -520,6 +522,19 @@ class Table {
         this.columnData.fat.visData.totalValue = _ => currRow[0].grams_of_fat;
 
         this.updateTable();
+    }
+
+    scrollToFood(food) {
+        let rows = document.querySelectorAll('#food-table tr');
+
+        let index = this.tableElements.findIndex(function(currentValue, index, arr) {
+            return currentValue.title == food;
+        });
+        
+        index = index == 0 ? 1 : index;
+        let target = rows[index];
+        
+        target.parentNode.scrollTop = target.offsetTop;
     }
 
     
