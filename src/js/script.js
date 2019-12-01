@@ -3,7 +3,6 @@ d3.json('data/nutrients_and_price1.json').then( data => {
 
     d3.json('data/recommended_values.json').then(valuedata => {
     
-        console.log('data', data);
         this.data = data;
         
         let table = new Table(data, valuedata);

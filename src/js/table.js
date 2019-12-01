@@ -30,24 +30,13 @@ class Table {
             serving_size: {
                 "title": "serving size",
                 "id": "serving-size",
-                // "vis" : "text",
                 "visData" : {
                     type: "text",
-                    //value: d => `${d.portion_amount} ${d.serving}`,
                     value: d => `${d.serving}`,
                     color: _ => ""
                 },
                 "sort": (first, second) => first.serving <= second.serving ? -1 : 1
             },
-            // food_group : {
-            //     "title": "food group",
-            //     "id": "food-group",
-            //     "visData" : {
-            //         type: "text",
-            //         value: d => d.category,
-            //         color: d => d.category,
-            //     }
-            // },
             calories : {
                 "title": "calories",
                 "unit": "cal",
@@ -56,7 +45,6 @@ class Table {
                     type: "donut",
                     value: d => d[energyCol],
                     totalValue: _ => 2400, 
-                    // text: d => `${d["Energy"]} / 2400`
                 },
                 "sort": (first, second) => first[energyCol] <= second[energyCol] ? -1 : 1 
             },
@@ -68,7 +56,6 @@ class Table {
                     type: "donut",
                     value: d => d[carbCol],
                     totalValue: _ => 130,
-                    // text: d => `${d["Carbohydrate, by difference"]} / 130`
                 },
                 "sort": (first, second) => first[carbCol] 
                     <= second[carbCol] ? -1 : 1 
@@ -124,13 +111,10 @@ class Table {
                     color: _ => ""
                 },
                 "sort" : (first, second) => first[priceCol] <= second[priceCol] ? -1 : 1
-                // "vis": "text"
             },
         };
 
         this.selectedColumns = [
-            // this.columnData["serving_size"],
-            // this.columnData["food_group"],
             this.columnData["calories"],
             this.columnData["carbs"],
             this.columnData["protein"],
@@ -153,8 +137,6 @@ class Table {
         }
         else
         {
-            // console.log("d");
-            // console.log(d);
             instance.tableElements = instance.tableElements.sort( d.sort );
             instance.sortedBy = d.id;
             direction = "up";
@@ -198,7 +180,6 @@ class Table {
             .data([this.columnData.food_title])
                 .join("th")
                     .attr("id", d => `${d.id}-header`)
-                    // .classed("header-row", true)
                     .on("click", function(d) {
                         instance.sortByColumn(d, instance, this);
                     })
@@ -232,23 +213,6 @@ class Table {
                 .classed("sort-icon sorted-up-icon hidden", true)
                     .attr('src', `assets/arrow_up.svg`);
 
-        
-
-        // headerRow.selectAll("th")
-        //     .data([this.columnData.food_title, ...this.selectedColumns])
-        //         .join("th")
-        //         .classed("header-row", true)
-        //         .attr("id", d => `${d.id}-header`)
-        //             .append("p")
-        //                 .classed("header-line-1", true)
-        //                 .text(d => d.title); 
-        
-        
-        // d3.select("#food-title-header")
-        //     .classed("header-row", false);
-
-        
-        
 
         d3.select("#food-table")
             .append("tbody");
@@ -326,8 +290,6 @@ class Table {
             .selectAll(".body-row")
                 .data(this.tableElements);
 
-        // console.log("table elements");
-        // console.log(this.tableElements);
         rows.join("tr")
             .classed("body-row", true)
             .classed("highlightTableRow", true)
@@ -378,11 +340,7 @@ class Table {
                             .attr("class", d => d.category)
                             .classed("food-title-text", true)
                             .text(d => d.title);
-
-        
-
-
-        
+      
 
         d3.selectAll(".food-title-text-container")
             .selectAll(".food-serving-size")
@@ -397,19 +355,6 @@ class Table {
                 let rowData = [];
                 this.selectedColumns.forEach(column => {
                     // d is the rowData
-                    // let cellData = {
-                    //     // "vis": column.vis,
-                    //     "vis": column.visData.type,
-                    //     // "value": d[column.key],
-                    //     "value": 6,
-                    //     // "total_value": demographicData[something],
-                    //     "total_value": column.maxValue,
-                    //     // "units": column.unit,
-                    //     "units": column.unit
-
-                    // };
-                    // console.log("column");
-                    // console.log(column);
                     let combinedCellData = {
                         columnData: column.visData,
                         units: column.unit,
@@ -434,21 +379,9 @@ class Table {
         });
 
         this.updateTextCells(textCells);
-        
-        // this.setScroll();
+
     }
 
-    // setScroll() {
-    //     $('tbody').scroll(function(e) { //detect a scroll event on the tbody
-    //         /*
-    //       Setting the thead left value to the negative valule of tbody.scrollLeft will make it track the movement
-    //       of the tbody element. Setting an elements left value to that of the tbody.scrollLeft left makes it maintain 			it's relative position at the left of the table.    
-    //       */
-    //       $('thead').css("left", -$("tbody").scrollLeft()); //fix the thead relative to the body scrolling
-    //       $('thead th:nth-child(1)').css("left", $("tbody").scrollLeft()); //fix the first cell of the header
-    //       $('.food-title-cell').css("left", $("tbody").scrollLeft()); //fix the first column of tdbody
-    //     });
-    // }
 
     updateDonutCells(donutCells)
     {
@@ -519,24 +452,6 @@ class Table {
                     .attr("text-anchor", "middle")
                     ;
 
-        // donutCells
-        //     .selectAll(".donut-label")
-        //     .data(d => [d])
-        //     .join("div")
-        //         .classed("donut-label", true)
-        //         .selectAll(".donut-label-value", true)
-        //         .data(d => [d])
-        //         .join("span")
-        //             .classed("donut-label-value", true)
-        //             .text(d => +d.columnData.value(d.rowData).toFixed(2))
-        //         ;
-
-        // donutCells.selectAll(".donut-label")
-        //     .selectAll(".donut-label-totalValue")
-        //     .data(d => [d])
-        //     .join("span")
-        //         .classed("donut-label-totalValue", true)
-        //         .text(d => ` / ${+d.columnData.totalValue(d.rowData).toFixed(2)}`);
     }
 
     updateTextCells(textCells)
@@ -546,8 +461,6 @@ class Table {
                 .data(d => [d])
                 .join("text")
                     .text(d => {
-                        // console.log(d);
-
                         return ellipsizeText(d.columnData.value(d.rowData));
                     })
                     .attr("class", d => d.columnData.color(d.rowData));
@@ -555,7 +468,6 @@ class Table {
     }
 	
 	highlightRow(food, clear) {
-        //TODO
         if (clear) {
             d3.select('#food-table')
                 .selectAll("td")

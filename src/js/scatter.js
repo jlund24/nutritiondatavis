@@ -438,7 +438,7 @@ class ScatterPlot {
 							.attr("r", 10)
 							.attr("transform", "translate(" + this.margin.left + "," + (this.margin.top) + ") scale (1, 1)")
 							.attr("class", (d) => d.category)
-							.on("mouseover", function (d) { //ALSO HIGHLIGHT THE CIRCLE BY INCREASING STROKE WIDTH, AND HIGHLIGHT ROW IN TABLE
+							.on("mouseover", function (d) {
 								tooltip.style("opacity", 0.9)
 								   	   .html(that.tooltipRender(d))
 								       .style("left", (d3.event.pageX + 20) + "px")
@@ -450,10 +450,7 @@ class ScatterPlot {
 								tooltip.style("opacity", 0);
 								that.highlightCircle(null, true);
 								that.tableRef.highlightRow(null, true);
-							})
-							/*.on("click", function(d) {
-								//can call a function for interactivity
-							})*/,
+							}),
 			
 				update => update
 							.transition()

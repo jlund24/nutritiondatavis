@@ -61,7 +61,6 @@ class MealPlanner {
 		
 		/* INITIALIZE MENU */
 		let optionSelect = function(data) {
-			console.log('search', data)
 		}
 				
 		//create search bar
@@ -74,7 +73,6 @@ class MealPlanner {
 		let label = menuDiv.append('label')
 			.attr('for', 'searchBar')
 			.html('Select a food')
-//			.style('margin', '20px');
 		label.append('br');
 		let searchBar =	label.append('select')
 			.attr('name', 'foodSearch')
@@ -104,7 +102,6 @@ class MealPlanner {
 			//don't allow duplicates
 			if(that.menuItems.filter(d => d[0].title == newFood).length == 0) {
 				that.menuItems.push([foodData[0], 1]);
-				console.log(that.menuItems);
 				that.updateMenu();
 				that.updatePriceChart();
 				that.updateBarGraph();
@@ -124,13 +121,11 @@ class MealPlanner {
 		menuDiv.append('br');
 
 
-
 		// storytelling aka presets
 
 		let presetLabel = menuDiv.append('label')
 			.attr('for', 'presetSearchBar')
 			.html('...or apply a preset')
-//			.style('margin', '20px');
 		presetLabel.append('br');
 		let presetSearchBar = presetLabel.append('select')
 			.attr('name', 'presetSearch')
@@ -156,7 +151,6 @@ class MealPlanner {
 		let loadPreset = function(e) {
 			let newPreset = $("#presetSearchBar").select2("val");
 			let foodData = that.presets.filter(d => d.title == newPreset)[0];
-			console.log(foodData);
 			that.menuItems = [];
 			for (let item of foodData.foods) {
 				that.menuItems.push([that.data.filter(d => d.title == item[0])[0], item[1]]);
@@ -191,34 +185,11 @@ class MealPlanner {
 		
 		menuDiv.append('ul')
 			.attr('id', 'menu-list');
-//		menuDiv.append('svg')
-//			.attr('width', '100%')
-//			.attr('height', '400px')
-//			.attr('id', 'menuSvg');
-		
-		
-//		let menuTable = menuDiv.append('table')
-//			.attr('id', 'menuTable');
-//		
-//		let tableHead = menuTable.append('thead');
-//		let headerRow = tableHead.append('tr')
-//			.attr('id', 'menuTableHeaders');
-//		headerRow.append('td');
-//		headerRow.append('td')
-//			.html('Food');
-//		headerRow.append('td')
-//			.html('Servings');
-//		
-//		menuTable.append('tbody')
-//			.attr('id', 'menuTableBody');
-
 
         menuDiv.append('div').attr('id', 'descriptionDiv');
 
 		
 		/* INITIALIZE PRICE CHART */
-		
-		//TODO
 		let priceSvg = d3.select("#price-div")
 			.append('svg')
 			.attr('width', this.priceWidth)
@@ -328,27 +299,7 @@ class MealPlanner {
     updateMenu()
     {
 		let that = this;
-		
-//		let menuSvg = d3.select('#menuSvg');
-//		menuSvg.selectAll('text')
-//			.data(this.menuItems)
-//			.join('text')
-//			.classed('menuItem', true)
-//			.text(d => d[0])
-//			.attr("transform", (d,i) => "translate(40," + (30 + i*40) + ")")
-		
-		//TODO: Get numbers working
-		
-//		let foreigns = menuSvg.selectAll('foreignobject')
-//			.data(this.menuItems)
-//			.join('foreignobject')
-//			.attr("transform", (d,i) => "translate(100," + (30 + i*40) + ")")
-//			.append('input')
-//			.attr('type', 'number')
-//			.attr('id', (d,i) => 'servings' + i)
-//			.attr('min', '0')
-//			.attr('max', '99')
-		
+				
 		let updateQuantity = function(d, i) {
 			let node = d3.select("#servingInput" + i).node();
 			let newVal = node.value;
@@ -375,8 +326,6 @@ class MealPlanner {
 				enter => {	
 					let li = enter.append('li')
 						.classed("food-list-item", true)
-						// .classed("food-list-item-highlighted", true)
-						// .style('list-style', 'none')
 						;
 					let foodItemLeft = li.append("div")
 						.classed("food-list-item-left-container", true);
@@ -388,7 +337,6 @@ class MealPlanner {
 						.append('img')
 						.classed('remove-svg', true)
 						.attr('src', `assets/delete.svg`)
-						// .attr('src', d => `assets/${d[0].icon_name}.svg`)
 						.attr('width', '20px')
 						.attr('height', '20px');
 
@@ -410,7 +358,6 @@ class MealPlanner {
 					});
 					foodItemLeft.append('div')
 						.classed('foodName-div', true)
-						// .html(d => d[0].title + " - " + format(d[0].price));
 						.html(d => d[0].title + " - " + d[0].serving);
 					li.append('input')
 						.classed('servingInput', true)
@@ -426,8 +373,6 @@ class MealPlanner {
 							.classed("hidden", false);
 						
 						that.highlightFood(d[0]);
-						// d3.select(this)
-						// 	.classed("food-list-item-highlighted", true);
 					});
 					li.on("mouseout", function (d) {
 						d3.select(this).select(".remove-div")
@@ -435,7 +380,7 @@ class MealPlanner {
 						that.highlightFood(null, true);
 					});
 				},
-				update => { //I DON'T THINK THIS IS EVER USED, SO A JOIN IS UNNECESSARY
+				update => { //We dont necessarily need this since it's probably not used (could just have enter and not join)
 					update.select('.foodName-div')
 						.html(d => d[0].title + " - " + d[0].serving);
 					update.select('.servingInput')
@@ -479,7 +424,6 @@ class MealPlanner {
 		let priceData = this.menuItems.map((item, ind) => {
 			return {
 				share: item[0]["price"] * item[1] / totalValue,
-				// color: `rgb(${ind * 100}, ${ind * 50}, ${ind * 10})`,
 				color: "#2E4B7C",
 				data: item[0],
 				servings: item[1]
@@ -551,7 +495,6 @@ class MealPlanner {
 							instance.highlightFood(null, true);
 							tooltip.style("opacity", 0);
 						})
-						// .attr("d", arc)
 						.call(enter => enter
 							.transition()
 							.delay(function(d, i) { return i * 50; })
@@ -568,7 +511,6 @@ class MealPlanner {
 							.duration(500)
 							.attrTween("d", arcTween)
 							)
-							// .attr("d", arc)
 						;
 				},
 				exit => exit.remove()
@@ -619,8 +561,8 @@ class MealPlanner {
 		let that = this;
 		let barSvg = d3.select('#barSvg');
 		
-		//index is bar/column number from left to right. Each index contains an array where each slot matches up with the food item in this.menuItems and
-		//   values are the top of the bar segment for that food(unscaled)
+		// index is bar/column number from left to right. Each index contains an array where each slot matches up with the food item in this.menuItems and
+		// values are the top of the bar segment for that food(unscaled)
 		let barData = []; 
 		
 		//calculate bar segment sizes
@@ -720,16 +662,7 @@ class MealPlanner {
 					.attr('height', 0)
 					.attr('opacity', 0)
 					.remove()
-			);
-				
-//		bars.attr('width', this.barWidth)
-//			.attr('height', (d, i) => barScale(0) - barScale(d.val - d.previous))
-//			.attr('transform', (d,i) => 'translate(0,' + (barScale(0) - (i == 0 ? barScale(0) : barScale(d.previous))) + ')')
-//			.attr('fill', 'green')
-//			.attr('stroke', 'black')
-//			.on('mouseover', d => this.highlightBars(d.food, false))
-//			.on('mouseout', d => this.highlightBars(null, true));
-		
+			);	
 		
 	}
 	
@@ -741,7 +674,6 @@ class MealPlanner {
 	}
 	
 	highlightMenu(food, clear) {
-		
 		if (clear) {
 			d3.select('#menu-list').selectAll("li")
 				.classed("food-list-item-highlighted", false);

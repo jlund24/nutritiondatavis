@@ -1,33 +1,23 @@
 * {
-    /* font-family: "Roboto", "Helvetica Neue", Helvetica, Arial, sans-serif; */
-    /* font-family: 'Source Code Pro', monospace; */
     font-family: 'Inconsolata', monospace;
-    /* font-family: sans-serif; */
 }
 
 #controls {
     width: 1500px;
     height: 153px;
-/*    background-color: yellow;*/
-/*    border: solid 1px black;*/
-
-  overflow: auto;
+  	overflow: auto;
 }
 
 
 #main-container {
     width: 1800px;
     height: 900px;
-/*    background-color: gray;*/
 }
 
 #food-table-container {
     width: 1020px;
     height: 800px;
-    /* background-color: red; */
     float: left;
-    /* overflow-y: auto;
-    overflow-x: auto; */
 }
 
 
@@ -37,7 +27,6 @@
 #food-scatterplot-container {
     width: 700px;
     height: 800px;
-/*    background-color: blue;*/
     float: left;
 }
 
@@ -81,7 +70,6 @@ div.tooltip {
     position: absolute;
     text-align: center;
     min-width: 60px;
-/*    height: 28px;*/
     padding: 5px;
     background: #B5CDDD;
     stroke: gray;
@@ -105,7 +93,6 @@ div.dropdown-wrapper {
 	float: left;
     margin-left: 75px;
     width: 200px;
-/*    height: 130px;*/
 	height:80px;
 	padding: 2px;
 }
@@ -138,7 +125,6 @@ div.dropdown-wrapper {
   outline: none;
   border: none;
   cursor: pointer;
-  /* background-color: #2196F3; */
   background-color: #2E4B7C;
   transition: background-color ease 0.3s;
 }
@@ -182,9 +168,6 @@ div.dropdown-wrapper {
     height: 800px;
     display: flex;
     flex-flow: column nowrap;
-/*    background-color: green;*/
-    /* float: left; */
-
 }
 
 #mealTitle-div {
@@ -207,16 +190,12 @@ div.dropdown-wrapper {
 	width: 500px;
     height: 100%;
     margin-right: 50px;
-/*	    background-color: green;*/
-	/* display: inline-block; */
-	/* float: left; */
 }
 
 
 
 /*Designed with https://dabuttonfactory.com/*/
 #addFoodButton {
-    /* background:    #2196f3; */
     background: #2E4B7C;
 	border-radius: 1000px;
 	padding:       8px 20px;
@@ -229,8 +208,7 @@ div.dropdown-wrapper {
 }
 
 #addPresetButton {
-    /* background:    #2196f3; */
-    background: #2E4B7C;
+  background: #2E4B7C;
   border-radius: 1000px;
   padding:       8px 20px;
   color:         #ffffff;
@@ -247,26 +225,20 @@ li {
 }
 
 .remove-div {
-	/* display: inline-block; */
-    /* float: left; */
     padding-right: 5px;
     padding-left: 5px;
     cursor: pointer;
 }
 
 .foodName-div {
-	/* display: inline-block; */
-    /* float: left; */
     text-overflow: ellipsis;
     width: 350px;
     white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  	overflow: hidden;
+ 	text-overflow: ellipsis;
 }
 
 .servingInput {
-	/* display: inline-block; */
-    /* float: left; */
     margin-right: 5px;
     width: 50px;
     font-size: 12pt;
@@ -278,21 +250,11 @@ li {
     height: 100%;
     text-align: center;
     margin-right: 50px;
-	    /* background-color: red; */
-	/* display: inline-block;
-	float: left; */
-
-
 }
 
 #bar-div {
 	width: 700px;
 	height: 100%;
-/*	    background-color: royalblue;*/
-	/* display: inline-block;
-	float: left; */
-
-
 }
 
 .barHighlighted {
@@ -359,7 +321,6 @@ li {
 table {
     position: relative;
     width: 1020px;
-    /* background-color: #aaa; */
     background-color: white;
     overflow: hidden;
     border-collapse: collapse;
@@ -379,25 +340,20 @@ table {
     background-color: #99a;
     min-width: 130px;
     height: 32px;
-    /* border: 1px solid #222; */
     border: 1px solid rgb(235, 235, 235);
     cursor: pointer;
   }
 
   .header-row {
-    /* background-color: #99a; */
-    /* background-color: rgb(213, 213, 226); */
     background-color: white;
     min-width: 130px;
     height: 32px;
     border: 1px solid rgb(235, 235, 235);
-    /* font-weight: bold; */
     cursor: pointer;
   }
   
   thead th:nth-child(1) {/*first cell in the header*/
     position: relative;
-    /* display: block; seperates the first cell in the header from the header */
     background-color: #88b;
     
   }
@@ -413,26 +369,20 @@ table {
   }
   
   tbody th {
-    /* background-color: #bbc; */
     background-color: white;
     min-width: 130px;
-    /* border: 1px solid #222; */
     border: 1px solid rgb(235, 235, 235);
   }
 
   tbody td {
-    /* background-color: #bbc; */
     background-color: white;
     min-width: 130px;
     max-width: 130px;
-    /* border: 1px solid #222; */
     border: 1px solid rgb(235, 235, 235);
   }
 
   #food-title-header {
     position: relative;
-    /* display: block; seperates the first cell in the header from the header */
-    /* background-color: #88b; */
     background-color: white;
     min-height: 43px;
     min-width: 200px;
@@ -441,8 +391,6 @@ table {
   }
 
   .food-title-cell {
-    /* position: relative; */
-    /* display: block; seperates the first column from the tbody */
     height: 63px;
     min-width: 199px;
     max-width: 199px;
@@ -450,7 +398,6 @@ table {
     flex-flow: row nowrap;
     justify-content: space-around;
     align-items: center;
-    /* background-color: rgb(213, 213, 226); */
     background-color: white;
   }
 
@@ -468,7 +415,6 @@ table {
       display: flex;
       flex-flow: row nowrap;
       justify-content: space-evenly;
-      /* height: 43px; */
   }
 
   .hidden {
@@ -477,7 +423,6 @@ table {
 
 ul {
     list-style-type: none;
-    /* width: 100%; */
     margin: 0px;
     padding: 10px;
 }
@@ -486,7 +431,6 @@ ul {
     display: flex;
     flex-flow: row nowrap;
     justify-content: space-between;
-    /* font-weight: bold; */
     margin-right: 10px;
     margin-left: 10px;
     margin-top: 10px;
@@ -496,7 +440,6 @@ ul {
     display: flex;
     flex-flow: row nowrap;
     justify-content: space-between;
-    /* width: 100% */
     padding-top: 5px;
     padding-bottom: 5px;
 }
@@ -563,5 +506,4 @@ ul {
 
 .totalPrice-tooltip {
     font-size: 12pt;
-    /* font-family: inherit; */
 }
