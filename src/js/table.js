@@ -220,7 +220,7 @@ class Table {
             .data(d => [d])
             .join("img")
                 .classed("sort-icon sorted-down-icon hidden", true)
-                    .attr('src', `assets/arrow_down.svg`)
+                    .attr('src', `src/assets/arrow_down.svg`)
                     ;
 
         d3.selectAll(".header-cell-container")
@@ -228,7 +228,7 @@ class Table {
             .data(d => [d])
             .join("img")
                 .classed("sort-icon sorted-up-icon hidden", true)
-                    .attr('src', `assets/arrow_up.svg`);
+                    .attr('src', `src/assets/arrow_up.svg`);
 
         
 
@@ -310,14 +310,14 @@ class Table {
             .data(d => [d])
             .join("img")
                 .classed("sort-icon sorted-down-icon hidden", true)
-                    .attr('src', `assets/arrow_down.svg`);
+                    .attr('src', `src/assets/arrow_down.svg`);
 
         d3.selectAll(".header-cell-container")
             .selectAll(".sorted-up-icon")
             .data(d => [d])
             .join("img")
                 .classed("sort-icon sorted-up-icon hidden", true)
-                    .attr('src', `assets/arrow_up.svg`);
+                    .attr('src', `src/assets/arrow_up.svg`);
         
         // bind data to rows
         let rows = d3.select("#food-table tbody")
@@ -360,7 +360,7 @@ class Table {
             .data(d => [d])
                 .join('img')
                 .classed("food-title-image", true)
-                .attr('src', d => ("icon_name" in d && d.icon_name != null) ? `assets/${d.icon_name}.svg` : "")
+                .attr('src', d => ("icon_name" in d && d.icon_name != null) ? `src/assets/${d.icon_name}.svg` : "")
                 .attr("width", d => ("icon_name" in d && d.icon_name != null) ? 30 : 30)
                 .attr("height", d => ("icon_name" in d && d.icon_name != null) ? 30 : 30);   
                     

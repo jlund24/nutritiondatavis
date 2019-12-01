@@ -1,7 +1,7 @@
 // JavaScript Document
-d3.json('data/nutrients_and_price1.json').then( data => {
+d3.json('src/data/nutrients_and_price1.json').then( data => {
 
-    d3.json('data/recommended_values.json').then(valuedata => {
+    d3.json('src/data/recommended_values.json').then(valuedata => {
     
         console.log('data', data);
         this.data = data;
