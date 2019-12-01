@@ -220,6 +220,18 @@ div.dropdown-wrapper {
   margin-left: 15px;
 }
 
+.tablink {
+  background: #2E4B7C;
+  border-radius: 1000px;
+  padding:       8px 20px;
+  color:         #ffffff;
+  display:       inline-block;
+  font:          normal bold 16px/1 "Inconsolata", sans-serif;
+  text-align:    center;
+  outline: none;
+  margin-left: 15px;
+}
+
 
 li {
     height: 25px;

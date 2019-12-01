@@ -41,9 +41,9 @@ class MealPlanner {
 		
 		let mealContainer = d3.select("#meal-container");
 		
-		let mealTitleDiv = mealContainer.append('div')
-			.attr('id', "mealTitle-div")
-			.html("Meal Planner");
+		//let mealTitleDiv = mealContainer.append('div')
+		//	.attr('id', "mealTitle-div")
+		//	.html("Meal Planner");
 
 		let mealContentContainer = mealContainer.append('div')
 			.attr("id", "mealContent-div");

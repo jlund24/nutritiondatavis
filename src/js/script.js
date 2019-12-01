@@ -132,6 +132,37 @@ d3.json('src/data/nutrients_and_price1.json').then( data => {
         legendItems.append('text')
             .text(d => d)
             .attr('transform', 'translate(30, 10)');
+
+
+        // tab layout
+
+    function openTab(pageName, elmnt) {
+        // Hide all elements with class="tabcontent" by default */
+        let tabcontent = document.getElementsByClassName("tabcontent");
+            for (let i = 0; i < tabcontent.length; i++) {
+            tabcontent[i].style.display = "none";
+        }
+
+        let tablinks = document.getElementsByClassName("tablink");
+        for (let i = 0; i < tablinks.length; i++) {
+            tablinks[i].style.backgroundColor = "#2E4B7C";
+        }
+
+        // Show the specific tab content
+        document.getElementById(pageName).style.display = "block";
+
+        // Add the specific color to the button used to open the tab content
+        elmnt.style.backgroundColor = "lightsteelblue";
+    }
+
+    d3.select('#main-button')
+        .on('click', function() {openTab('main-container', this);})
+
+    d3.select('#meal-button')
+        .on('click', function() {openTab('meal-container', this);})
+
+    // Get the element with id="defaultOpen" and click on it
+    document.getElementById("main-button").click();
             
     
     })
