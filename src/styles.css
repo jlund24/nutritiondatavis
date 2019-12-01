@@ -256,7 +256,12 @@ li {
 
 .foodName-div {
 	/* display: inline-block; */
-	/* float: left; */
+    /* float: left; */
+    text-overflow: ellipsis;
+    width: 350px;
+    white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .servingInput {
@@ -554,4 +559,9 @@ ul {
 .highlightTableRow {
     background-color: lightsteelblue;
     border-style: none;
+}
+
+.totalPrice-tooltip {
+    font-size: 12pt;
+    /* font-family: inherit; */
 }

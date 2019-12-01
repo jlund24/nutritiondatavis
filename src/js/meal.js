@@ -183,7 +183,7 @@ class MealPlanner {
 
 		menuHeadersContainer.append('span')
 			.classed("menu-headers-text", true)
-			.html("Food - Price per serving");
+			.html("Food - Serving size");
 		
 		menuHeadersContainer.append('span')
 			.classed("menu-headers-text", true)
@@ -410,7 +410,8 @@ class MealPlanner {
 					});
 					foodItemLeft.append('div')
 						.classed('foodName-div', true)
-						.html(d => d[0].title + " - " + format(d[0].price));
+						// .html(d => d[0].title + " - " + format(d[0].price));
+						.html(d => d[0].title + " - " + d[0].serving);
 					li.append('input')
 						.classed('servingInput', true)
 						.attr('id', (d,i) => "servingInput" + i)
@@ -436,7 +437,7 @@ class MealPlanner {
 				},
 				update => { //I DON'T THINK THIS IS EVER USED, SO A JOIN IS UNNECESSARY
 					update.select('.foodName-div')
-						.html(d => d[0].title + " - " + format(d[0].price));
+						.html(d => d[0].title + " - " + d[0].serving);
 					update.select('.servingInput')
 						.attr('value', d => d[1])
 						.attr('id', (d,i) => "servingInput" + i);
@@ -786,11 +787,13 @@ class MealPlanner {
 
 	sliceTooltipRender(data) {
 		let format = function(d) { return "$" + d3.format(",.2f")(d); };
-		let price = format(data.data.data.price * data.data.servings);
+		let individualPrice = format(data.data.data.price);
+		let totalPrice = format(data.data.data.price * data.data.servings);
 		
 		let text = "<span>" + data.data.data.title + "</span><br>" 
 			+ "<div>"
-			+ price
+			+ `<strong>${totalPrice}</strong><br>`
+			+ `<text class='totalPrice-tooltip'>${individualPrice} x ${data.data.servings}</text>`
 			+ "</div>";
         return text;
 	}
