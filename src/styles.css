@@ -176,13 +176,14 @@ div.dropdown-wrapper {
 	font: bold 30px "Inconsolata";
 	text-align: center;
 	vertical-align: bottom;
-	display: table-cell;
+    display: table-cell;
+    margin-top: 50px;
 }
 
 #mealContent-div {
     display: flex;
     flex-flow: row nowrap;
-    height: 700px;
+    height: 800px;
     
 }
 
@@ -506,4 +507,11 @@ ul {
 
 .totalPrice-tooltip {
     font-size: 12pt;
+}
+
+
+header {
+    height: 100%;
+    width: 100%;
+    
 }

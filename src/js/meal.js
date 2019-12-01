@@ -312,7 +312,6 @@ class MealPlanner {
 				newVal = node.value;
 			}
 			that.menuItems[i][1] = +newVal;
-
 			that.updatePriceChart();
 			that.updateBarGraph();
 		}
@@ -321,7 +320,7 @@ class MealPlanner {
 		
 		let menuList = d3.select('#menu-list');
 		menuList.selectAll('li')
-			.data(this.menuItems)
+			.data(that.menuItems)
 			.join(
 				enter => {	
 					let li = enter.append('li')
@@ -352,6 +351,7 @@ class MealPlanner {
 					d3.selectAll('.remove-div')
 						.on("click", function (d, i) {
 							that.menuItems.splice(i, 1);
+							console.log(that.menuItems);
 							that.updateMenu();
 							that.updatePriceChart();
 							that.updateBarGraph();
@@ -383,8 +383,12 @@ class MealPlanner {
 				update => { //We dont necessarily need this since it's probably not used (could just have enter and not join)
 					update.select('.foodName-div')
 						.html(d => d[0].title + " - " + d[0].serving);
+					
 					update.select('.servingInput')
-						.attr('value', d => d[1])
+						.property('value', d => {
+							
+							return d[1];
+						})
 						.attr('id', (d,i) => "servingInput" + i);
 					update.select('.menu-icon-svg')
 						.attr('src', d => `src/assets/${d[0].icon_name}.svg`);
