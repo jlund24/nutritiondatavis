@@ -221,12 +221,27 @@ div.dropdown-wrapper {
   margin-left: 15px;
 }
 
+#controls {
+    display: flex;
+    flex-flow: row nowrap;
+    margin-bottom: 50px;
+    justify-content: center;
+}
+
+.controls-child {
+    width: 45%;
+    text-align: center;
+    justify-content: center;
+    margin-left: 15px;
+}
+
 #tabs {
     display: flex;
     flex-flow: row nowrap;
     margin-bottom: 50px;
     justify-content: center;
 }
+
 
 .tablink {
   background: #2E4B7C;

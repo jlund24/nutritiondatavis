@@ -16,7 +16,7 @@ d3.json('src/data/nutrients_and_price1.json').then( data => {
         //set up controls container
         let controls = d3.select('#legend');
         let controlsSvg = controls.append('svg')
-            .attr('width', '1000')
+            .attr('width', '300')
             .attr('height', '100%');
 
         // controls
@@ -112,7 +112,7 @@ d3.json('src/data/nutrients_and_price1.json').then( data => {
 
         //draw legend
         controlsSvg.append('rect')
-            .attr('transform', 'translate(630, 5)')
+            .attr('transform', 'translate(17, 5)')
             .attr('height', 90)
             .attr('width', 265)
             .attr('rx', 12)
@@ -126,7 +126,7 @@ d3.json('src/data/nutrients_and_price1.json').then( data => {
             .data(legendData)
             .join('g')
             .classed('legendItem', true)
-            .attr('transform', (d,i) => 'translate(' + (650 + (i >= 4 ? 120 : 0)) + ',' + (15 + (i%4 * 20)) +')');
+            .attr('transform', (d,i) => 'translate(' + (37 + (i >= 4 ? 120 : 0)) + ',' + (15 + (i%4 * 20)) +')');
         
         let rects = legendItems.append('rect')
             .attr('height', 10)
