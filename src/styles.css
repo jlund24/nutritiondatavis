@@ -220,16 +220,24 @@ div.dropdown-wrapper {
   margin-left: 15px;
 }
 
+#tabs {
+    display: flex;
+    flex-flow: row nowrap;
+    margin-bottom: 50px;
+    justify-content: center;
+}
+
 .tablink {
   background: #2E4B7C;
-  border-radius: 1000px;
-  padding:       8px 20px;
+  border-radius: 5px;
+  padding:       8px;
   color:         #ffffff;
-  display:       inline-block;
-  font:          normal bold 16px/1 "Inconsolata", sans-serif;
+  /* display:       inline-block; */
+  font:          normal bold 32px/1 "Inconsolata", sans-serif;
   text-align:    center;
   outline: none;
   margin-left: 15px;
+  width: 45%;
 }
 
 
@@ -520,13 +528,6 @@ ul {
 
 .totalPrice-tooltip {
     font-size: 12pt;
-}
-
-
-header {
-    height: 100%;
-    width: 100%;
-    
 }
 
 .foodName {
