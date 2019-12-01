@@ -153,8 +153,6 @@ class Table {
         }
         else
         {
-            // console.log("d");
-            // console.log(d);
             instance.tableElements = instance.tableElements.sort( d.sort );
             instance.sortedBy = d.id;
             direction = "up";
@@ -326,8 +324,7 @@ class Table {
             .selectAll(".body-row")
                 .data(this.tableElements);
 
-        // console.log("table elements");
-        // console.log(this.tableElements);
+       
         rows.join("tr")
             .classed("body-row", true)
             .classed("highlightTableRow", true)
@@ -581,6 +578,8 @@ class Table {
             row
                 .selectAll("th")
                     .classed("highlightTableRow", true);
+            
+            this.scrollToFood(row.data()[0].title);
         }
     }
 	
@@ -608,6 +607,19 @@ class Table {
         this.columnData.fat.visData.totalValue = _ => currRow[0].grams_of_fat;
 
         this.updateTable();
+    }
+
+    scrollToFood(food) {
+        let rows = document.querySelectorAll('#food-table tr');
+
+        let index = this.tableElements.findIndex(function(currentValue, index, arr) {
+            return currentValue.title == food;
+        });
+        
+        index = index == 0 ? 1 : index;
+        let target = rows[index];
+        
+        target.parentNode.scrollTop = target.offsetTop;
     }
 
     
