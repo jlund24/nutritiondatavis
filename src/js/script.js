@@ -38,6 +38,12 @@ d3.json('src/data/nutrients_and_price1.json').then( data => {
             .attr("value", function (d) { return d; }); // corresponding value returned by the button
 
 
+        ageButton.on("change", function(d) {
+                table.updateDailyValues();
+                meal_planner.updateDailyValues();
+            } );
+        ageButton.selectAll('option').property("selected", function(d){ return d == 25; })
+
         let sexSelect = d3.select("#sexSelectDiv")
             .append('select')
             .attr('id', 'sexSelect');
@@ -49,6 +55,12 @@ d3.json('src/data/nutrients_and_price1.json').then( data => {
             .append('option')
             .text(function (d) { return d; }) // text showed in the menu
             .attr("value", function (d) { return d; });
+
+        sexSelect.on("change", function(d) {
+                table.updateDailyValues();
+                meal_planner.updateDailyValues();
+            } );
+        sexSelect.selectAll('option').property("selected", function(d){ return d == 'Male'; })
 
         let heights = [];
         for (let i = 48; i <= 78; i++) {
@@ -66,6 +78,12 @@ d3.json('src/data/nutrients_and_price1.json').then( data => {
             .text(function (d) { return d; }) // text showed in the menu
             .attr("value", function (d) { return d; });
 
+        heightSelect.on("change", function(d) {
+                table.updateDailyValues();
+                meal_planner.updateDailyValues();
+            } );
+        heightSelect.selectAll('option').property("selected", function(d){ return d == 70; })
+
         let weights = [];
         for (let i = 80; i <= 275; i += 5) {
             weights.push(i);
@@ -82,26 +100,15 @@ d3.json('src/data/nutrients_and_price1.json').then( data => {
             .text(function (d) { return d; }) // text showed in the menu
             .attr("value", function (d) { return d; });
 
-        d3.select('#ageSelect')
-            .on("change", function(d) {
+        weightSelect.on("change", function(d) {
                 table.updateDailyValues();
                 meal_planner.updateDailyValues();
-            } )
-        d3.select('#sexSelect')
-            .on("change", function(d) {
-                table.updateDailyValues();
-                meal_planner.updateDailyValues();
-            } )
-        d3.select('#heightSelect')
-            .on("change", function(d) {
-                table.updateDailyValues();
-                meal_planner.updateDailyValues();
-            } )
-        d3.select('#weightSelect')
-            .on("change", function(d) {
-                table.updateDailyValues();
-                meal_planner.updateDailyValues();
-            } )
+            } );
+        weightSelect.selectAll('option').property("selected", function(d){ return d == 200; })
+
+
+        table.updateDailyValues();
+        meal_planner.updateDailyValues();
 
         //draw legend
         controlsSvg.append('rect')
@@ -136,34 +143,31 @@ d3.json('src/data/nutrients_and_price1.json').then( data => {
 
         // tab layout
 
-    function openTab(pageName, elmnt) {
-        // Hide all elements with class="tabcontent" by default */
-        let tabcontent = document.getElementsByClassName("tabcontent");
-            for (let i = 0; i < tabcontent.length; i++) {
-            tabcontent[i].style.display = "none";
+        function openTab(pageName, elmnt) {
+            // hide all tabs
+            let tabcontent = document.getElementsByClassName("tabcontent");
+                for (let i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].style.display = "none";
+            }
+
+            // set all links to navy
+            let tablinks = document.getElementsByClassName("tablink");
+            for (let i = 0; i < tablinks.length; i++) {
+                tablinks[i].style.backgroundColor = "#2E4B7C";
+            }
+
+            // but then view/highlight corresponding button/tab
+            document.getElementById(pageName).style.display = "block";
+            elmnt.style.backgroundColor = "lightsteelblue";
         }
 
-        let tablinks = document.getElementsByClassName("tablink");
-        for (let i = 0; i < tablinks.length; i++) {
-            tablinks[i].style.backgroundColor = "#2E4B7C";
-        }
+        d3.select('#main-button')
+            .on('click', function() {openTab('main-container', this);})
 
-        // Show the specific tab content
-        document.getElementById(pageName).style.display = "block";
+        d3.select('#meal-button')
+            .on('click', function() {openTab('meal-container', this);})
 
-        // Add the specific color to the button used to open the tab content
-        elmnt.style.backgroundColor = "lightsteelblue";
-    }
-
-    d3.select('#main-button')
-        .on('click', function() {openTab('main-container', this);})
-
-    d3.select('#meal-button')
-        .on('click', function() {openTab('meal-container', this);})
-
-    // Get the element with id="defaultOpen" and click on it
-    document.getElementById("main-button").click();
-            
-    
+        // Get the element with id="defaultOpen" and click on it
+        document.getElementById("main-button").click();
     })
 });
