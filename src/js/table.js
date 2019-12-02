@@ -494,7 +494,11 @@ class Table {
                 .selectAll("th")
                     .classed("highlightTableRow", true);
             
-            this.scrollToFood(row.data()[0].title);
+            if (row.data()[0] != undefined)
+            {
+                this.scrollToFood(row.data()[0].title);
+            }
+            
         }
     }
 	
