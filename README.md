@@ -13,8 +13,17 @@ The site is best viewed on displays that are approximately **1800 x 1300 pixels*
 ## File Structure
 `index.html` is the main page of our site. All javascript files are in `src/js`.
 
-Data files are `nutrients_and_price1.json` and `recommended_values.json`. They are found in `src/data`.
+When developing, we used `feast.html` within the `src` directory. We had to create `index.html` in the root directory to deploy using GitHub Pages.
+
+Data files are `nutrients_and_price1.json` and `recommended_values.json`. They are found in `src/data`. `nutrients_and_price.json` is the original data file we used before running `icon_script.js` to add icon paths to each food item.
+
+The `preprocess` directory contains scripts and raw data sources used to generate the data files above.
+
+The `assets` directory contains all the icons and images used on the site.
+
+All css is contained in `styles.css` in the `src` directory.
 
 ## Notes
 * All illustrations (all food items and the header) were hand crafted by Lizzie
 * The values at the top of each column in the nutrient explorer table are the maximum recommended amount for the given nutrient. These are determined based on the demographic  data (age, gender, etc.) at the top of the page.
+* Wrangling the data took a significant amount of work. To reproduce our data cleaning process, you need to download the Microsoft Access database at the FDA’s FoodDataCentral (https://fdc.nal.usda.gov/index.html) and query it with the SQL query provided, as well as price information from the USDA ERS (https://www.ers.usda.gov/data-products/fruit-and-vegetable-prices/). The script `wrangle.R` will use this result to combine the other (hand-made) datasets in the preprocess folder to deliver the processed data to the src folder.
