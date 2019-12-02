@@ -2,8 +2,8 @@
 class ScatterPlot {
     constructor(data, table)
     {
-        this.data = data;
-        this.tableElements = data;
+        this.data = Object.assign([], data);
+        this.tableElements = this.data;
 		this.tableRef = table;
 		
 		this.margin = { top: 20, right: 20, bottom: 60, left: 80 };
@@ -424,7 +424,7 @@ class ScatterPlot {
 		
 		//update circles
 		scatterGroup.selectAll("circle")
-			.data(this.tableElements)
+			.data(this.data)
 			.join(
 				enter => enter.append("circle")
 							.attr("cx", function (d) { 
