@@ -8,7 +8,7 @@ The site can be visited here: https://jlund24.github.io/nutritiondatavis/
 The site is best viewed on displays that are approximately **1800 x 1300 pixels**.
 
 ## Demo Video
-
+https://vimeo.com/376738527
 
 ## File Structure
 `index.html` is the main page of our site. All javascript files are in `src/js`.
